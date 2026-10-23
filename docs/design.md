@@ -62,8 +62,6 @@ After an initial online load, viewing stored inventory, rules, and shopping shou
 
 Distinguish Saved on this device, Syncing, Up to date, and Needs review. Keep unsaved forms on failure. Conflicting device edits ask for a corrected amount. Empty pantry, no search matches, and no configured rules each offer the relevant next action.
 
-## Prototype and release scope
-
-The self-contained prototype uses fixed sample data dated 21 October 2026. It demonstrates cards, grouped batches, details, units, date entry, rules, shopping, and simulated scanning. Changes reset on reload. Live lookup, camera decoding, durable offline storage, synchronization, and push notifications are not implemented. The earlier row/compact comparisons remain available for review; cards are the chosen direction.
+## Release scope
 
 Shared households, recipes, nutrition analysis, automatic expiry recognition, ordering, and Open Food Facts contributions are outside the first release. Implementation steps and verification belong in the [technical plan](technical-plan.md).

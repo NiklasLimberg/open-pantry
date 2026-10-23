@@ -1,8 +1,8 @@
 # Open Pantry technical plan
 
-Draft · 22 October 2026 · Implementation has not started
+Updated 23 October 2026 · Scaffold, auth, and share links implemented
 
-Architecture, integration constraints, and implementation checks. The [product design](design.md) describes the interface; [data and rules](data-and-rules.md) defines quantities, matching, and dates. TanStack Start is selected; TanStack DB is the preferred client data candidate pending the trial below. Hosting, authentication, server database, and the final persistence adapter remain open.
+Architecture, integration constraints, and implementation checks. The [product design](design.md) describes the interface; [data and rules](data-and-rules.md) defines quantities, matching, and dates. Chosen: TanStack Start, PostgreSQL with Drizzle, and Better Auth. TanStack DB is the preferred client data candidate pending the trial below. Hosting and the final persistence adapter remain open.
 
 ## TanStack DB assessment
 
@@ -39,25 +39,17 @@ Accept the combination only after proving:
 
 If the adapter combination fails these checks, retain the product's partial-offline contract and compare a dedicated sync adapter against a smaller custom IndexedDB implementation. Pin versions after the trial; do not carry two competing inventory stores into implementation.
 
-## Authentication and future Authelia integration
+## Authentication
 
-Recommendation: use Better Auth with TanStack Start for application sessions and a generic OpenID Connect provider for future Authelia sign-in. Better Auth documents both integrations. If Authelia is not available initially, start with a provisioned owner account and local password sign-in, with public registration disabled. The initial login method is not yet selected. [Start integration](https://better-auth.com/docs/integrations/tanstack), [generic OAuth and OIDC](https://better-auth.com/docs/plugins/generic-oauth)
-
-Authelia later acts as the identity provider. Register Open Pantry as a confidential OIDC client, use Authorization Code with PKCE S256, and configure discovery, client credentials, and an exact callback URL. The Start server completes the exchange and establishes the app session. Keep client secrets and provider tokens on the server; use a Secure, HttpOnly session cookie in the browser. Request only identity scopes needed by the app. [Authelia OIDC integration](https://www.authelia.com/integration/openid-connect/introduction/)
-
-Give users stable internal IDs and link external identities by issuer and subject. Pantry ownership references the internal user ID. To move an existing owner to Authelia, explicitly link the new identity while authenticated; do not silently merge accounts by email. A provider change must not create a second empty pantry or move data between owners.
-
-Every read, mutation, outbox replay, and push-subscription operation validates the current session and pantry access on the server. Route guards are navigation conveniences, not the authorization boundary. Query keys, collection IDs, browser persistence, and outboxes are scoped to the user and pantry. Never let an old account's pending writes replay under a new account.
-
-Previously loaded local data can remain available offline on that device; this does not grant server access or refresh a login. If the session expires, retain pending changes, pause upload, request sign-in, then resume only for the same owner. Treat authentication failures as paused work rather than discarding queued edits. Sign-out clears private local state only after unresolved changes are handled. Distinguish application logout from identity-provider logout when implementing the OIDC flow.
+Better Auth with pantry roles and share links; see [authentication and permissions](auth-and-permissions.md). Every read, mutation, outbox replay, and push-subscription operation checks the session and pantry access on the server.
 
 ## Application architecture
 
 Use TanStack Start with React and TypeScript. TanStack Router defines `/pantry`, `/rules`, `/shopping`, and `/settings`; `/products/$productId` opens product details; `/scan` is an overlay-capable route that can also load directly. Start supplies the server boundary for validated mutations, authentication, product lookup, and push subscription registration. It supports server functions and server routes; local offline behavior is a separate application responsibility. [TanStack Start overview](https://tanstack.com/start/latest/docs/framework/react/overview)
 
-Proposed modules are `inventory`, `rules`, `shopping`, `products`, `sync`, and `reminders`. Keep unit conversion, date comparisons, matching, and shortage calculation as pure TypeScript functions shared by client and server. Evaluate TanStack DB as the reactive client data layer, with a durable row store and a durable pending-mutation outbox. The adapter combination is provisional; in-memory optimistic state alone does not satisfy offline durability.
+Code is grouped by domain under `src/domains/` (currently `auth`, `pantry`, `sharing`, `theme`; next `inventory`, `rules`, `shopping`, `products`, `sync`, `reminders`). Keep unit conversion, date comparisons, matching, and shortage calculation as pure TypeScript functions shared by client and server. Evaluate TanStack DB as the reactive client data layer, with a durable row store and a durable pending-mutation outbox. The adapter combination is provisional; in-memory optimistic state alone does not satisfy offline durability.
 
-A relational server database stores authoritative records, operation deduplication keys, subscriptions, and reminder delivery state. Choose the database provider, authentication library, and hosting adapter during scaffolding; hosting must support scheduled jobs or an external scheduler. The default product assumption is one owner with authenticated devices, not a public anonymous pantry.
+A relational server database stores authoritative records, operation deduplication keys, subscriptions, and reminder delivery state. Hosting must support scheduled jobs or an external scheduler. The default product assumption is one owner with authenticated devices, not a public anonymous pantry.
 
 ### Partial offline contract
 
@@ -82,7 +74,7 @@ Use revision checks for absolute quarter updates and edits. An operation against
 
 The server looks up a scanned barcode through the product API and requests only relevant fields: name, brand, category tags, quantity, image references, and available storage instructions. Optional detail fields include ingredients and label information. It identifies the app with a custom User-Agent, validates responses, caches results by barcode, coalesces duplicate requests, and applies shared upstream throttling. Respect the current documented per-IP quotas, timeout and back off on throttling or service errors, and avoid search-as-you-type requests. [Open Food Facts API guidance](https://openfoodfacts.github.io/openfoodfacts-server/api/)
 
-Store provenance and fetch time; permit a refresh without overwriting local edits. Unknown quantity strings need confirmation. Product metadata is community-maintained and may be incomplete. Display “Product data: Open Food Facts” with a source link, and observe database ODbL and product-image attribution/share-alike terms. Keep user inventory separate; review redistribution obligations before exporting a combined public product database. [Open Food Facts reuse guidance](https://openfoodfacts.github.io/openfoodfacts-server/api/#before-you-start)
+Store provenance and fetch time; permit a refresh without overwriting local edits. Unknown quantity strings need confirmation. Product metadata is community-maintained and may be incomplete. Display “Product data: Open Food Facts” with a source link, and observe database ODbL and product-image attribution/share-alike terms. Keep user inventory separate; review redistribution obligations before exporting a combined public product database. [Open Food Facts reuse guidance](https://openfoodfacts.github.io/openfoodfacts-server/api/#before-you-start) Sampled records (October 2026) carry `expiration_date` only as old calendar dates of one package, so they are never used as shelf-life durations.
 
 ### Barcode decoding
 
@@ -123,16 +115,4 @@ Before calling the application ready, verify keyboard and screen-reader flows, c
 
 ## Decisions to revisit during implementation
 
-Defaults are one owner, quarter-based remaining amounts, optional exact counts, local-first edits, and opt-in daily reminders. Revisit shared households, preferred pack sizes across brands, dark appearance, hosting and authentication when scaffolding. These choices do not block review of the proposed screens.
-
-## Open Food Facts field observations
-
-Live product records checked on 22 October 2026 illustrate the distinction:
-
-| Product record                                                                                                                                             | `expiration_date` | `conservation_conditions`                                                          |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------------- |
-| [Nutella 3017620422003](https://world.openfoodfacts.org/api/v2/product/3017620422003.json?fields=product_name,expiration_date,conservation_conditions)     | `12-2024`         | French instructions to store dry, away from heat, and not refrigerate; no duration |
-| [Whole Milk 5099874079781](https://world.openfoodfacts.org/api/v2/product/5099874079781.json?fields=product_name,expiration_date,conservation_conditions)  | Absent            | Absent                                                                             |
-| [Lactel milk 3428272950057](https://world.openfoodfacts.org/api/v2/product/3428272950057.json?fields=product_name,expiration_date,conservation_conditions) | `05/11/2017`      | Absent                                                                             |
-
-These are examples, not a coverage estimate. The observed expiry values are old calendar dates, not reusable shelf-life durations. Storage text is useful for product details; if another record contains an explicit duration and storage conditions, offer a user-confirmed opening or production rule tied to the stated starting event.
+Defaults are one owner, quarter-based remaining amounts, optional exact counts, local-first edits, and opt-in daily reminders. Still open: hosting, shared households beyond invited members, and preferred pack sizes across brands.

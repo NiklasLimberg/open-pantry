@@ -8,7 +8,7 @@ Detailed behavior for quantities, stock matching, and dates. Start with the [pro
 
 A product describes a food and its confirmed package definition. A batch represents food acquired together with the same date, location, and opened state. Split packages into separate batches when those properties or remaining fractions differ. Inventory cards group compatible batches for display; grouping never merges their dates or update actions.
 
-Group by product identity and confirmed package size, not category or name alone. Search and location filters apply before grouping. The prototype uses sample names and units in place of production product IDs.
+Group by product identity and confirmed package size, not category or name alone. Search and location filters apply before grouping.
 
 ## Remaining amounts
 
@@ -25,8 +25,6 @@ Add and update forms include a Track amount in selector with packs, cartons, bot
 Open Food Facts packaging components can supply shape, number of units, and quantity per unit; normalized product quantity supplies mass or volume. Map a supported container shape to carton or bottle only when the relevant retail package is unambiguous. Packaging can include caps and wrappers, so do not simply use the first component. Treat multipack count and contents per package separately. [Packaging schema](https://raw.githubusercontent.com/openfoodfacts/openfoodfacts-server/main/docs/api/ref/schemas/packagings/packagings.yaml), [product quantity schema](https://raw.githubusercontent.com/openfoodfacts/openfoodfacts-server/main/docs/api/ref/schemas/product_base.yaml)
 
 Choosing a label does not establish a conversion. Switching to slices without a slice count asks the user for the full and remaining amounts; switching to grams or millilitres requires a confirmed amount in that dimension. Never relabel an existing quantity without conversion. Container labels can share the internal package-count dimension, but different package sizes remain distinct. Grouping uses product identity and compatible confirmed units and package definitions. Existing batches retain their quantities when a future default is changed.
-
-The prototype prefills units from illustrative product details and remembers the user's saved choice for the current session. A changed batch unit requires re-entering amounts where a conversion is unknown; cross-unit rule conversion remains an implementation task.
 
 ### Exact amounts and conversions
 
@@ -62,7 +60,7 @@ Open Food Facts is a product metadata source, not the source of the date on the 
 
 Use this precedence: the user's confirmed printed date first; a product-specific personal reminder default second; otherwise leave the date unknown. Personal defaults are optional and keyed by product ID, with the intended location and unopened state recorded. Never reuse another batch's calendar date. A duration measured from production cannot be added to the purchase date: production date and applicable storage conditions are needed to calculate that date. Opening-based durations start when the user records opening, not when the product is added.
 
-A suggested date is prefilled as “Estimated reminder” and shows its source, duration, and starting event. The user can replace it with the printed date or clear it. Store date kind and provenance separately so reminders, detail views, and Use soon retain the estimate label. Estimates do not establish a printed MHD and are not automatically treated as expired stock; show “Review estimate” once the estimate passes. Rules requiring a known remaining life do not count estimates as confirmed shelf life. The prototype uses an opt-in product-name match for session-only demonstration; production defaults use stable product IDs and storage conditions.
+A suggested date is prefilled as “Estimated reminder” and shows its source, duration, and starting event. The user can replace it with the printed date or clear it. Store date kind and provenance separately so reminders, detail views, and Use soon retain the estimate label. Estimates do not establish a printed MHD and are not automatically treated as expired stock; show “Review estimate” once the estimate passes. Rules requiring a known remaining life do not count estimates as confirmed shelf life.
 
 If future manufacturer data provides an explicit duration with a defined starting event and storage conditions, offer it for confirmation with attribution. Free-text storage instructions are shown as text until the user confirms any extracted duration; no maximum-life assumption is inferred. Category-level shelf-life data from a separate source would require its own matching and provenance design.
 
