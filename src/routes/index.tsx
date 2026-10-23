@@ -1,19 +1,26 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 
-import { Button } from "#/components/Button/Button.tsx";
-import { ThemeToggle } from "#/components/ThemeToggle/ThemeToggle.tsx";
+import { Landing } from "#/components/Landing/Landing.tsx";
+import { getSession, needsSetup } from "#/domains/auth/auth.functions.ts";
 
-export const Route = createFileRoute("/")({ component: Home });
+export const Route = createFileRoute("/")({
+  loader: async () => {
+    const [session, setup] = await Promise.all([getSession(), needsSetup()]);
+    return { cta: session ? "pantry" : setup ? "setup" : "sign-in" } as const;
+  },
+  head: () => ({
+    meta: [
+      {
+        name: "description",
+        content:
+          "See what is at home, use food in time, and buy what is missing. A pantry companion for cupboard, fridge, and freezer.",
+      },
+    ],
+  }),
+  component: Home,
+});
 
 function Home() {
-  return (
-    <main style={{ padding: "var(--space-6)" }}>
-      <ThemeToggle />
-      <h1>Open Pantry</h1>
-      <p>Pantry, rules, and shopping screens come next.</p>
-      <Button asChild>
-        <Link to="/pantry">Open your pantry</Link>
-      </Button>
-    </main>
-  );
+  const { cta } = Route.useLoaderData();
+  return <Landing cta={cta} />;
 }

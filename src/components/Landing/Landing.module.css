@@ -1,0 +1,286 @@
+.landing {
+  --content-width: 1120px;
+
+  overflow-x: clip;
+}
+
+.nav,
+.hero,
+.features,
+.extras,
+.closing,
+.footer {
+  width: min(100% - 2 * var(--space-4), var(--content-width));
+  margin-inline: auto;
+}
+
+/* Nav */
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-4);
+}
+
+.navActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.brand {
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  line-height: 1.1;
+}
+
+.brand b {
+  color: var(--color-accent);
+  font-weight: 400;
+}
+
+/* Hero */
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: var(--space-12);
+  padding-block: var(--space-12) calc(2 * var(--space-12));
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-3);
+  color: var(--color-green);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.heroTitle {
+  margin: 0 0 var(--space-6);
+  font-family: var(--font-serif);
+  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.lead {
+  max-width: 34em;
+  margin: 0 0 var(--space-8);
+  color: var(--color-muted);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.heroPhone {
+  position: relative;
+}
+
+.heroPhone::before {
+  position: absolute;
+  z-index: -1;
+  inset: 8% -18% -6%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--color-soft), transparent);
+  content: "";
+}
+
+.phoneSection {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: var(--space-1);
+}
+
+.phoneSection strong {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  font-weight: 400;
+}
+
+.phoneSection span {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+/* Features */
+
+.features {
+  display: grid;
+  gap: calc(2 * var(--space-12));
+  padding-bottom: calc(2 * var(--space-12));
+}
+
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.reverse .featureText {
+  order: 2;
+}
+
+.featureText p:not(.eyebrow) {
+  max-width: 32em;
+  color: var(--color-muted);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+.featureVisual {
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.cardGrid > div {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+}
+
+/* Two packs side by side, the exact-count bread card underneath. */
+.cardGrid > div > :last-child {
+  grid-column: 1 / -1;
+}
+
+.listPanel {
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: var(--color-paper);
+}
+
+.putAway {
+  justify-self: end;
+  padding: 8px var(--space-4);
+  border-radius: 8px;
+  background: var(--color-green);
+  color: var(--color-paper);
+  font-weight: 600;
+}
+
+/* Extras */
+
+.extras {
+  padding: var(--space-12) 0;
+  border-top: 1px solid var(--color-line);
+}
+
+.extraList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: var(--space-6);
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.extra {
+  padding: var(--space-6);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  background: var(--color-paper);
+}
+
+.extra h3 {
+  margin: 0 0 var(--space-2);
+  font-size: 1rem;
+}
+
+.extra p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+/* Closing */
+
+.closing {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-12);
+  padding: var(--space-12) var(--space-6);
+  border-radius: 24px;
+  background: var(--color-soft);
+  text-align: center;
+}
+
+.closing .sectionTitle {
+  margin: 0;
+}
+
+.status {
+  max-width: 36em;
+  margin: 0 0 var(--space-4);
+  color: var(--color-muted);
+}
+
+/* Footer */
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-6);
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 860px) {
+  .hero,
+  .feature {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-8);
+  }
+
+  .hero {
+    padding-block: var(--space-6) var(--space-12);
+  }
+
+  .reverse .featureText {
+    order: 0;
+  }
+
+  .features {
+    gap: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+}
+
+@media (max-width: 480px) {
+  .cardGrid > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* The hero repeats this button right below. */
+  .navCta {
+    display: none;
+  }
+}

@@ -13,8 +13,16 @@
   --color-amber: light-dark(#865317, #e0a75e);
   --color-warn: light-dark(#fbf0d8, #3a2f1c);
   --color-red: light-dark(#9c4036, #ef8f84);
+  --color-accent: light-dark(#63824d, #a9c98f);
+  --color-tile: light-dark(#eeeade, #2a302a);
+  --color-progress: light-dark(#7b9362, #8fc1a0);
+  /* Surfaces that stay dark in both themes (device frame, camera view). */
+  --color-inverse: light-dark(#223a2b, #0c0f0c);
+  --color-on-inverse: #e6eadf;
+  --color-on-inverse-accent: #e0a75e;
 
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
   --radius-sm: 6px;
   --radius-md: 10px;
   --space-1: 4px;
@@ -22,6 +30,8 @@
   --space-3: 12px;
   --space-4: 16px;
   --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
 
   color-scheme: light dark;
 }
