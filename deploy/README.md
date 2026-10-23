@@ -16,6 +16,10 @@ through the Cloudflare Tunnel.
    - runs the migrations in a one-off `migrate` container; if they fail, the running app is left untouched;
    - starts the new app and waits for `/api/health`; if it does not become healthy, the previous image is restored.
 
+Before merging, CI applies the migrations to an empty database and on top of `main`'s
+database, and rejects out-of-order, edited or destructive migrations (see "Database changes"
+in [AGENTS.md](../AGENTS.md)), so a merge cannot leave the database behind the code.
+
 An image that failed is not retried; merge a fix to deploy again. Migrations are never
 reversed automatically, so keep them backward-compatible (add first, remove in a later
 release) and restore a backup if the old app cannot use a new schema.
@@ -33,7 +37,7 @@ From this repository on your computer:
 
 ```sh
 ssh infra@192.168.178.42 'sudo mkdir -p /opt/open-pantry && sudo chown infra:infra /opt/open-pantry'
-rsync -av deploy/ infra@192.168.178.42:/opt/open-pantry/
+scp -r deploy/. infra@192.168.178.42:/opt/open-pantry/
 ```
 
 On the VM:
