@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "jsx-a11y", "import"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "ignorePatterns": ["src/routeTree.gen.ts", ".output/**", ".tanstack/**", "drizzle/**"],
+  "rules": {
+    "react/react-in-jsx-scope": "off"
+  }
+}

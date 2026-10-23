@@ -1,0 +1,26 @@
+allowBuilds:
+  esbuild: true
+  lightningcss: true
+minimumReleaseAgeExclude:
+  - "@tanstack/react-router@1.170.46"
+  - "@tanstack/react-start-client@1.168.44"
+  - "@tanstack/react-start-rsc@0.1.65"
+  - "@tanstack/react-start-server@1.167.52"
+  - "@tanstack/react-start@1.169.4"
+  - "@tanstack/router-core@1.171.39"
+  - "@tanstack/router-generator@1.167.46"
+  - "@tanstack/router-plugin@1.168.48"
+  - "@tanstack/start-client-core@1.170.39"
+  - "@tanstack/start-plugin-core@1.171.55"
+  - "@tanstack/start-server-core@1.169.45"
+  - "@tanstack/start-storage-context@1.167.41"
+  - "@voidzero-dev/vite-plus-core@1.4.0"
+  - "@voidzero-dev/vite-plus-darwin-arm64@1.4.0"
+  - "@voidzero-dev/vite-plus-darwin-x64@1.4.0"
+  - "@voidzero-dev/vite-plus-linux-arm64-gnu@1.4.0"
+  - "@voidzero-dev/vite-plus-linux-arm64-musl@1.4.0"
+  - "@voidzero-dev/vite-plus-linux-x64-gnu@1.4.0"
+  - "@voidzero-dev/vite-plus-linux-x64-musl@1.4.0"
+  - "@voidzero-dev/vite-plus-win32-arm64-msvc@1.4.0"
+  - "@voidzero-dev/vite-plus-win32-x64-msvc@1.4.0"
+  - vite-plus@1.4.0
