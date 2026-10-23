@@ -43,3 +43,7 @@ On first start, `/setup` creates the owner account and pantry. Sign-up is closed
 | `pnpm build`                           | Production build into `.output/` (`node .output/server/index.mjs`)                   |
 | `pnpm db:generate` / `pnpm db:migrate` | Create and apply Drizzle migrations                                                  |
 | `pnpm auth:generate`                   | Regenerate Better Auth tables in `src/db/auth-schema.ts` after changing auth plugins |
+
+## Deployment
+
+Every merge to `main` is deployed to the home server automatically, including database migrations. See [deploy/README.md](deploy/README.md).

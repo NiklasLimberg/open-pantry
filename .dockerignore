@@ -1,0 +1,12 @@
+.git
+.github
+.claude
+.vscode
+.output
+.tanstack
+.nitro
+node_modules
+deploy
+docs
+.env*
+!.env.example
