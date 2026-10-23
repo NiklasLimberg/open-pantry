@@ -1,16 +1,18 @@
 /* Design tokens taken from docs/design/screens.html. Component styles live in
-   CSS Modules next to each component in src/components. */
+   CSS Modules next to each component in src/components.
+   Colors are light-dark() pairs: they follow the OS setting via color-scheme,
+   and data-theme="light" | "dark" on <html> forces one. */
 :root {
-  --color-bg: #f7f6f0;
-  --color-paper: #fffefa;
-  --color-ink: #223a2b;
-  --color-muted: #667064;
-  --color-line: #dedfd4;
-  --color-green: #294f3b;
-  --color-soft: #e9eee3;
-  --color-amber: #865317;
-  --color-warn: #fbf0d8;
-  --color-red: #9c4036;
+  --color-bg: light-dark(#f7f6f0, #161a16);
+  --color-paper: light-dark(#fffefa, #1e231f);
+  --color-ink: light-dark(#223a2b, #e6eadf);
+  --color-muted: light-dark(#667064, #9aa496);
+  --color-line: light-dark(#dedfd4, #343b34);
+  --color-green: light-dark(#294f3b, #8fc1a0);
+  --color-soft: light-dark(#e9eee3, #243229);
+  --color-amber: light-dark(#865317, #e0a75e);
+  --color-warn: light-dark(#fbf0d8, #3a2f1c);
+  --color-red: light-dark(#9c4036, #ef8f84);
 
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --radius-sm: 6px;
@@ -21,7 +23,15 @@
   --space-4: 16px;
   --space-6: 24px;
 
+  color-scheme: light dark;
+}
+
+:root[data-theme="light"] {
   color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 *,
