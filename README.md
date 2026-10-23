@@ -18,7 +18,7 @@ The screen prototype is a standalone design artifact, not the application.
 - VoidZero tooling used directly, so the TanStack setup stays stock: Vite (Rolldown) for dev/build, Vitest for tests, Oxlint and Oxfmt for lint and format.
 - Plain CSS: design tokens in `src/styles.css`, CSS Modules per component in `src/components/`, behaviour from [Radix Primitives](https://www.radix-ui.com/primitives).
 - Drizzle ORM on PostgreSQL.
-- [Better Auth](https://better-auth.com) with owner, editor, and viewer roles.
+- [Better Auth](https://better-auth.com) with owner, editor, and viewer roles and view-only share links.
 
 ## Development
 

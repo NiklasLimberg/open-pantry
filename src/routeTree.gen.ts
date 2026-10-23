@@ -14,6 +14,7 @@ import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as AuthedPantryRouteImport } from './routes/_authed/pantry'
+import { Route as ShareTokenRouteImport } from './routes/share/$token'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -40,6 +41,11 @@ const AuthedPantryRoute = AuthedPantryRouteImport.update({
   path: '/pantry',
   getParentRoute: () => AuthedRoute,
 } as any)
+const ShareTokenRoute = ShareTokenRouteImport.update({
+  id: '/share/$token',
+  path: '/share/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/setup': typeof SetupRoute
   '/sign-in': typeof SignInRoute
   '/pantry': typeof AuthedPantryRoute
+  '/share/$token': typeof ShareTokenRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -58,6 +65,7 @@ export interface FileRoutesByTo {
   '/setup': typeof SetupRoute
   '/sign-in': typeof SignInRoute
   '/pantry': typeof AuthedPantryRoute
+  '/share/$token': typeof ShareTokenRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -67,13 +75,15 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/sign-in': typeof SignInRoute
   '/_authed/pantry': typeof AuthedPantryRoute
+  '/share/$token': typeof ShareTokenRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/setup' | '/sign-in' | '/pantry' | '/api/auth/$'
+  fullPaths:
+    '/' | '/setup' | '/sign-in' | '/pantry' | '/share/$token' | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/setup' | '/sign-in' | '/pantry' | '/api/auth/$'
+  to: '/' | '/setup' | '/sign-in' | '/pantry' | '/share/$token' | '/api/auth/$'
   id:
     | '__root__'
     | '/'
@@ -81,6 +91,7 @@ export interface FileRouteTypes {
     | '/setup'
     | '/sign-in'
     | '/_authed/pantry'
+    | '/share/$token'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -89,6 +100,7 @@ export interface RootRouteChildren {
   AuthedRoute: typeof AuthedRouteWithChildren
   SetupRoute: typeof SetupRoute
   SignInRoute: typeof SignInRoute
+  ShareTokenRoute: typeof ShareTokenRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -129,6 +141,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedPantryRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/share/$token': {
+      id: '/share/$token'
+      path: '/share/$token'
+      fullPath: '/share/$token'
+      preLoaderRoute: typeof ShareTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -155,6 +174,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthedRoute: AuthedRouteWithChildren,
   SetupRoute: SetupRoute,
   SignInRoute: SignInRoute,
+  ShareTokenRoute: ShareTokenRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

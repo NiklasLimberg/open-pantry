@@ -13,7 +13,8 @@ export type PantryAccess = {
   pantryId: string;
   pantryName: string;
   role: PantryRole;
-  userId: string;
+  /** null for share-link visitors. */
+  userId: string | null;
 };
 
 export class ForbiddenError extends Error {

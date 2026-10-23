@@ -8,6 +8,7 @@ export const statement = {
   inventory: ["read", "create", "update", "delete"],
   rule: ["read", "create", "update", "delete"],
   shopping: ["read", "add", "check", "confirm-purchase"],
+  shareLink: ["read", "create", "revoke"],
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -24,16 +25,17 @@ const editPantry = {
   shopping: ["read", "add", "check", "confirm-purchase"],
 } as const;
 
-/** Read-only. */
+/** Read-only. Also the role granted to anyone opening a share link. */
 export const viewer = ac.newRole(readPantry);
 
-/** Changes pantry contents but cannot manage members or the pantry itself. */
+/** Changes pantry contents but cannot manage members, share links, or the pantry itself. */
 export const editor = ac.newRole(editPantry);
 
-/** Everything, including members and deleting the pantry. */
+/** Everything, including members, share links, and deleting the pantry. */
 export const owner = ac.newRole({
   ...ownerAc.statements,
   ...editPantry,
+  shareLink: ["read", "create", "revoke"],
 });
 
 export const roles = { owner, editor, viewer };

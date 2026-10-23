@@ -17,8 +17,12 @@ describe("roleCan", () => {
     expect(roleCan("viewer", change)).toBe(false);
   });
 
-  it("reserves members and pantry deletion for owners", () => {
-    for (const permissions of [{ member: ["create"] }, { organization: ["delete"] }] as const) {
+  it("reserves members, share links, and pantry deletion for owners", () => {
+    for (const permissions of [
+      { member: ["create"] },
+      { shareLink: ["create"] },
+      { organization: ["delete"] },
+    ] as const) {
       expect(roleCan("owner", permissions)).toBe(true);
       expect(roleCan("editor", permissions)).toBe(false);
       expect(roleCan("viewer", permissions)).toBe(false);
