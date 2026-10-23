@@ -1,0 +1,25 @@
+.page {
+  position: relative;
+  display: grid;
+  place-content: center;
+  gap: var(--space-4);
+  min-height: 100dvh;
+  padding: var(--space-4);
+}
+
+.brand {
+  margin: 0;
+  color: var(--color-green);
+  font-weight: 700;
+  text-align: center;
+}
+
+.card {
+  width: min(100%, 380px);
+}
+
+.theme {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+}

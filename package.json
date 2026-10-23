@@ -18,20 +18,23 @@
     "db:up": "docker compose up -d db",
     "check": "oxfmt --check && oxlint && tsc --noEmit",
     "lint": "oxlint",
-    "format": "oxfmt"
+    "format": "oxfmt",
+    "auth:generate": "pnpm dlx auth@1.7.12 generate --config src/domains/auth/auth.ts --output src/db/auth-schema.ts --yes"
   },
   "dependencies": {
     "@tanstack/react-devtools": "0.10.13",
     "@tanstack/react-router": "1.170.46",
     "@tanstack/react-router-devtools": "1.167.2",
     "@tanstack/react-start": "1.169.4",
+    "better-auth": "1.7.12",
     "drizzle-orm": "^0.45.1",
     "lucide-react": "^1.61.0",
     "nitro": "3.0.260610-beta",
     "pg": "^8.16.3",
     "radix-ui": "^1.8.1",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0"
+    "react-dom": "^19.2.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@tanstack/devtools-vite": "0.8.5",

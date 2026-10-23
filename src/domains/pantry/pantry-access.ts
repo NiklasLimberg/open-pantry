@@ -1,0 +1,49 @@
+import { setResponseStatus } from "@tanstack/react-start/server";
+import { and, eq } from "drizzle-orm";
+
+import { db } from "#/db/index.ts";
+import { member, organization } from "#/db/schema.ts";
+
+import { isPantryRole, roleCan, type PantryRole, type Permissions } from "./permissions.ts";
+
+// Server-only. Every server function that touches pantry data resolves a PantryAccess
+// first and checks it with requirePermission; route guards are only navigation.
+
+export type PantryAccess = {
+  pantryId: string;
+  pantryName: string;
+  role: PantryRole;
+  userId: string;
+};
+
+export class ForbiddenError extends Error {
+  constructor(message = "You don't have access to this.") {
+    super(message);
+    setResponseStatus(403);
+    this.name = "ForbiddenError";
+  }
+}
+
+export async function getMemberAccess(userId: string, pantryId: string): Promise<PantryAccess> {
+  const [row] = await db
+    .select({ role: member.role, pantryName: organization.name })
+    .from(member)
+    .innerJoin(organization, eq(organization.id, member.organizationId))
+    .where(and(eq(member.userId, userId), eq(member.organizationId, pantryId)));
+  if (!row || !isPantryRole(row.role)) throw new ForbiddenError();
+  return { pantryId, pantryName: row.pantryName, role: row.role, userId };
+}
+
+export async function getFirstPantryId(userId: string): Promise<string | null> {
+  const [row] = await db
+    .select({ pantryId: member.organizationId })
+    .from(member)
+    .where(eq(member.userId, userId))
+    .orderBy(member.createdAt)
+    .limit(1);
+  return row?.pantryId ?? null;
+}
+
+export function requirePermission(access: PantryAccess, permissions: Permissions): void {
+  if (!roleCan(access.role, permissions)) throw new ForbiddenError();
+}

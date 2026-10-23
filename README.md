@@ -18,6 +18,7 @@ The screen prototype is a standalone design artifact, not the application.
 - VoidZero tooling used directly, so the TanStack setup stays stock: Vite (Rolldown) for dev/build, Vitest for tests, Oxlint and Oxfmt for lint and format.
 - Plain CSS: design tokens in `src/styles.css`, CSS Modules per component in `src/components/`, behaviour from [Radix Primitives](https://www.radix-ui.com/primitives).
 - Drizzle ORM on PostgreSQL.
+- [Better Auth](https://better-auth.com) with owner, editor, and viewer roles.
 
 ## Development
 
@@ -25,15 +26,19 @@ Requires Node 22.18+ and pnpm. Docker is used for the local database.
 
 ```bash
 pnpm install
-cp .env.example .env.local
+cp .env.example .env.local   # then set BETTER_AUTH_SECRET
 pnpm db:up        # Postgres on localhost:5432
+pnpm db:migrate
 pnpm dev          # http://localhost:3000
 ```
 
-| Command                                | Purpose                                                            |
-| -------------------------------------- | ------------------------------------------------------------------ |
-| `pnpm check`                           | Format check, lint, and type-check (Oxfmt, Oxlint, tsc)            |
-| `pnpm format`                          | Format with Oxfmt                                                  |
-| `pnpm test`                            | Vitest                                                             |
-| `pnpm build`                           | Production build into `.output/` (`node .output/server/index.mjs`) |
-| `pnpm db:generate` / `pnpm db:migrate` | Create and apply Drizzle migrations                                |
+On first start, `/setup` creates the owner account and pantry. Sign-up is closed after that.
+
+| Command                                | Purpose                                                                              |
+| -------------------------------------- | ------------------------------------------------------------------------------------ |
+| `pnpm check`                           | Format check, lint, and type-check (Oxfmt, Oxlint, tsc)                              |
+| `pnpm format`                          | Format with Oxfmt                                                                    |
+| `pnpm test`                            | Vitest                                                                               |
+| `pnpm build`                           | Production build into `.output/` (`node .output/server/index.mjs`)                   |
+| `pnpm db:generate` / `pnpm db:migrate` | Create and apply Drizzle migrations                                                  |
+| `pnpm auth:generate`                   | Regenerate Better Auth tables in `src/db/auth-schema.ts` after changing auth plugins |
