@@ -1,0 +1,2094 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Open Pantry — preliminary screen designs</title>
+    <style>
+      :root {
+        --bg: #f7f6f0;
+        --paper: #fffefa;
+        --ink: #223a2b;
+        --muted: #667064;
+        --line: #dedfd4;
+        --green: #294f3b;
+        --soft: #e9eee3;
+        --amber: #865317;
+        --warn: #fbf0d8;
+        --red: #9c4036;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        font-size: 15px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button,
+      a,
+      input,
+      select {
+        -webkit-tap-highlight-color: transparent;
+      }
+      button {
+        cursor: pointer;
+      }
+      button {
+        min-height: 44px;
+        border: 1px solid var(--line);
+        background: var(--paper);
+        color: var(--ink);
+        border-radius: 10px;
+        padding: 10px 15px;
+      }
+      button:hover {
+        background: var(--soft);
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #b37b2c;
+        outline-offset: 3px;
+      }
+      button.primary {
+        background: var(--green);
+        color: #fff;
+        border-color: var(--green);
+      }
+      button.quiet {
+        background: transparent;
+        border-color: transparent;
+      }
+      input,
+      select {
+        width: 100%;
+        min-height: 46px;
+        background: var(--paper);
+        border: 1px solid #adb5a7;
+        border-radius: 9px;
+        padding: 10px;
+        color: var(--ink);
+      }
+      input[type="checkbox"] {
+        width: 23px;
+        min-height: 23px;
+        accent-color: var(--green);
+      }
+      label {
+        display: block;
+        font-size: 14px;
+      }
+      label input,
+      label select {
+        margin-top: 7px;
+      }
+      a {
+        color: var(--green);
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+      h1 {
+        font-family: Georgia, serif;
+        font-weight: 400;
+        font-size: 44px;
+        letter-spacing: -1.5px;
+        line-height: 1.1;
+        margin-bottom: 12px;
+      }
+      h2 {
+        font:
+          400 26px Georgia,
+          serif;
+        letter-spacing: -0.4px;
+        margin-bottom: 8px;
+      }
+      h3 {
+        font-size: 16px;
+        margin-bottom: 7px;
+      }
+      p {
+        line-height: 1.6;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .small {
+        font-size: 13px;
+      }
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .between {
+        justify-content: space-between;
+      }
+      .wrap {
+        flex-wrap: wrap;
+      }
+      .stack {
+        display: grid;
+        gap: 18px;
+      }
+      .hidden,
+      [hidden] {
+        display: none !important;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+      .rail {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: 222px;
+        padding: 36px 24px;
+        background: #efefe6;
+        border-right: 1px solid var(--line);
+        display: flex;
+        flex-direction: column;
+        z-index: 3;
+      }
+      .brand {
+        font:
+          25px Georgia,
+          serif;
+        line-height: 1.1;
+        margin-bottom: 48px;
+      }
+      .brand span {
+        display: block;
+        margin-left: 35px;
+      }
+      .brand b {
+        font-weight: 400;
+        color: #63824d;
+      }
+      .rail nav {
+        display: grid;
+        gap: 9px;
+      }
+      .nav-btn {
+        text-align: left;
+        background: transparent;
+        border-color: transparent;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .nav-btn[aria-current="page"] {
+        background: #dfe7d9;
+        font-weight: 650;
+      }
+      .nav-index {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .rail-foot {
+        margin-top: auto;
+      }
+      .rail-foot p {
+        margin-bottom: 7px;
+      }
+      .design-label {
+        padding: 9px 16px;
+        border-bottom: 1px solid var(--line);
+        font-size: 12px;
+        background: #ece9dd;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-left: 222px;
+      }
+      .design-label a {
+        font-weight: 600;
+      }
+      .main {
+        margin-left: 222px;
+        padding: 42px 52px 135px;
+        max-width: 1460px;
+      }
+      .top {
+        margin-bottom: 32px;
+      }
+      .top .eyebrow {
+        margin-bottom: 18px;
+      }
+      .subhead {
+        margin: 0;
+        color: var(--muted);
+      }
+      .sync {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+      .dot {
+        height: 7px;
+        width: 7px;
+        border-radius: 50%;
+        background: #63824d;
+      }
+      .notice {
+        padding: 13px 16px;
+        border-radius: 10px;
+        background: var(--warn);
+        color: #704817;
+        margin-bottom: 24px;
+        font-size: 14px;
+      }
+      .columns {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 270px;
+        gap: 30px;
+        align-items: start;
+      }
+      .panel {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        padding: 24px;
+      }
+      .stats-line {
+        padding: 16px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .section-head {
+        margin: 30px 0 16px;
+      }
+      .section-head:first-child {
+        margin-top: 0;
+      }
+      .pill {
+        display: inline-block;
+        font-size: 12px;
+        border-radius: 6px;
+        background: var(--soft);
+        padding: 5px 9px;
+        white-space: normal;
+      }
+      .pill.warn {
+        background: var(--warn);
+        color: var(--amber);
+      }
+      .pill.red {
+        background: #f5e5df;
+        color: var(--red);
+      }
+      .item {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        padding: 18px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .item:last-child {
+        border-bottom: 0;
+      }
+      .food-icon {
+        width: 47px;
+        height: 51px;
+        background: #eeeade;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-size: 26px;
+        flex-shrink: 0;
+      }
+      .item-text {
+        flex: 1;
+        min-width: 0;
+      }
+      .item-text strong {
+        display: block;
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+      .item-text p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .item-end {
+        text-align: right;
+        display: grid;
+        gap: 5px;
+        justify-items: end;
+      }
+      .item-end button {
+        min-height: 35px;
+        padding: 5px 10px;
+        font-size: 13px;
+      }
+      .toolbar {
+        margin: 26px 0 10px;
+        display: grid;
+        grid-template-columns: 1fr 160px;
+        gap: 10px;
+      }
+      .rule {
+        padding: 24px;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        margin: 16px 0;
+      }
+      .rule p {
+        margin: 9px 0 17px;
+      }
+      .rule .amount {
+        font-size: 14px;
+      }
+      .line-progress {
+        height: 5px;
+        background: var(--soft);
+        border-radius: 4px;
+        margin: 17px 0;
+      }
+      .line-progress span {
+        display: block;
+        height: 100%;
+        background: #7b9362;
+        border-radius: 4px;
+      }
+      .rule-bottom {
+        font-size: 13px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+      }
+      .shopping-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 22px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .shopping-row label {
+        flex: 1;
+        cursor: pointer;
+      }
+      .shopping-row strong {
+        font-size: 16px;
+      }
+      .shopping-row p {
+        margin: 5px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .shopping-row.checked strong {
+        text-decoration: line-through;
+        color: var(--muted);
+      }
+      .buy-amount {
+        font-weight: 650;
+        white-space: nowrap;
+      }
+      .fab {
+        position: fixed;
+        bottom: 28px;
+        right: 36px;
+        z-index: 4;
+        box-shadow: 0 5px 22px #294f3b25;
+        border-radius: 30px;
+        padding: 15px 24px;
+        font-weight: 650;
+      }
+      .bottom-nav {
+        display: none;
+      }
+      .empty {
+        padding: 35px 10px;
+        text-align: center;
+        color: var(--muted);
+      }
+      .settings-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .settings-grid .wide {
+        grid-column: 1/-1;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .check-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .check-label input {
+        margin: 0;
+      }
+      .settings-actions {
+        margin-top: 22px;
+      }
+      .toast {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 14px 20px;
+        background: var(--ink);
+        color: #fff;
+        border-radius: 12px;
+        z-index: 9;
+        max-width: calc(100% - 32px);
+        font-size: 14px;
+        box-shadow: 0 6px 30px #0002;
+      }
+      .toast button {
+        color: #fff;
+        background: transparent;
+        border: 0;
+        min-height: 30px;
+        padding: 3px 10px;
+        text-decoration: underline;
+      }
+      dialog {
+        color: var(--ink);
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 28px;
+        width: min(510px, calc(100% - 24px));
+        max-height: 90dvh;
+        overflow: auto;
+      }
+      dialog::backdrop {
+        background: #16251b88;
+      }
+      dialog h2 {
+        font-size: 30px;
+      }
+      .dialog-head {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .dialog-head button {
+        padding: 4px 12px;
+      }
+      .choices {
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+        margin: 10px 0 20px;
+      }
+      .choices button {
+        flex: 1;
+        min-width: 50px;
+        padding: 10px 7px;
+      }
+      .choices button[aria-pressed="true"] {
+        background: var(--green);
+        color: #fff;
+        border-color: var(--green);
+      }
+      .dialog-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+      }
+      .dialog-actions button {
+        flex: 1;
+      }
+      .camera {
+        height: 220px;
+        background: #23352b;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        text-align: center;
+        margin: 16px 0;
+      }
+      .scan-frame {
+        padding: 30px;
+        border: 2px dashed #d2d9c9;
+        border-radius: 8px;
+      }
+      .barcode {
+        height: 42px;
+        width: 135px;
+        background: repeating-linear-gradient(
+          90deg,
+          #fff 0px,
+          #fff 2px,
+          transparent 2px,
+          transparent 5px,
+          #fff 5px,
+          #fff 6px,
+          transparent 6px,
+          transparent 10px
+        );
+        margin: auto auto 14px;
+      }
+      .space {
+        margin-top: 20px;
+      }
+      .summary-number {
+        font:
+          40px Georgia,
+          serif;
+      }
+      @media (min-width: 1400px) {
+        .main {
+          padding-left: 75px;
+          padding-right: 75px;
+        }
+        .columns {
+          grid-template-columns: minmax(0, 1fr) 300px;
+        }
+      }
+      @media (max-width: 1050px) {
+        .rail {
+          width: 185px;
+          padding: 28px 18px;
+        }
+        .main {
+          margin-left: 185px;
+          padding: 32px 28px 130px;
+        }
+        .design-label {
+          margin-left: 185px;
+        }
+        .columns {
+          grid-template-columns: 1fr;
+        }
+        .aside {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          order: -1;
+        }
+        .aside .panel {
+          margin: 0 !important;
+        }
+        .settings-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 700px) {
+        .rail {
+          display: none;
+        }
+        .design-label {
+          margin-left: 0;
+          padding: 9px 18px;
+          font-size: 11px;
+        }
+        .main {
+          margin: 0;
+          padding: 25px 19px 190px;
+        }
+        .top {
+          margin-bottom: 23px;
+        }
+        h1 {
+          font-size: 37px;
+        }
+        .columns {
+          gap: 24px;
+        }
+        .aside {
+          grid-template-columns: 1fr;
+        }
+        .aside .tip {
+          display: none;
+        }
+        .bottom-nav {
+          display: flex;
+          position: fixed;
+          inset: auto 0 0;
+          background: var(--paper);
+          border-top: 1px solid var(--line);
+          z-index: 5;
+          padding: 7px 7px calc(7px + env(safe-area-inset-bottom));
+          justify-content: space-around;
+        }
+        .bottom-nav button {
+          display: grid;
+          text-align: center;
+          gap: 3px;
+          font-size: 12px;
+          min-width: 73px;
+          padding: 8px 7px;
+        }
+        .bottom-nav .nav-index {
+          font-size: 14px;
+        }
+        .fab {
+          bottom: calc(88px + env(safe-area-inset-bottom));
+          right: 18px;
+          padding: 13px 20px;
+        }
+        .panel {
+          padding: 20px;
+        }
+        .toolbar {
+          grid-template-columns: minmax(0, 1fr) 125px;
+        }
+        .item {
+          gap: 10px;
+        }
+        .food-icon {
+          width: 37px;
+          height: 43px;
+          font-size: 23px;
+        }
+        .item-end {
+          max-width: 125px;
+        }
+        .item-end .pill {
+          font-size: 11px;
+        }
+        .settings-grid,
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+        .rule {
+          padding: 19px;
+        }
+        .rule-bottom {
+          align-items: start;
+        }
+        .top-actions {
+          align-items: start;
+        }
+        .top-actions button {
+          padding: 8px 11px;
+        }
+        dialog {
+          padding: 22px;
+        }
+        .toast {
+          bottom: 160px;
+          width: max-content;
+        }
+        .subhead {
+          font-size: 14px;
+        }
+      }
+      @media (max-width: 380px) {
+        .panel > .row.between {
+          flex-wrap: wrap;
+        }
+        .rule .food-icon {
+          display: none;
+        }
+        .rule > .row > .row {
+          min-width: 0;
+          flex: 1;
+        }
+        .rule h3 {
+          overflow-wrap: anywhere;
+        }
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        button {
+          transition: background 0.15s;
+        }
+      }
+
+      /* Spacious date cards keep product details separate from the action. */
+      .main {
+        max-width: 1260px;
+      }
+      .columns {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .top {
+        margin-bottom: 28px;
+      }
+      h1 {
+        font:
+          500 30px ui-sans-serif,
+          system-ui,
+          sans-serif;
+        letter-spacing: -0.8px;
+        margin: 0;
+      }
+      h2 {
+        font:
+          600 20px ui-sans-serif,
+          system-ui,
+          sans-serif;
+        letter-spacing: -0.3px;
+        margin: 0;
+      }
+      .section-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+      }
+      .soon-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+      .soon-card {
+        background: var(--paper);
+        border: 1px solid #ddd8c8;
+        border-radius: 16px;
+        padding: 24px;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .soon-date {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        flex-wrap: wrap;
+        color: var(--amber);
+        font-size: 13px;
+      }
+      .soon-date strong {
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+      .soon-date time {
+        margin-left: auto;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .soon-product {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      .soon-product h3 {
+        font-size: 19px;
+        font-weight: 600;
+        margin: 0 0 6px;
+        overflow-wrap: anywhere;
+      }
+      .soon-product p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .soon-product .food-icon {
+        width: 50px;
+        height: 54px;
+        font-size: 28px;
+      }
+      .soon-footer {
+        border-top: 1px solid var(--line);
+        padding-top: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-size: 14px;
+      }
+      .soon-footer button {
+        font-size: 13px;
+        min-height: 44px;
+      }
+      .inventory-heading {
+        margin-top: 36px;
+      }
+      .toolbar {
+        margin-top: 0;
+      }
+      .rail-foot {
+        padding-top: 24px;
+      }
+      .settings-grid {
+        align-items: start;
+      }
+      @media (min-width: 1400px) {
+        .columns {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+      @media (max-width: 900px) {
+        .soon-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 700px) {
+        .main {
+          padding-top: 24px;
+        }
+        .top {
+          margin-bottom: 28px;
+        }
+        h1 {
+          font-size: 28px;
+        }
+        .soon-card {
+          padding: 22px;
+          gap: 22px;
+        }
+        .soon-footer {
+          padding-top: 16px;
+        }
+        .soon-grid {
+          gap: 14px;
+        }
+        .inventory-heading {
+          margin-top: 32px;
+        }
+      }
+
+      .product-link {
+        background: transparent;
+        border: 0;
+        border-radius: 4px;
+        min-height: 44px;
+        padding: 0;
+        text-align: left;
+        font-weight: 600;
+        line-height: 1.3;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }
+      .product-link:hover {
+        background: transparent;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+      }
+      .item-text > .product-link {
+        display: block;
+        margin-bottom: 0;
+        font-size: 15px;
+      }
+      .soon-product .product-link {
+        font-size: 19px;
+        min-height: 44px;
+      }
+      .soon-product h3 {
+        margin-bottom: 7px;
+      }
+      .detail-section {
+        padding: 22px 0;
+        border-top: 1px solid var(--line);
+      }
+      .detail-section:last-child {
+        padding-bottom: 0;
+      }
+      .detail-facts {
+        margin: 18px 0;
+      }
+      .detail-facts > div {
+        display: grid;
+        grid-template-columns: 110px minmax(0, 1fr);
+        gap: 14px;
+        margin: 14px 0;
+        font-size: 14px;
+      }
+      .detail-facts dt {
+        color: var(--muted);
+      }
+      .detail-facts dd {
+        margin: 0;
+        overflow-wrap: anywhere;
+      }
+      .detail-batch {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        padding: 15px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .detail-batch p {
+        margin: 6px 0 0;
+      }
+      .detail-batch:last-child {
+        border: 0;
+      }
+
+      .inventory-layout-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 0 0 18px;
+      }
+      .inventory-layout-controls button {
+        font-size: 13px;
+        padding: 9px 13px;
+        background: transparent;
+      }
+      .inventory-layout-controls button[aria-pressed="true"] {
+        background: var(--green);
+        color: #fff;
+        border-color: var(--green);
+      }
+      .inventory-comparison {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 22px;
+      }
+      .component-option {
+        min-width: 0;
+      }
+      .option-heading {
+        border-top: 2px solid #b6c3ab;
+        padding-top: 16px;
+        margin-bottom: 20px;
+      }
+      .option-heading h3 {
+        font-size: 17px;
+        margin: 0 0 8px;
+      }
+      .option-heading p {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0;
+        line-height: 1.5;
+        min-height: 60px;
+      }
+      .option-choose {
+        margin-top: 20px;
+        font-size: 13px;
+        width: 100%;
+      }
+      .stock-row {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 14px;
+        border-bottom: 1px solid var(--line);
+        padding: 20px 0;
+      }
+      .stock-row .food-icon {
+        margin-top: 7px;
+        width: 40px;
+        height: 46px;
+        font-size: 24px;
+      }
+      .stock-row-body p {
+        margin: 0 0 10px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .stock-date {
+        display: block;
+        font-size: 12px;
+        line-height: 1.5;
+        color: var(--amber);
+      }
+      .stock-row-action {
+        display: grid;
+        justify-items: end;
+        gap: 12px;
+        min-width: 62px;
+        padding-top: 10px;
+      }
+      .stock-row-action strong {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .stock-row-action button,
+      .stock-card button:not(.product-link),
+      .stock-compact-sub button {
+        font-size: 13px;
+        padding: 8px 11px;
+      }
+      .stock-row .product-link {
+        font-size: 15px;
+      }
+      .inventory-style-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+        gap: 16px;
+      }
+      .stock-card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 20px;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .stock-card-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .stock-card-title > div {
+        min-width: 0;
+      }
+      .stock-card-title p {
+        font-size: 12px;
+        color: var(--muted);
+        margin: 2px 0 0;
+      }
+      .stock-card-title .product-link {
+        font-size: 15px;
+      }
+      .stock-card-title .food-icon {
+        width: 36px;
+        height: 42px;
+        font-size: 23px;
+      }
+      .stock-card-quantity {
+        display: flex;
+        gap: 10px;
+        align-items: baseline;
+        flex-wrap: wrap;
+      }
+      .stock-card-quantity strong {
+        font-size: 32px;
+        font-weight: 500;
+        letter-spacing: -1px;
+      }
+      .stock-card-quantity > span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .stock-quarter-track {
+        display: flex;
+        gap: 5px;
+      }
+      .stock-quarter-track span {
+        height: 9px;
+        flex: 1;
+        border-radius: 2px;
+        background: #e3e8dc;
+      }
+      .stock-quarter-track .filled {
+        background: #607a4e;
+      }
+      .stock-card-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-size: 12px;
+        border-top: 1px solid var(--line);
+        padding-top: 14px;
+        margin-top: auto;
+      }
+      .stock-card-bottom > span {
+        color: var(--amber);
+        line-height: 1.5;
+      }
+      .stock-compact {
+        padding: 13px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .stock-compact-main {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .stock-compact-main .product-link {
+        font-size: 15px;
+      }
+      .stock-inline-quantity {
+        font-size: 15px;
+        font-weight: 650;
+        flex-shrink: 0;
+      }
+      .stock-compact-sub {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.7;
+      }
+      .inventory-comparison .stock-row {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+      }
+      .inventory-comparison .stock-row > .food-icon {
+        display: none;
+      }
+      .inventory-comparison .stock-card-title > .food-icon {
+        display: none;
+      }
+      .inventory-comparison .inventory-style-cards {
+        grid-template-columns: 1fr;
+      }
+      @media (max-width: 1150px) {
+        .inventory-comparison {
+          grid-template-columns: 1fr;
+        }
+        .option-heading p {
+          min-height: 0;
+        }
+        .component-option {
+          margin-bottom: 20px;
+        }
+        .inventory-comparison .stock-row {
+          grid-template-columns: auto minmax(0, 1fr) auto;
+        }
+        .inventory-comparison .stock-row > .food-icon {
+          display: grid;
+        }
+        .inventory-comparison .stock-card-title > .food-icon {
+          display: grid;
+        }
+        .inventory-comparison .inventory-style-cards {
+          grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+        }
+      }
+      @media (max-width: 400px) {
+        .stock-row {
+          gap: 10px;
+        }
+        .stock-row > .food-icon,
+        .inventory-comparison .stock-row > .food-icon {
+          display: none;
+        }
+        .stock-row,
+        .inventory-comparison .stock-row {
+          grid-template-columns: minmax(0, 1fr) auto;
+        }
+        .stock-card {
+          padding: 18px;
+        }
+        .stock-inline-quantity {
+          font-size: 14px;
+        }
+        .stock-compact-main {
+          gap: 10px;
+        }
+      }
+
+      .inventory-style-cards {
+        align-items: start;
+      }
+      .stock-group-summary {
+        margin: -7px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .stock-group-date {
+        font-size: 13px;
+        color: var(--amber);
+        line-height: 1.6;
+      }
+      .stock-batches {
+        border-top: 1px solid var(--line);
+        padding-top: 4px;
+      }
+      .stock-batches summary {
+        padding: 14px 0;
+        min-height: 44px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .stock-batches-list {
+        display: grid;
+        gap: 12px;
+      }
+      .stock-batch {
+        background: var(--bg);
+        padding: 16px;
+        border-radius: 10px;
+        min-width: 0;
+      }
+      .stock-batch-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 13px;
+      }
+      .stock-batch-heading > span {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .stock-batch-amount {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin: 16px 0;
+        font-size: 14px;
+      }
+      .stock-batch-amount .stock-quarter-track {
+        width: 104px;
+        max-width: 45%;
+        flex-shrink: 0;
+      }
+      .stock-batch-bottom {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 12px;
+        line-height: 1.7;
+      }
+      .stock-batch-bottom > span {
+        color: var(--muted);
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      .stock-group .stock-card-quantity strong {
+        font-size: 28px;
+      }
+      .stock-group .stock-card-quantity {
+        gap: 8px;
+      }
+      @media (max-width: 700px) {
+        .inventory-style-cards,
+        .inventory-comparison .inventory-style-cards {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .stock-card {
+          width: 100%;
+        }
+        .stock-batch {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="design-label">
+      <span>DESIGN STUDY 01 · Sample pantry · 21 Oct 2026</span
+      ><a href="../design.md">Read the design document ↗</a>
+    </div>
+    <aside class="rail">
+      <div class="brand"><b>◒</b> open<span>pantry</span></div>
+      <nav aria-label="Main navigation">
+        <button class="nav-btn" data-page="pantry"><span class="nav-index">01</span> Pantry</button
+        ><button class="nav-btn" data-page="rules">
+          <span class="nav-index">02</span> Stock rules</button
+        ><button class="nav-btn" data-page="shopping">
+          <span class="nav-index">03</span> Shopping
+        </button>
+      </nav>
+      <div class="rail-foot">
+        <button class="nav-btn" data-page="settings">Settings & reminders</button
+        ><button id="offline-toggle" class="quiet small" type="button">
+          Preview offline state
+        </button>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="sync" id="sync-status">
+        <span class="dot"></span> Sample data · changes reset on reload
+      </div>
+      <div id="offline-notice" class="notice" hidden>
+        Offline preview · Changes would save on this device. Reminders use your last synced pantry.
+      </div>
+      <div id="screen"></div>
+    </main>
+    <button class="primary fab" id="scan-open" type="button">▥ &nbsp; Scan an item</button>
+    <nav class="bottom-nav" aria-label="Mobile navigation">
+      <button class="nav-btn" data-page="pantry"><span class="nav-index">01</span>Pantry</button
+      ><button class="nav-btn" data-page="rules"><span class="nav-index">02</span>Rules</button
+      ><button class="nav-btn" data-page="shopping">
+        <span class="nav-index">03</span>Shopping</button
+      ><button class="nav-btn" data-page="settings">
+        <span class="nav-index">⚙</span>Settings
+      </button>
+    </nav>
+    <dialog id="sheet" aria-labelledby="sheet-title"></dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <script>
+      const $ = (s) => document.querySelector(s);
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"']/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+        );
+      let inventoryLayout = "cards";
+      let page = "pantry",
+        offline = false,
+        activeBatch = null,
+        selectedFraction = 1,
+        toastTimer;
+      let batches = [
+        {
+          id: "bread",
+          name: "Sourdough bread",
+          category: "Bread",
+          icon: "🍞",
+          location: "Cupboard",
+          unit: "slices",
+          initial: 20,
+          remaining: 3,
+          exact: true,
+          opened: true,
+          date: "2026-10-22",
+          dateType: "MHD",
+        },
+        {
+          id: "milk-open",
+          name: "Whole milk",
+          category: "Milk",
+          icon: "🥛",
+          location: "Fridge",
+          packageUnit: "cartons",
+          unit: "packs",
+          initial: 1,
+          remaining: 0.5,
+          exact: false,
+          opened: true,
+          date: "2026-10-22",
+          dateType: "MHD",
+        },
+        {
+          id: "milk-spare",
+          name: "Whole milk",
+          category: "Milk",
+          icon: "🥛",
+          location: "Fridge",
+          packageUnit: "cartons",
+          unit: "packs",
+          initial: 1,
+          remaining: 1,
+          exact: false,
+          opened: false,
+          date: "2026-10-28",
+          dateType: "MHD",
+        },
+        {
+          id: "coffee",
+          name: "Ground coffee",
+          category: "Coffee",
+          icon: "☕",
+          location: "Cupboard",
+          unit: "packs",
+          initial: 1,
+          remaining: 0.5,
+          exact: false,
+          opened: true,
+          date: "2027-02-10",
+          dateType: "MHD",
+        },
+        {
+          id: "coffee-spare",
+          name: "Ground coffee",
+          category: "Coffee",
+          icon: "☕",
+          location: "Cupboard",
+          unit: "packs",
+          initial: 1,
+          remaining: 1,
+          exact: false,
+          opened: false,
+          date: "2027-06-15",
+          dateType: "MHD",
+        },
+        {
+          id: "rice",
+          name: "Basmati rice",
+          category: "Rice",
+          icon: "🍚",
+          location: "Cupboard",
+          unit: "packs",
+          initial: 1,
+          remaining: 0.75,
+          exact: false,
+          opened: true,
+          date: "2027-06-01",
+          dateType: "MHD",
+        },
+      ];
+      let rules = [
+        {
+          id: "r1",
+          name: "Bread for tomorrow",
+          category: "Bread",
+          target: 3,
+          strict: true,
+          unit: "slices",
+          unopened: false,
+          icon: "🍞",
+        },
+        {
+          id: "r2",
+          name: "Milk in the fridge",
+          category: "Milk",
+          target: 2,
+          strict: false,
+          unit: "packs",
+          unopened: false,
+          icon: "🥛",
+        },
+        {
+          id: "r3",
+          name: "A spare coffee",
+          category: "Coffee",
+          target: 1,
+          strict: false,
+          unit: "packs",
+          unopened: true,
+          icon: "☕",
+        },
+      ];
+      const basket = new Set();
+      const productUnitDefaults = new Map();
+      const unitOptions = [
+        ["packs", "Packs"],
+        ["cartons", "Cartons"],
+        ["bottles", "Bottles"],
+        ["loaves", "Loaves"],
+        ["slices", "Slices"],
+        ["pieces", "Pieces"],
+        ["g", "Grams"],
+        ["ml", "Millilitres"],
+      ];
+      const packageUnits = ["packs", "cartons", "bottles", "loaves"];
+      const canonicalUnit = (unit) => (packageUnits.includes(unit) ? "packs" : unit);
+      const currentUnit = (b) => b.packageUnit || b.unit;
+      const unitSelect = (id, value) =>
+        `<label>Track amount in<select id="${id}">${unitOptions.map(([key, label]) => `<option value="${key}" ${key === value ? "selected" : ""}>${label}</option>`).join("")}</select></label>`;
+      const sampleUnitSuggestions = {
+        "Whole milk": { unit: "cartons", quantity: 1 },
+        "Ground coffee": { unit: "packs", quantity: 1 },
+        "Sourdough bread": { unit: "slices", quantity: 20 },
+        "Basmati rice": { unit: "packs", quantity: 1 },
+      };
+      const shelfDefaults = new Map();
+      const sampleToday = "2026-10-21";
+      function estimateDate(days) {
+        const date = new Date(sampleToday + "T12:00:00Z");
+        date.setUTCDate(date.getUTCDate() + Number(days));
+        return date.toISOString().slice(0, 10);
+      }
+      const quarter = (v) =>
+        ({ 0: "Empty", 0.25: "¼", 0.5: "½", 0.75: "¾", 1: "Full" })[v] || String(v);
+      const effective = (r) => r.target + (r.strict ? 1 : 0);
+      const available = (r) =>
+        batches
+          .filter(
+            (b) =>
+              b.category === r.category &&
+              b.unit === r.unit &&
+              (!r.unopened || !b.opened) &&
+              b.remaining > 0 &&
+              (!b.date || b.dateType === "Estimated reminder" || b.date >= "2026-10-21"),
+          )
+          .reduce((sum, b) => sum + b.remaining, 0);
+      const missing = (r) => Math.max(0, effective(r) - available(r));
+      const shortageRules = () => rules.filter((r) => missing(r) > 0);
+      const unitLabel = (r, n) => (n === 1 ? r.unit.replace(/s$/, "") : r.unit);
+      const sentence = (r) =>
+        `Keep ${r.strict ? "more than" : "at least"} ${r.target} ${r.unopened ? "unopened " : ""}${unitLabel(r, r.target)} of ${r.category.toLowerCase()}`;
+      const amount = (b) =>
+        b.exact
+          ? `${b.remaining} ${b.unit}`
+          : `${quarter(b.remaining / b.initial)} ${b.opened ? "· opened" : "· unopened"}`;
+      function dateLabel(b) {
+        if (!b.date)
+          return b.dateType === "No printed date" ? "No printed date" : "Date not entered";
+        const d = Math.round((Date.parse(b.date) - Date.parse("2026-10-21")) / 86400000);
+        return `${b.dateType} ${d === 0 ? "today" : d === 1 ? "tomorrow" : d < 0 ? (b.dateType === "Verbrauchsdatum" ? "passed · do not use" : b.dateType === "Estimated reminder" ? "passed · review estimate" : "passed · review") : new Date(b.date + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`;
+      }
+      function toast(message, undo) {
+        clearTimeout(toastTimer);
+        $("#toast").replaceChildren(document.createTextNode(message));
+        if (undo) {
+          const button = document.createElement("button");
+          button.textContent = "Undo";
+          button.onclick = () => {
+            undo();
+            render();
+            $("#toast").hidden = true;
+          };
+          $("#toast").append(button);
+        }
+        $("#toast").hidden = false;
+        toastTimer = setTimeout(() => ($("#toast").hidden = true), 6500);
+      }
+      function header(title, action = "") {
+        return `<header class="top"><div class="row between top-actions"><h1>${title}</h1>${action}</div></header>`;
+      }
+      function item(b, urgent = false) {
+        return `<article class="item"><div class="food-icon" aria-hidden="true">${b.icon}</div><div class="item-text"><button class="product-link" data-detail="${b.id}">${esc(b.name)}</button><p>${esc(b.location)} · ${amount(b)}</p></div><div class="item-end"><span class="pill ${urgent ? "warn" : ""}">${dateLabel(b)}</span><button data-edit-batch="${b.id}" aria-label="Update ${esc(b.name)} ${b.opened ? "opened" : "unopened"} batch">Update</button></div></article>`;
+      }
+      function inventoryComponent(b, style) {
+        const edit = `<button data-edit-batch="${b.id}" aria-label="Update ${esc(b.name)} ${b.opened ? "opened" : "unopened"} batch">Update</button>`,
+          name = `<button class="product-link" data-detail="${b.id}">${esc(b.name)}</button>`,
+          remaining = b.exact ? `${b.remaining} ${b.unit}` : quarter(b.remaining / b.initial),
+          fraction = Math.max(0, Math.min(1, b.remaining / b.initial));
+        if (style === "cards")
+          return `<article class="stock-card"><div class="stock-card-title"><span class="food-icon" aria-hidden="true">${b.icon}</span><div>${name}<p>${esc(b.location)} · ${b.opened ? "Opened" : "Unopened"}</p></div></div><div class="stock-card-quantity"><strong>${remaining}</strong><span>remaining${b.exact ? "" : " · approximate"}</span></div>${b.exact ? "" : `<div class="stock-quarter-track" role="img" aria-label="${remaining} remaining">${[1, 2, 3, 4].map((n) => `<span class="${n <= fraction * 4 ? "filled" : ""}"></span>`).join("")}</div>`}<div class="stock-card-bottom"><span>${dateLabel(b)}</span>${edit}</div></article>`;
+        if (style === "compact")
+          return `<article class="stock-compact"><div class="stock-compact-main">${name}<span class="stock-inline-quantity">${remaining}</span></div><div class="stock-compact-sub"><span>${esc(b.location)} · ${b.opened ? "Opened" : "Unopened"}<br>${dateLabel(b)}</span>${edit}</div></article>`;
+        return `<article class="stock-row"><span class="food-icon" aria-hidden="true">${b.icon}</span><div class="stock-row-body">${name}<p>${esc(b.location)} · ${b.opened ? "Opened" : "Unopened"}</p><span class="stock-date">${dateLabel(b)}</span></div><div class="stock-row-action"><strong>${remaining}</strong>${edit}</div></article>`;
+      }
+      function productGroups(rows) {
+        const groups = new Map();
+        for (const batch of rows) {
+          const key = batch.name + "|" + batch.unit + "|" + (batch.packageUnit || "");
+          const group = groups.get(key) || [];
+          group.push(batch);
+          groups.set(key, group);
+        }
+        return [...groups.values()];
+      }
+      function groupedCard(group) {
+        if (group.length === 1) return inventoryComponent(group[0], "cards");
+        const first = group[0],
+          ordered = [...group].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999")),
+          total = group.reduce((n, b) => n + b.remaining, 0),
+          count = group.reduce((n, b) => n + (b.exact ? 1 : b.initial), 0),
+          opened = group.reduce((n, b) => n + (b.opened ? (b.exact ? 1 : b.initial) : 0), 0),
+          unit = currentUnit(first),
+          locations = [...new Set(group.map((b) => b.location))].join(", "),
+          earliest = ordered.find((b) => b.date);
+        return `<article class="stock-card stock-group"><div class="stock-card-title"><span class="food-icon" aria-hidden="true">${first.icon}</span><div><button class="product-link" data-detail="${first.id}">${esc(first.name)}</button><p>${esc(locations)} · ${group.length} batches</p></div></div><div class="stock-card-quantity"><strong>${total} ${unit}</strong><span>${group.some((b) => !b.exact) ? "approximately " : ""}remaining</span></div><p class="stock-group-summary">${count} ${first.exact ? "batches" : unit} · ${opened} opened · ${count - opened} unopened</p><div class="stock-group-date">${earliest ? "Earliest: " + dateLabel(earliest) : "No dates entered"}${group.some((b) => !b.date) ? '<br><span class="muted">Some dates are not entered</span>' : ""}</div><details class="stock-batches" open><summary>Individual ${first.exact ? "batches" : unit}</summary><div class="stock-batches-list">${ordered.map((b, index) => `<div class="stock-batch"><div class="stock-batch-heading"><strong>${{ cartons: "Carton", bottles: "Bottle", loaves: "Loaf", packs: "Pack" }[currentUnit(b)] || "Batch"} ${index + 1}</strong><span>${b.opened ? "Opened" : "Unopened"}</span></div><div class="stock-batch-amount"><span>${b.exact ? `${b.remaining} ${b.unit} left` : quarter(b.remaining / b.initial) + " left"}</span>${b.exact ? "" : `<div class="stock-quarter-track" role="img" aria-label="${quarter(b.remaining / b.initial)} remaining">${[1, 2, 3, 4].map((n) => `<span class="${n <= (b.remaining / b.initial) * 4 ? "filled" : ""}"></span>`).join("")}</div>`}</div><div class="stock-batch-bottom"><span>${esc(b.location)}<br>${dateLabel(b)}</span><button data-edit-batch="${b.id}" aria-label="Update ${esc(b.name)} ${b.opened ? "opened" : "unopened"} batch">Update</button></div></div>`).join("")}</div></details></article>`;
+      }
+      function inventoryCards(rows) {
+        return productGroups(rows).map(groupedCard).join("");
+      }
+      const inventoryStyles = [
+        [
+          "rows",
+          "Detailed rows",
+          "Product, storage, and date stay together. Amount and action sit alongside.",
+        ],
+        [
+          "cards",
+          "Amount cards",
+          "Remaining amounts are prominent, with quarter indicators for a quick visual check.",
+        ],
+        [
+          "compact",
+          "Compact list",
+          "Less visual weight and no thumbnails; useful for a longer pantry list.",
+        ],
+      ];
+      function inventoryMarkup(rows) {
+        if (!rows.length)
+          return '<p class="empty">No matching items. Try another search or scan an item.</p>';
+        if (inventoryLayout === "compare")
+          return `<div class="inventory-comparison">${inventoryStyles
+            .map(
+              ([key, title, description]) =>
+                `<section class="component-option" aria-label="${title}"><div class="option-heading"><h3>${title}</h3><p>${description}</p></div><div class="inventory-style-${key}">${
+                  key === "cards"
+                    ? inventoryCards(rows.slice(0, 3))
+                    : rows
+                        .slice(0, 3)
+                        .map((b) => inventoryComponent(b, key))
+                        .join("")
+                }</div><button class="option-choose" data-layout="${key}">Try ${title.toLowerCase()}</button></section>`,
+            )
+            .join(
+              "",
+            )}</div><p class="small muted space">Comparison shows the first 3 matching batches in each style.</p>`;
+        return `<div class="inventory-style-${inventoryLayout}">${inventoryLayout === "cards" ? inventoryCards(rows) : rows.map((b) => inventoryComponent(b, inventoryLayout)).join("")}</div>`;
+      }
+      function bindInventory() {
+        bindDetails();
+        document
+          .querySelectorAll("[data-edit-batch]")
+          .forEach((button) => (button.onclick = () => editBatch(button.dataset.editBatch)));
+        document.querySelectorAll("[data-layout]").forEach(
+          (button) =>
+            (button.onclick = () => {
+              inventoryLayout = button.dataset.layout;
+              refreshInventory();
+            }),
+        );
+      }
+      function refreshInventory() {
+        const rows = batches.filter(
+          (b) =>
+            b.remaining > 0 &&
+            b.name.toLowerCase().includes($("#search").value.toLowerCase()) &&
+            ($("#location").value === "All locations" || b.location === $("#location").value),
+        );
+        $("#inventory").innerHTML = inventoryMarkup(rows);
+        document
+          .querySelectorAll("#layout-controls [data-layout]")
+          .forEach((button) =>
+            button.setAttribute("aria-pressed", String(button.dataset.layout === inventoryLayout)),
+          );
+        bindInventory();
+      }
+      function soonCard(b) {
+        return `<article class="soon-card"><div class="soon-date"><span>${b.dateType}</span><strong>${dateLabel(b).replace(b.dateType + " ", "")}</strong><time datetime="${b.date}">${new Date(b.date + "T12:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</time></div><div class="soon-product"><span class="food-icon" aria-hidden="true">${b.icon}</span><div><h3><button class="product-link" data-detail="${b.id}">${esc(b.name)}</button></h3><p>${esc(b.location)}</p></div></div><div class="soon-footer"><span>${b.exact ? `${b.remaining} ${b.unit} left` : `${quarter(b.remaining / b.initial)} left · ${b.opened ? "opened" : "unopened"}`}</span><button data-edit-batch="${b.id}" aria-label="Update ${esc(b.name)} ${b.opened ? "opened" : "unopened"} batch">Update amount</button></div></article>`;
+      }
+      function renderPantry() {
+        const live = batches.filter((b) => b.remaining > 0),
+          soon = live
+            .filter((b) => b.date && b.date <= "2026-10-24")
+            .sort((a, b) => a.date.localeCompare(b.date));
+        return (
+          header("Pantry") +
+          `<section aria-labelledby="use-soon-title" class="use-soon"><div class="section-heading"><h2 id="use-soon-title">Use soon</h2><span class="muted small">${soon.length} items · next 3 days</span></div><div class="soon-grid">${soon.map(soonCard).join("") || '<p class="empty">Nothing dated in the next 3 days.</p>'}</div></section><section aria-labelledby="inventory-title"><div class="section-heading inventory-heading"><h2 id="inventory-title">Inventory</h2><span class="muted small">${productGroups(live).length} products · ${live.length} batches</span></div><div class="inventory-layout-controls" id="layout-controls" role="group" aria-label="Inventory component design options">${[
+            ["compare", "Compare styles"],
+            ["rows", "Rows"],
+            ["cards", "Cards"],
+            ["compact", "Compact"],
+          ]
+            .map(
+              ([key, label]) =>
+                `<button type="button" data-layout="${key}" aria-pressed="${inventoryLayout === key}">${label}</button>`,
+            )
+            .join(
+              "",
+            )}</div><div class="toolbar"><label><span class="sr-only">Search your pantry</span><input id="search" type="search" placeholder="Search pantry…"></label><label><span class="sr-only">Filter location</span><select id="location"><option>All locations</option><option>Cupboard</option><option>Fridge</option><option>Freezer</option></select></label></div><div id="inventory">${inventoryMarkup(live)}</div></section>`
+        );
+      }
+      function renderRules() {
+        return (
+          header("Stock rules") +
+          `<div class="columns"><div>${rules
+            .map((r) => {
+              const qty = available(r),
+                need = missing(r);
+              return `<article class="rule"><div class="row between"><div class="row"><span class="food-icon" aria-hidden="true">${r.icon}</span><div><h3>${esc(r.name)}</h3><span class="small muted">Category: ${r.category}${r.unopened ? " · Unopened only" : ""}</span></div></div><button class="quiet" data-edit-rule="${r.id}">Edit</button></div><p>${sentence(r)}</p><div class="line-progress" aria-hidden="true"><span style="width:${Math.min(100, (qty / effective(r)) * 100)}%"></span></div><div class="rule-bottom"><span>${r.unit === "packs" && !r.unopened ? "About " : ""}${qty} / ${effective(r)} ${r.unit} available</span><span class="pill ${need ? "warn" : ""}">${need ? `${need} ${unitLabel(r, need)} short` : "Covered"}</span></div></article>`;
+            })
+            .join(
+              "",
+            )}<button id="add-rule" class="primary">＋ Add a stock rule</button></div></div>`
+        );
+      }
+      function renderShopping() {
+        const needed = shortageRules();
+        return (
+          header("Shopping") +
+          `<div class="columns"><section class="panel"><div class="row between"><h2 class="sr-only">Items to buy</h2><span class="pill">${needed.filter((r) => basket.has(r.id)).length} in basket</span></div>${needed.map((r) => `<div class="shopping-row ${basket.has(r.id) ? "checked" : ""}"><input type="checkbox" id="basket-${r.id}" aria-label="${r.category} in basket" data-basket="${r.id}" ${basket.has(r.id) ? "checked" : ""}><label for="basket-${r.id}"><strong>${r.category === "Bread" ? "Sliced bread" : r.category === "Coffee" ? "Ground coffee" : r.category}</strong><p>${r.category === "Bread" ? `Need ${missing(r)} ${missing(r) === 1 ? "slice" : "slices"} · confirm loaf size` : r.unopened ? `${missing(r)} unopened ${missing(r) === 1 ? "spare" : "spares"} needed` : `About ${available(r)} packs at home · target ${effective(r)}`}</p><p>From: ${esc(r.name)}</p></label><div class="buy-amount">${r.category === "Bread" ? `${Math.ceil(missing(r) / 20)} ${Math.ceil(missing(r) / 20) === 1 ? "loaf" : "loaves"}*` : `${Math.ceil(missing(r))} pack`}</div></div>`).join("") || '<p class="empty">Your stock rules are covered.</p>'}${needed.some((r) => r.category === "Bread") ? '<p class="small muted space">*Example purchase suggestion: 1 loaf = 20 slices. Confirm the actual size when adding it.</p>' : ""}<div class="space"><button id="put-away" class="primary" ${!needed.some((r) => basket.has(r.id)) ? "disabled" : ""}>Put purchases away</button><p class="small muted space">In your basket isn’t in your pantry yet. Confirm each purchase and its date.</p></div></section></div>`
+        );
+      }
+      function renderSettings() {
+        return (
+          header("Settings") +
+          `<form id="settings-form" class="settings-grid"><section class="panel"><h2>Expiry reminders</h2><label class="check-label space"><input id="reminder-enabled" type="checkbox">Enable daily reminders</label><div class="form-grid space"><label>Remind me before<select id="lead"><option>1 day</option><option selected>2 days</option><option>3 days</option><option>7 days</option></select></label><label>Digest time<input id="digest-time" type="time" value="09:00" required></label></div><label class="space">Time zone<select><option>Europe/Berlin</option></select></label><p class="small muted space">Prototype only: no notifications are sent.</p></section><section class="panel"><h2>Offline preview</h2><p class="small muted">Preview pending-sync messaging without disconnecting.</p><button id="settings-offline" type="button">${offline ? "Return to online preview" : "Preview offline state"}</button></section><div><button class="primary" type="submit">Save preferences</button></div></form>`
+        );
+      }
+      let preferences = { enabled: false, lead: "2 days", time: "09:00" };
+      function render() {
+        document.querySelectorAll("[data-page]").forEach((b) => {
+          if (b.dataset.page === page) b.setAttribute("aria-current", "page");
+          else b.removeAttribute("aria-current");
+        });
+        $("#screen").innerHTML = {
+          pantry: renderPantry,
+          rules: renderRules,
+          shopping: renderShopping,
+          settings: renderSettings,
+        }[page]();
+        if (page === "settings") {
+          $("#reminder-enabled").checked = preferences.enabled;
+          $("#lead").value = preferences.lead;
+          $("#digest-time").value = preferences.time;
+        }
+        bind();
+      }
+      function navigate(next) {
+        page = next;
+        render();
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }
+      function showSheet(html) {
+        $("#sheet").innerHTML = html;
+        if (!$("#sheet").open) $("#sheet").showModal();
+      }
+      const closeButton = '<button type="button" data-close aria-label="Close dialog">×</button>';
+      function toggleOffline() {
+        offline = !offline;
+        $("#offline-notice").hidden = !offline;
+        $("#sync-status").innerHTML =
+          `<span class="dot"></span>${offline ? "Offline preview · pending changes would stay on this device" : "Sample data · changes reset on reload"}`;
+        if (page === "settings") render();
+        toast(offline ? "Offline state preview enabled" : "Online state preview enabled");
+      }
+      function bindDetails() {
+        document
+          .querySelectorAll("[data-detail]")
+          .forEach((button) => (button.onclick = () => productDetails(button.dataset.detail)));
+      }
+      function bind() {
+        bindDetails();
+        document
+          .querySelectorAll("[data-page]")
+          .forEach((b) => (b.onclick = () => navigate(b.dataset.page)));
+        document
+          .querySelectorAll("[data-edit-batch]")
+          .forEach((b) => (b.onclick = () => editBatch(b.dataset.editBatch)));
+        document
+          .querySelectorAll("[data-edit-rule]")
+          .forEach((b) => (b.onclick = () => editRule(b.dataset.editRule)));
+        if ($("#search")) {
+          $("#search").oninput = refreshInventory;
+          $("#location").onchange = refreshInventory;
+          bindInventory();
+        }
+        document.querySelectorAll("[data-basket]").forEach(
+          (b) =>
+            (b.onchange = () => {
+              b.checked ? basket.add(b.dataset.basket) : basket.delete(b.dataset.basket);
+              render();
+            }),
+        );
+        document.querySelectorAll("[data-check]").forEach(
+          (b) =>
+            (b.onclick = () => {
+              basket.has(b.dataset.check)
+                ? basket.delete(b.dataset.check)
+                : basket.add(b.dataset.check);
+              render();
+            }),
+        );
+        if ($("#put-away")) $("#put-away").onclick = () => purchasePicker();
+        if ($("#add-rule")) $("#add-rule").onclick = () => editRule();
+        if ($("#settings-offline")) $("#settings-offline").onclick = toggleOffline;
+        if ($("#settings-form"))
+          $("#settings-form").onsubmit = (e) => {
+            e.preventDefault();
+            preferences = {
+              enabled: $("#reminder-enabled").checked,
+              lead: $("#lead").value,
+              time: $("#digest-time").value,
+            };
+            toast("Preferences saved for this preview. No notifications scheduled.");
+          };
+      }
+      function productDetails(id) {
+        const b = batches.find((batch) => batch.id === id),
+          related = batches.filter((batch) => batch.name === b.name && batch.remaining > 0),
+          days = shelfDefaults.get(b.name) || "";
+        showSheet(
+          `<div class="dialog-head"><div><h2 id="sheet-title">${esc(b.name)}</h2><p class="muted small">${esc(b.category)} · ${related.length} ${related.length === 1 ? "batch" : "batches"} at home</p></div>${closeButton}</div><section class="detail-section"><h3>Product information</h3><dl class="detail-facts"><div><dt>Package</dt><dd>${b.category === "Milk" ? "1 litre carton" : b.category === "Coffee" ? "500 g pack" : b.category === "Rice" ? "1 kg bag" : "20 slices per loaf"} <span class="muted">· sample</span></dd></div><div><dt>Brand / barcode</dt><dd>Not provided in this preview</dd></div><div><dt>Storage instructions</dt><dd>No imported instructions available</dd></div></dl><p class="small muted">In the app, Open Food Facts supplies the image, name, brand, category, package size, and available ingredients or storage instructions. Missing fields stay blank.</p><p class="small"><a href="https://world.openfoodfacts.org/" target="_blank" rel="noreferrer">Open Food Facts</a> · This preview uses sample product data.</p></section><section class="detail-section"><h3>At home</h3>${related.map((batch) => `<div class="detail-batch"><div><strong>${amount(batch)}</strong><p class="small muted">${esc(batch.location)} · ${dateLabel(batch)}</p></div><button data-detail-edit="${batch.id}">Update</button></div>`).join("") || '<p class="muted">No remaining stock.</p>'}</section><section class="detail-section"><h3>Default reminder estimate</h3><p class="small muted">Optional: the number of days after adding this product before you want a reminder. This is your reminder estimate, separate from MHD or Verbrauchsdatum.</p><form id="shelf-default-form"><label>Days after adding<input id="shelf-days" type="number" min="1" max="3650" step="1" value="${days}" placeholder="Not set"></label><p class="small muted space">Only reused for this product. Confirm its storage conditions and check each package’s printed date.</p><button class="primary space">Save default</button></form></section>`,
+        );
+        document
+          .querySelectorAll("[data-detail-edit]")
+          .forEach((button) => (button.onclick = () => editBatch(button.dataset.detailEdit)));
+        $("#shelf-default-form").onsubmit = (e) => {
+          e.preventDefault();
+          const value = $("#shelf-days").value;
+          if (value) shelfDefaults.set(b.name, Number(value));
+          else shelfDefaults.delete(b.name);
+          toast(
+            value
+              ? "Reminder estimate saved for this product in this preview."
+              : "Reminder estimate removed.",
+          );
+        };
+      }
+      function dateFields(prefix, b = {}) {
+        const type = b.dateType || "MHD";
+        return `<div class="stack"><label>Date on the package<select id="${prefix}-type">${["MHD", "Verbrauchsdatum", "No printed date", "Not entered yet", "Estimated reminder"].map((value) => `<option ${type === value ? "selected" : ""}>${value}</option>`).join("")}</select></label><label><span id="${prefix}-date-label">${type === "MHD" ? "Mindesthaltbarkeitsdatum (MHD)" : type === "Verbrauchsdatum" ? "Verbrauchsdatum · zu verbrauchen bis" : "Estimated reminder"}</span> <span class="muted">(optional)</span><input id="${prefix}-date" type="date" value="${b.date || ""}"></label><p class="small muted" id="${prefix}-date-help"></p></div>`;
+      }
+      function bindDateFields(prefix) {
+        const select = $("#" + prefix + "-type"),
+          input = $("#" + prefix + "-date");
+        const refresh = () => {
+          const type = select.value,
+            undated = ["No printed date", "Not entered yet"].includes(type);
+          input.disabled = undated;
+          if (undated) input.value = "";
+          $("#" + prefix + "-date-label").textContent =
+            type === "MHD"
+              ? "Mindesthaltbarkeitsdatum (MHD)"
+              : type === "Verbrauchsdatum"
+                ? "Verbrauchsdatum · zu verbrauchen bis"
+                : type === "Estimated reminder"
+                  ? "Estimated reminder"
+                  : "Date";
+          $("#" + prefix + "-date-help").textContent =
+            type === "MHD"
+              ? "Past the MHD: review this batch."
+              : type === "Verbrauchsdatum"
+                ? "A Verbrauchsdatum is a use-by deadline."
+                : type === "No printed date"
+                  ? "No date is printed on this item. You can add it without a date."
+                  : type === "Not entered yet"
+                    ? "You can add the date later."
+                    : "A personal reminder estimate, separate from a printed date.";
+        };
+        select.onchange = refresh;
+        refresh();
+        return refresh;
+      }
+      function editBatch(id) {
+        activeBatch = batches.find((b) => b.id === id);
+        selectedFraction = activeBatch.remaining / activeBatch.initial;
+        const b = activeBatch;
+        showSheet(
+          `<div class="dialog-head"><div><h2 id="sheet-title" class="space">${esc(b.name)}</h2></div>${closeButton}</div><p class="muted small">${esc(b.location)} · ${dateLabel(b)}</p><form id="batch-form">${unitSelect("batch-unit-select", currentUnit(b))}<div id="batch-amount-fields"></div><label class="check-label"><input id="batch-opened" type="checkbox" ${b.opened ? "checked" : ""}>This package is opened</label>${dateFields("batch", b)}<p class="small muted space">${b.exact ? "Exact counts help your slice rule stay accurate." : "Quarter amounts are estimates. Update this package separately from other purchases."}</p><div class="dialog-actions"><button type="button" id="used-up">Used up</button><button class="primary">Save change</button></div></form>`,
+        );
+        const renderAmounts = () => {
+          const unit = $("#batch-unit-select").value,
+            same = canonicalUnit(unit) === b.unit,
+            isPackage = packageUnits.includes(unit);
+          $("#batch-amount-fields").innerHTML = isPackage
+            ? `<label>Packages in this batch<input id="batch-full-amount" type="number" min="1" step="1" value="${same ? b.initial : ""}" placeholder="Enter package count" required></label><label class="space">How much is left?</label><div class="choices">${[1, 0.75, 0.5, 0.25, 0].map((value) => `<button type="button" data-fraction="${value}" aria-pressed="${selectedFraction === value}">${quarter(value)}</button>`).join("")}</div>`
+            : `<div class="stack"><label>Full batch amount in ${unit}<input id="batch-full-amount" type="number" min="0.01" step="${["slices", "pieces"].includes(unit) ? "1" : "0.01"}" value="${same ? b.initial : ""}" required></label><label>Remaining ${unit}<input id="exact-remaining" type="number" min="0" step="${["slices", "pieces"].includes(unit) ? "1" : "0.01"}" value="${same ? b.remaining : ""}" required></label></div>`;
+          if (!same)
+            $("#batch-amount-fields").insertAdjacentHTML(
+              "afterbegin",
+              '<p class="small muted">Enter the amount in the new unit. No conversion will be assumed.</p>',
+            );
+          document.querySelectorAll("[data-fraction]").forEach(
+            (button) =>
+              (button.onclick = () => {
+                selectedFraction = Number(button.dataset.fraction);
+                document
+                  .querySelectorAll("[data-fraction]")
+                  .forEach((other) => other.setAttribute("aria-pressed", String(other === button)));
+              }),
+          );
+        };
+        renderAmounts();
+        $("#batch-amount-fields").oninput = () => {
+          if ($("#exact-remaining")) $("#exact-remaining").setCustomValidity("");
+        };
+        $("#batch-unit-select").onchange = renderAmounts;
+        bindDateFields("batch");
+        const save = (zero) => {
+          const old = { ...b },
+            chosen = $("#batch-unit-select").value,
+            newExact = !packageUnits.includes(chosen),
+            full = Number($("#batch-full-amount").value),
+            remaining = zero
+              ? 0
+              : newExact
+                ? Number($("#exact-remaining").value)
+                : full * selectedFraction;
+          if (!zero && remaining > full) {
+            $("#exact-remaining").setCustomValidity(
+              "Remaining amount cannot exceed the full batch amount.",
+            );
+            $("#exact-remaining").reportValidity();
+            return;
+          }
+          b.initial = zero ? b.initial : full;
+          b.remaining = remaining;
+          b.unit = zero ? b.unit : canonicalUnit(chosen);
+          b.packageUnit = zero ? b.packageUnit : packageUnits.includes(chosen) ? chosen : undefined;
+          b.exact = zero ? b.exact : newExact;
+          if (!zero) productUnitDefaults.set(b.name, chosen);
+          b.opened = $("#batch-opened").checked;
+          b.date = $("#batch-date").value;
+          b.dateType = $("#batch-type").value;
+          $("#sheet").close();
+          render();
+          toast("Pantry updated in this preview.", () => Object.assign(b, old));
+        };
+        $("#batch-form").onsubmit = (e) => {
+          e.preventDefault();
+          save(false);
+        };
+        $("#used-up").onclick = () => save(true);
+      }
+      function editRule(id) {
+        const r = rules.find((r) => r.id === id) || {
+          id: "r" + Date.now(),
+          name: "My stock rule",
+          category: "Rice",
+          target: 1,
+          strict: false,
+          unit: "packs",
+          unopened: false,
+          icon: "🍚",
+        };
+        showSheet(
+          `<div class="dialog-head"><h2 id="sheet-title">${id ? "Edit stock rule" : "New stock rule"}</h2>${closeButton}</div><form id="rule-form" class="stack"><label>Rule name<input id="rule-name" value="${esc(r.name)}" required></label><label>Match category<select id="rule-category">${["Bread", "Milk", "Coffee", "Rice"].map((v) => `<option ${v === r.category ? "selected" : ""}>${v}</option>`).join("")}</select></label><div class="form-grid"><label>Keep<select id="rule-comparison"><option value="atleast" ${!r.strict ? "selected" : ""}>At least</option><option value="more" ${r.strict ? "selected" : ""}>More than</option></select></label><label>Amount<input id="rule-target" type="number" min="1" step="1" value="${r.target}" required></label></div><p class="small muted" id="rule-unit">Unit: ${r.unit}</p><label class="check-label"><input id="rule-unopened" type="checkbox" ${r.unopened ? "checked" : ""}>Count unopened packages only</label><p class="small muted">This preliminary editor matches categories. Product, tag, brand, location, and date criteria are specified in the design document.</p><div class="notice" id="rule-preview" role="status"></div><button class="primary">Save rule</button></form>`,
+        );
+        const draft = () => ({
+          ...r,
+          name: $("#rule-name").value,
+          category: $("#rule-category").value,
+          unit: $("#rule-category").value === "Bread" ? "slices" : "packs",
+          strict: $("#rule-comparison").value === "more",
+          target: Number($("#rule-target").value),
+          unopened: $("#rule-unopened").checked,
+        });
+        const preview = () => {
+          const n = draft();
+          $("#rule-unit").textContent = "Unit: " + n.unit;
+          $("#rule-preview").textContent =
+            `${available(n)} ${n.unit} available · target ${effective(n)} · ${missing(n)} short`;
+        };
+        $("#rule-form").oninput = preview;
+        preview();
+        $("#rule-form").onsubmit = (e) => {
+          e.preventDefault();
+          const n = draft();
+          n.icon = { Bread: "🍞", Milk: "🥛", Coffee: "☕", Rice: "🍚" }[n.category];
+          id ? Object.assign(r, n) : rules.push(n);
+          $("#sheet").close();
+          render();
+          toast("Stock rule saved. Shopping list recalculated.");
+        };
+      }
+      function scan() {
+        showSheet(
+          `<div class="dialog-head"><div><h2 id="sheet-title" class="space">Scan an item</h2></div>${closeButton}</div><span class="pill warn">Scanner simulation · camera is off</span><div class="camera"><div class="scan-frame"><div class="barcode" aria-hidden="true"></div><span>Point at a product barcode</span></div></div><p class="small muted">The app will look up product details in Open Food Facts. You’ll confirm the amount and date.</p><button id="simulate" class="primary" style="width:100%">Try sample milk scan</button><button id="manual-add" class="quiet space" style="width:100%">Add a product manually</button>`,
+        );
+        $("#simulate").onclick = () => scanResult();
+        $("#manual-add").onclick = () => purchaseForm(null, true);
+      }
+      function scanResult() {
+        showSheet(
+          `<div class="dialog-head"><h2 id="sheet-title">Whole milk</h2>${closeButton}</div><div class="row"><span class="food-icon">🥛</span><div><strong>1 litre carton</strong><p class="small muted">Sample product · simulated result</p></div></div><p class="space">You already have ${batches.filter((b) => b.category === "Milk" && b.remaining > 0).length} batches of milk. What would you like to do?</p><div class="stack"><button id="new-milk" class="primary">Add a purchase</button>${batches
+            .filter((b) => b.category === "Milk" && b.remaining > 0)
+            .map(
+              (b) =>
+                `<button data-existing="${b.id}">Update ${b.opened ? "opened" : "unopened"} carton · ${quarter(b.remaining)}<br><span class="small muted">${dateLabel(b)}</span></button>`,
+            )
+            .join(
+              "",
+            )}</div><p class="small muted space">In the app: <a href="https://world.openfoodfacts.org/" target="_blank" rel="noreferrer">Product data from Open Food Facts</a>. This preview uses illustrative data.</p>`,
+        );
+        $("#new-milk").onclick = () => purchaseForm(rules.find((r) => r.category === "Milk"));
+        document
+          .querySelectorAll("[data-existing]")
+          .forEach((b) => (b.onclick = () => editBatch(b.dataset.existing)));
+      }
+      function purchasePicker() {
+        const picked = rules.filter((r) => basket.has(r.id) && missing(r) > 0);
+        showSheet(
+          `<div class="dialog-head"><h2 id="sheet-title">Put purchases away</h2>${closeButton}</div><p class="muted">Confirm each purchase before adding it to your pantry.</p><div class="stack">${picked.map((r) => `<button data-purchase="${r.id}">${r.icon} Add ${r.category.toLowerCase()} purchase</button>`).join("")}</div>`,
+        );
+        document
+          .querySelectorAll("[data-purchase]")
+          .forEach(
+            (b) => (b.onclick = () => purchaseForm(rules.find((r) => r.id === b.dataset.purchase))),
+          );
+      }
+      function purchaseForm(r, manual = false) {
+        const category = r?.category || "Milk",
+          bread = category === "Bread";
+        showSheet(
+          `<div class="dialog-head"><h2 id="sheet-title">${manual ? "Add a product" : "Add a purchase"}</h2>${closeButton}</div><form id="purchase-form" class="stack"><label>Product name<input id="purchase-name" value="${manual ? "" : category === "Bread" ? "Sourdough bread" : category === "Coffee" ? "Ground coffee" : "Whole milk"}" required></label><label>Category<select id="purchase-category">${["Bread", "Milk", "Coffee", "Rice"].map((v) => `<option ${v === category ? "selected" : ""}>${v}</option>`).join("")}</select></label>${unitSelect("purchase-unit-select", bread ? "slices" : "packs")}<p id="unit-source" class="small muted"></p><label>Amount in <span id="purchase-unit">${bread ? "slices" : "packs"}</span><input id="purchase-qty" type="number" min="1" step="1" value="${bread ? 20 : 1}" required></label>${dateFields("purchase")}<label>Location<select id="purchase-location"><option ${category === "Milk" ? "selected" : ""}>Fridge</option><option ${category !== "Milk" ? "selected" : ""}>Cupboard</option><option>Freezer</option></select></label><p id="date-default-note" class="small muted">Enter the printed MHD, or leave it unknown. A saved product default can suggest an estimated reminder.</p><button class="primary">Put in my pantry</button></form>`,
+        );
+        const refreshDate = bindDateFields("purchase");
+        const suggestDate = () => {
+          const days = shelfDefaults.get($("#purchase-name").value.trim());
+          $("#purchase-type").value = days ? "Estimated reminder" : "MHD";
+          $("#purchase-date").value = days ? estimateDate(days) : "";
+          refreshDate();
+          $("#date-default-note").textContent = days
+            ? `Suggested from your saved default: ${days} days after adding. Choose MHD or Verbrauchsdatum to enter the printed date.`
+            : "Dates are optional. Choose the label printed on this package, or record that no date is printed.";
+        };
+        const refreshUnit = () => {
+          const unit = $("#purchase-unit-select").value;
+          $("#purchase-unit").textContent = unit;
+          $("#purchase-qty").step =
+            packageUnits.includes(unit) || ["slices", "pieces"].includes(unit) ? "1" : "0.01";
+        };
+        const suggestUnit = () => {
+          const name = $("#purchase-name").value.trim(),
+            saved = productUnitDefaults.get(name),
+            sample = sampleUnitSuggestions[name];
+          $("#purchase-unit-select").value = saved || sample?.unit || "packs";
+          $("#purchase-qty").value =
+            sample && (!saved || saved === sample.unit) ? sample.quantity : 1;
+          $("#unit-source").textContent = saved
+            ? "Your saved unit for this product."
+            : sample
+              ? "Prefilled from sample product details. Real Open Food Facts suggestions will be confirmed here."
+              : "No unit suggestion available. Choose how you want to track this product.";
+          refreshUnit();
+        };
+        suggestDate();
+        suggestUnit();
+        $("#purchase-name").onchange = () => {
+          suggestDate();
+          suggestUnit();
+        };
+        $("#purchase-unit-select").onchange = () => {
+          refreshUnit();
+          $("#purchase-qty").value = "";
+          $("#unit-source").textContent =
+            "Your choice will be remembered for this product when saved.";
+        };
+        $("#purchase-form").onsubmit = (e) => {
+          e.preventDefault();
+          const cat = $("#purchase-category").value,
+            qty = Number($("#purchase-qty").value);
+          const b = {
+            id: "purchase-" + Date.now(),
+            name: $("#purchase-name").value,
+            category: cat,
+            icon: { Bread: "🍞", Milk: "🥛", Coffee: "☕", Rice: "🍚" }[cat],
+            location: $("#purchase-location").value,
+            unit: canonicalUnit($("#purchase-unit-select").value),
+            packageUnit: packageUnits.includes($("#purchase-unit-select").value)
+              ? $("#purchase-unit-select").value
+              : undefined,
+            initial: qty,
+            remaining: qty,
+            exact: !packageUnits.includes($("#purchase-unit-select").value),
+            opened: false,
+            date: $("#purchase-date").value,
+            dateType: $("#purchase-type").value,
+            dateSource:
+              $("#purchase-type").value === "Estimated reminder" ? "personal-default" : "user",
+          };
+          productUnitDefaults.set(b.name, $("#purchase-unit-select").value);
+          batches.push(b);
+          if (r) basket.delete(r.id);
+          $("#sheet").close();
+          render();
+          toast("Purchase added. Shopping list updated.", () => {
+            batches = batches.filter((x) => x.id !== b.id);
+          });
+        };
+      }
+      $("#sheet").onclick = (e) => {
+        if (e.target.closest("[data-close]")) $("#sheet").close();
+      };
+      $("#scan-open").onclick = scan;
+      $("#offline-toggle").onclick = toggleOffline;
+      render();
+    </script>
+  </body>
+</html>
