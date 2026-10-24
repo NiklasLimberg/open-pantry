@@ -11,7 +11,11 @@ import { ForbiddenError, type PantryAccess } from "#/domains/pantry/pantry-acces
 /** Share links always grant the viewer role, whatever the creator's role. */
 export async function getShareLinkAccess(token: string): Promise<PantryAccess> {
   const [row] = await db
-    .select({ pantryId: shareLink.pantryId, pantryName: organization.name })
+    .select({
+      pantryId: shareLink.pantryId,
+      pantryName: organization.name,
+      timeZone: organization.timeZone,
+    })
     .from(shareLink)
     .innerJoin(organization, eq(organization.id, shareLink.pantryId))
     .where(

@@ -15,6 +15,13 @@
       "when": 1792775333065,
       "tag": "0001_share_links",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792793624184,
+      "tag": "0002_stock",
+      "breakpoints": true
     }
   ]
 }

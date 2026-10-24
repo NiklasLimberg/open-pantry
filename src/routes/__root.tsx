@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, ScriptOnce, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { registerServiceWorker } from "#/domains/offline/register-sw.ts";
 import { themeScript } from "#/domains/theme/theme.ts";
 import appCss from "../styles.css?url";
 
@@ -23,12 +25,15 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: appCss,
       },
+      // The manifest and service worker are only built for production (vite.config.ts).
+      ...(import.meta.env.PROD ? [{ rel: "manifest", href: "/manifest.webmanifest" }] : []),
     ],
   }),
   shellComponent: RootDocument,
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+  useEffect(registerServiceWorker, []);
   return (
     // themeScript sets data-theme before hydration, so React must not flag the mismatch.
     <html lang="en" suppressHydrationWarning>
@@ -40,7 +45,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         {children}
         <TanStackDevtools
           config={{
-            position: "bottom-right",
+            // Floating trigger parked just above the Scan button (bottom-right). Draggable; dev only.
+            triggerMode: "floating",
+            triggerCoords: { x: 100, y: 74 },
           }}
           plugins={[
             {

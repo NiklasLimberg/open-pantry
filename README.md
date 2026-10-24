@@ -33,7 +33,7 @@ pnpm db:migrate
 pnpm dev          # http://localhost:3000
 ```
 
-On first start, `/setup` creates the owner account and pantry. Sign-up is closed after that.
+On first start, `/setup` creates the owner account and pantry. Sign-up is closed after that. To try the app, including the scanner, on a phone, see [Testing on an Android phone](docs/testing-on-a-phone.md).
 
 | Command                                | Purpose                                                                              |
 | -------------------------------------- | ------------------------------------------------------------------------------------ |

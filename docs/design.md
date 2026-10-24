@@ -8,7 +8,7 @@ See what is at home, use food in time, and buy what is missing. Start with one p
 
 ## Navigation and appearance
 
-Pantry, Stock rules, and Shopping are the main destinations. Settings holds reminders. A floating Scan button is available throughout. Use bottom navigation on mobile and a sidebar on desktop.
+Pantry, Stock rules, and Shopping are the main destinations. Settings holds reminders. A floating Scan button is available throughout. Use bottom navigation on mobile and a sidebar on desktop (from 700 px wide: 222 px, narrowing to 185 px below 1050 px, with Settings at its foot).
 
 Keep the warm neutral surfaces, green actions, and short functional headings. Avoid slogans and decorative headings. Status uses text as well as color. Provide visible keyboard focus, labeled controls, 44-pixel touch targets, and layouts that work at 320 pixels.
 
@@ -20,7 +20,7 @@ Inventory uses cards, one full-width card per row on mobile. Search by name and 
 
 A milk card can show 2 cartons physically present and approximately 1.5 cartons remaining. Expand Individual cartons to see the half-full opened carton and the unopened spare, each with its own Update action. Ground coffee uses the same grouping. Show the earliest date on the group card; show only matching batches when a filter is applied.
 
-Tap a product name for details. Tap Update to change a specific batch. Full, ¾, ½, ¼, and Empty are the quick amount controls; exact counts are available for slices and other useful units. Used up and Discard support Undo. A physical storage-fullness indicator is not included.
+Tap a product name for details. Each batch shows its amount choices in place, with the saved one selected: Full, ¾, ½, ¼, and Used up. Picking a different one reveals an Update button; nothing is saved until it is pressed. Anything below Full marks the batch opened, so there is no separate Opened control here; exact counts are available for slices and other useful units. Used up and Discard support Undo. A physical storage-fullness indicator is not included.
 
 ## Product details and units
 
@@ -46,7 +46,7 @@ Checking an item means In basket. Put purchases away confirms the actual product
 
 Scan opens the camera after the user requests it. Resolve the barcode to product details, then offer Add a purchase or Update existing. Updating requires choosing a batch; a barcode cannot identify which carton is in hand.
 
-Confirm the unit, amount, opened state, optional date, and location before saving. Allow manual barcode and product entry when the camera is denied, lookup fails, or a product is unknown. Keep camera frames on the device.
+Confirm the unit, starting amount (Full by default; anything below Full marks the package opened), optional date, and location before saving. The flow opens in a dialog over the current page. Allow manual barcode and product entry when the camera is denied, lookup fails, or a product is unknown. Keep camera frames on the device.
 
 ## Dates and reminders
 
@@ -58,9 +58,9 @@ Reminders are opt-in, with a daily digest defaulting to 2 days ahead at 09:00 in
 
 ## Offline and recovery
 
-After an initial online load, viewing stored inventory, rules, and shopping should work offline, as should adding and updating stock. Known products use cached details; unknown barcodes allow manual details for later enrichment. Initial sign-in and new online lookups require a connection.
+While a page is open, the last loaded inventory stays on screen if the connection drops; starting the app offline is not supported yet. Adding and updating stock needs a connection, and a failed save keeps the form. Scanning decodes on the device. Unknown barcodes allow manual details, with enrichment later. Sign-in and new online lookups require a connection.
 
-Distinguish Saved on this device, Syncing, Up to date, and Needs review. Keep unsaved forms on failure. Conflicting device edits ask for a corrected amount. Empty pantry, no search matches, and no configured rules each offer the relevant next action.
+Show a status line only when something needs attention: Offline, a refresh that takes longer than about half a second, or a failed refresh with Try again. Nothing is shown when the pantry is up to date. Keep unsaved forms on failure. Conflicting device edits ask for a corrected amount. Empty pantry, no search matches, and no configured rules each offer the relevant next action.
 
 ## Release scope
 

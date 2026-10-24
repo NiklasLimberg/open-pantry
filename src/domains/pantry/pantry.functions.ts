@@ -9,7 +9,7 @@ import { getFirstPantryId, getMemberAccess } from "./pantry-access.ts";
 export const pantryMiddleware = createMiddleware({ type: "function" }).server(async ({ next }) => {
   const session = await auth.api.getSession({ headers: getRequestHeaders() });
   if (!session) throw new Error("Not signed in.");
-  // The sign-up session is created before its pantry, so fall back to the first membership.
+  // Sessions don't store an active pantry yet (one pantry per user), so use the first membership.
   const pantryId =
     session.session.activeOrganizationId ?? (await getFirstPantryId(session.user.id));
   if (!pantryId) throw new Error("You are not a member of any pantry.");
@@ -22,6 +22,11 @@ export const getCurrentPantry = createServerFn({ method: "GET" })
   .handler(({ context }) => ({
     id: context.access.pantryId,
     name: context.access.pantryName,
+    timeZone: context.access.timeZone,
     role: context.access.role,
-    user: { name: context.session.user.name, email: context.session.user.email },
+    user: {
+      id: context.session.user.id,
+      name: context.session.user.name,
+      email: context.session.user.email,
+    },
   }));

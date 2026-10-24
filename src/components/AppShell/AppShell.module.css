@@ -1,0 +1,4 @@
+/* Leaves room for the sidebar; on phones the rail width is 0 and the bar sits below. */
+.content {
+  padding-left: var(--rail-width);
+}

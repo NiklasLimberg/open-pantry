@@ -32,8 +32,24 @@
   --space-6: 24px;
   --space-8: 32px;
   --space-12: 48px;
+  /* Phones have a bottom bar; from 700 px wide the navigation is a sidebar instead. */
+  --nav-height: 64px;
+  --rail-width: 0px;
 
   color-scheme: light dark;
+}
+
+@media (min-width: 700px) {
+  :root {
+    --nav-height: 0px;
+    --rail-width: 185px;
+  }
+}
+
+@media (min-width: 1051px) {
+  :root {
+    --rail-width: 222px;
+  }
 }
 
 :root[data-theme="light"] {

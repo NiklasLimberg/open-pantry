@@ -12,6 +12,8 @@ import { isPantryRole, roleCan, type PantryRole, type Permissions } from "./perm
 export type PantryAccess = {
   pantryId: string;
   pantryName: string;
+  /** IANA zone used to compare calendar dates. */
+  timeZone: string;
   role: PantryRole;
   /** null for share-link visitors. */
   userId: string | null;
@@ -27,12 +29,12 @@ export class ForbiddenError extends Error {
 
 export async function getMemberAccess(userId: string, pantryId: string): Promise<PantryAccess> {
   const [row] = await db
-    .select({ role: member.role, pantryName: organization.name })
+    .select({ role: member.role, pantryName: organization.name, timeZone: organization.timeZone })
     .from(member)
     .innerJoin(organization, eq(organization.id, member.organizationId))
     .where(and(eq(member.userId, userId), eq(member.organizationId, pantryId)));
   if (!row || !isPantryRole(row.role)) throw new ForbiddenError();
-  return { pantryId, pantryName: row.pantryName, role: row.role, userId };
+  return { pantryId, pantryName: row.pantryName, timeZone: row.timeZone, role: row.role, userId };
 }
 
 export async function getFirstPantryId(userId: string): Promise<string | null> {
