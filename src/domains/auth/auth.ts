@@ -36,18 +36,6 @@ export const auth = betterAuth({
         },
       },
     },
-    session: {
-      create: {
-        // Open the user's pantry on sign-in so requests have an active pantry.
-        before: async (session, ctx) => {
-          const membership = await ctx?.context.adapter.findOne<{ organizationId: string }>({
-            model: "member",
-            where: [{ field: "userId", value: session.userId }],
-          });
-          return { data: { ...session, activeOrganizationId: membership?.organizationId ?? null } };
-        },
-      },
-    },
   },
   plugins: [
     organization({

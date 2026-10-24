@@ -14,9 +14,9 @@ Group by product identity and confirmed package size, not category or name alone
 
 ### Quarter amounts
 
-A batch has an initial package count and per-package amount, plus a remaining fraction selected from 1, 0.75, 0.5, 0.25, and 0. The UI labels these Full, ¾, ½, ¼, and Empty. A 500 g coffee pack at ½ contributes approximately 250 g or 0.5 pack, depending on the rule unit. Approximate contributions are labeled “about.”
+A batch has an initial package count and per-package amount, plus a remaining fraction selected from 1, 0.75, 0.5, 0.25, and 0. The UI labels these Full, ¾, ½, ¼, and Empty; the amount choices on a batch offer Used up in place of Empty, which removes the batch. A 500 g coffee pack at ½ contributes approximately 250 g or 0.5 pack, depending on the rule unit. Approximate contributions are labeled “about.”
 
-Separate packages with different fractions, opened states, or dates into separate batches. Identical unopened packages can be grouped, such as two full 1 L milk cartons with the same date. Changing one to opened splits it from the group. An unopened spare rule counts only whole unopened packages.
+A batch is marked opened as soon as its remaining amount is set below Full; setting it back to Full leaves the flag unchanged, since a package cannot be unopened. Separate packages with different fractions, opened states, or dates into separate batches. Identical unopened packages can be grouped, such as two full 1 L milk cartons with the same date. Changing one to opened splits it from the group. An unopened spare rule counts only whole unopened packages.
 
 ### Choosing the tracking unit
 

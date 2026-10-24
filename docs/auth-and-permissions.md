@@ -2,7 +2,7 @@
 
 23 October 2026 · Better Auth, roles, and share links are implemented; Authelia sign-in is not
 
-Which auth library to use and how pantry permissions work. Builds on the authentication section of the [technical plan](technical-plan.md): Authelia as a future OIDC provider, internal user IDs, server-side authorization on every read, mutation, and outbox replay.
+Which auth library to use and how pantry permissions work. Builds on the authentication section of the [technical plan](technical-plan.md): Authelia as a future OIDC provider, internal user IDs, server-side authorization on every read and mutation.
 
 ## Requirements
 
@@ -29,7 +29,7 @@ Implemented ([src/domains/auth/auth.ts](../src/domains/auth/auth.ts)):
 
 - Email + password. Only the first account can sign up (`/setup`); it becomes the owner and gets a pantry. Later sign-ups are rejected on the server with 403.
 - `organization` plugin with our own statements and roles; a pantry is an organization with a `timeZone` field.
-- The session's active pantry is set on sign-in.
+- The active pantry is the first membership; sessions do not store one yet.
 - Generated tables live in `src/db/auth-schema.ts` (`pnpm auth:generate`, then `pnpm db:generate`).
 
 Later: `generic-oauth` with Authelia (discovery URL, confidential client, PKCE S256, exact callback; the first-account rule must then allow invited or linked identities). Invitation emails for additional members. Optional `passkey` plugin.
@@ -70,8 +70,8 @@ An owner creates a link at `/share/<token>`. The token is 32 random bytes; only 
 
 - **Server functions are the boundary.** `pantryMiddleware` loads the session and the member's role; a share-link function resolves access from the token instead. Every handler calls `requirePermission(access, { … })`, which throws a 403. Queries always filter by the verified pantry ID.
 - **Client checks are cosmetic.** Pages use `roleCan` to hide controls (for example the share-link panel for non-owners).
-- **Offline outbox (later).** Each queued operation records user, pantry, and idempotency key; the server re-checks permission at replay time and surfaces rejections as "Needs review".
-- **Local storage scoping (later).** Browser collections and outboxes are keyed by user and pantry.
+- **No offline writes.** There is no outbox to replay, so every write is authorized when it is made.
+- **Local storage scoping (later).** Nothing private is stored in the browser yet: the Query cache is in memory per signed-in visit. A persisted cache or service worker would be keyed by user and pantry and cleared on sign-out.
 
 ### Tests
 

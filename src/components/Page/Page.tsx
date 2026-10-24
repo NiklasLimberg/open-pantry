@@ -8,7 +8,7 @@ type PageProps = {
   /** Short text next to the title, e.g. the viewer's role. */
   badge?: string;
   actions?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 export function Page({ title, badge, actions, children }: PageProps) {

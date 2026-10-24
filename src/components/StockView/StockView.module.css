@@ -1,0 +1,34 @@
+.stock {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-3);
+}
+
+.empty,
+.attribution {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+}
+
+.empty {
+  margin-bottom: var(--space-3);
+}
+
+.attribution a {
+  color: inherit;
+}
+
+.added {
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: var(--color-soft);
+  color: var(--color-green);
+  font-weight: 600;
+}

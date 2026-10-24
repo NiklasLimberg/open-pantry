@@ -14,6 +14,9 @@ import { Route as AuthedRouteImport } from './routes/_authed'
 import { Route as SetupRouteImport } from './routes/setup'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as AuthedPantryRouteImport } from './routes/_authed/pantry'
+import { Route as AuthedRulesRouteImport } from './routes/_authed/rules'
+import { Route as AuthedSettingsRouteImport } from './routes/_authed/settings'
+import { Route as AuthedShoppingRouteImport } from './routes/_authed/shopping'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ShareTokenRouteImport } from './routes/share/$token'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -42,6 +45,21 @@ const AuthedPantryRoute = AuthedPantryRouteImport.update({
   path: '/pantry',
   getParentRoute: () => AuthedRoute,
 } as any)
+const AuthedRulesRoute = AuthedRulesRouteImport.update({
+  id: '/rules',
+  path: '/rules',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedSettingsRoute = AuthedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthedRoute,
+} as any)
+const AuthedShoppingRoute = AuthedShoppingRouteImport.update({
+  id: '/shopping',
+  path: '/shopping',
+  getParentRoute: () => AuthedRoute,
+} as any)
 const ApiHealthRoute = ApiHealthRouteImport.update({
   id: '/api/health',
   path: '/api/health',
@@ -63,6 +81,9 @@ export interface FileRoutesByFullPath {
   '/setup': typeof SetupRoute
   '/sign-in': typeof SignInRoute
   '/pantry': typeof AuthedPantryRoute
+  '/rules': typeof AuthedRulesRoute
+  '/settings': typeof AuthedSettingsRoute
+  '/shopping': typeof AuthedShoppingRoute
   '/api/health': typeof ApiHealthRoute
   '/share/$token': typeof ShareTokenRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -72,6 +93,9 @@ export interface FileRoutesByTo {
   '/setup': typeof SetupRoute
   '/sign-in': typeof SignInRoute
   '/pantry': typeof AuthedPantryRoute
+  '/rules': typeof AuthedRulesRoute
+  '/settings': typeof AuthedSettingsRoute
+  '/shopping': typeof AuthedShoppingRoute
   '/api/health': typeof ApiHealthRoute
   '/share/$token': typeof ShareTokenRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -83,6 +107,9 @@ export interface FileRoutesById {
   '/setup': typeof SetupRoute
   '/sign-in': typeof SignInRoute
   '/_authed/pantry': typeof AuthedPantryRoute
+  '/_authed/rules': typeof AuthedRulesRoute
+  '/_authed/settings': typeof AuthedSettingsRoute
+  '/_authed/shopping': typeof AuthedShoppingRoute
   '/api/health': typeof ApiHealthRoute
   '/share/$token': typeof ShareTokenRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -94,6 +121,9 @@ export interface FileRouteTypes {
     | '/setup'
     | '/sign-in'
     | '/pantry'
+    | '/rules'
+    | '/settings'
+    | '/shopping'
     | '/api/health'
     | '/share/$token'
     | '/api/auth/$'
@@ -103,6 +133,9 @@ export interface FileRouteTypes {
     | '/setup'
     | '/sign-in'
     | '/pantry'
+    | '/rules'
+    | '/settings'
+    | '/shopping'
     | '/api/health'
     | '/share/$token'
     | '/api/auth/$'
@@ -113,6 +146,9 @@ export interface FileRouteTypes {
     | '/setup'
     | '/sign-in'
     | '/_authed/pantry'
+    | '/_authed/rules'
+    | '/_authed/settings'
+    | '/_authed/shopping'
     | '/api/health'
     | '/share/$token'
     | '/api/auth/$'
@@ -165,6 +201,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthedPantryRouteImport
       parentRoute: typeof AuthedRoute
     }
+    '/_authed/rules': {
+      id: '/_authed/rules'
+      path: '/rules'
+      fullPath: '/rules'
+      preLoaderRoute: typeof AuthedRulesRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/settings': {
+      id: '/_authed/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthedSettingsRouteImport
+      parentRoute: typeof AuthedRoute
+    }
+    '/_authed/shopping': {
+      id: '/_authed/shopping'
+      path: '/shopping'
+      fullPath: '/shopping'
+      preLoaderRoute: typeof AuthedShoppingRouteImport
+      parentRoute: typeof AuthedRoute
+    }
     '/api/health': {
       id: '/api/health'
       path: '/api/health'
@@ -191,10 +248,16 @@ declare module '@tanstack/react-router' {
 
 interface AuthedRouteChildren {
   AuthedPantryRoute: typeof AuthedPantryRoute
+  AuthedRulesRoute: typeof AuthedRulesRoute
+  AuthedSettingsRoute: typeof AuthedSettingsRoute
+  AuthedShoppingRoute: typeof AuthedShoppingRoute
 }
 
 const AuthedRouteChildren: AuthedRouteChildren = {
   AuthedPantryRoute: AuthedPantryRoute,
+  AuthedRulesRoute: AuthedRulesRoute,
+  AuthedSettingsRoute: AuthedSettingsRoute,
+  AuthedShoppingRoute: AuthedShoppingRoute,
 }
 
 const AuthedRouteWithChildren =

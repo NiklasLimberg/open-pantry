@@ -4,6 +4,10 @@
   max-width: 960px;
   margin: 0 auto;
   padding: var(--space-4);
+  /* Room below the last control for the bottom nav and the floating Scan button. */
+  padding-bottom: calc(
+    var(--nav-height) + var(--space-12) + var(--space-6) + env(safe-area-inset-bottom)
+  );
 }
 
 .header {
