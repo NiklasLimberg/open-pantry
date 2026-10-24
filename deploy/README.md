@@ -33,7 +33,7 @@ From this repository on your computer:
 
 ```sh
 ssh infra@192.168.178.42 'sudo mkdir -p /opt/open-pantry && sudo chown infra:infra /opt/open-pantry'
-rsync -av deploy/ infra@192.168.178.42:/opt/open-pantry/
+scp -r deploy/. infra@192.168.178.42:/opt/open-pantry/
 ```
 
 On the VM:
