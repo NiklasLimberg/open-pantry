@@ -1,0 +1,1 @@
+ALTER TABLE "product" ADD COLUMN "printed_date_kind" text;

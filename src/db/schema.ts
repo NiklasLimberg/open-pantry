@@ -101,6 +101,11 @@ export const product = pgTable(
     packageAmount: integer("package_amount"),
     packageUnit: text("package_unit", { enum: ["g", "ml"] }),
     trackUnit: text("track_unit", { enum: trackUnits }).notNull().default("pack"),
+    /**
+     * Which printed date the user last confirmed on this product's package. Only ever what the
+     * user chose, never inferred from a category (docs/data-and-rules.md).
+     */
+    printedDateKind: text("printed_date_kind", { enum: ["mhd", "use_by"] }),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [

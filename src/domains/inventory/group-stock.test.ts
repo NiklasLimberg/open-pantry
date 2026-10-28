@@ -9,6 +9,7 @@ const product = (id: string, name: string, barcode: string | null = null): Stock
   name,
   brand: null,
   trackUnit: "pack",
+  printedDateKind: null,
   packageAmount: null,
   packageUnit: null,
   suggestedPackage: null,
