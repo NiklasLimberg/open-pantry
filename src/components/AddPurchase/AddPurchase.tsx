@@ -1,10 +1,11 @@
-import { useForm } from "@tanstack/react-form";
+import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { useState } from "react";
 import { z } from "zod";
 
 import { trackUnits } from "#/db/schema.ts";
-import { unitLabel, type DateKind } from "#/domains/inventory/format.ts";
+import { todayIn, unitLabel, type DateKind } from "#/domains/inventory/format.ts";
 import type { LookupState } from "#/domains/inventory/lookup.ts";
+import { parseTypedDate } from "#/domains/inventory/parse-date.ts";
 import { toPurchaseInput, type PurchaseValues } from "#/domains/inventory/purchase.ts";
 import { useRefreshStock } from "#/domains/inventory/stock-query.ts";
 import {
@@ -15,7 +16,7 @@ import {
 
 import { AmountPicker, startAmountOptions } from "../AmountPicker/AmountPicker.tsx";
 import { Button } from "../Button/Button.tsx";
-import { FormError, FormInput, FormSelect } from "../Form/Form.tsx";
+import { Field, FormError, FormInput, FormSelect, Input } from "../Form/Form.tsx";
 import styles from "./AddPurchase.module.css";
 
 type Props = {
@@ -90,7 +91,8 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
     packageUnit: existing?.packageUnit ?? suggestion?.unit ?? "g",
     count: 1,
     locationId: locations[0]?.id ?? "",
-    dateKind: "mhd",
+    // What this product printed last time; MHD for one the pantry has not seen.
+    dateKind: existing?.printedDateKind ?? "mhd",
     date: "",
     amount: "4",
     needsName: !existing && !barcode,
@@ -203,12 +205,7 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
         {(dateKind) => (
           <form.Field name="date">
             {(field) => (
-              <FormInput
-                field={field}
-                label="Date"
-                type="date"
-                disabled={dateKind === "none" || dateKind === "unknown"}
-              />
+              <TypedDate field={field} disabled={dateKind === "none" || dateKind === "unknown"} />
             )}
           </form.Field>
         )}
@@ -235,5 +232,52 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
         )}
       </form.Subscribe>
     </form>
+  );
+}
+
+/** Shown back to the user so a typed shortcut is confirmed before it is saved. */
+const dateFormat = new Intl.DateTimeFormat("en-GB", {
+  weekday: "short",
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+/**
+ * The printed date, typed the way it reads on the package (2803, 28.03.27, 03.27) and echoed back
+ * as a full date. The field's value stays a calendar date, so the stored shape is unchanged.
+ */
+function TypedDate({ field, disabled }: { field: AnyFieldApi; disabled: boolean }) {
+  const [text, setText] = useState("");
+  const [today] = useState(() => todayIn(Intl.DateTimeFormat().resolvedOptions().timeZone));
+  const parsed = parseTypedDate(text, today);
+  const echo = parsed
+    ? `${dateFormat.format(new Date(`${parsed.iso}T00:00:00Z`))}${parsed.monthOnly ? " (end of month)" : ""}`
+    : text.trim()
+      ? "Not a date. Try 2803, 28.03.27 or 03.27."
+      : "Type it as printed, e.g. 2803, 28.03.27 or 03.27.";
+
+  return (
+    <Field
+      label="Date"
+      hint={disabled ? undefined : echo}
+      htmlFor={field.name}
+      errors={field.state.meta.errors}
+    >
+      <Input
+        id={field.name}
+        value={disabled ? "" : text}
+        disabled={disabled}
+        inputMode="numeric"
+        autoComplete="off"
+        placeholder="DD.MM.YY"
+        onBlur={field.handleBlur}
+        onChange={(event) => {
+          setText(event.target.value);
+          field.handleChange(parseTypedDate(event.target.value, today)?.iso ?? "");
+        }}
+      />
+    </Field>
   );
 }

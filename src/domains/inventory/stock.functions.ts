@@ -67,6 +67,8 @@ export type StockProduct = {
   name: string | null;
   brand: string | null;
   trackUnit: (typeof trackUnits)[number];
+  /** The printed date type the user last confirmed for this product; null until they have. */
+  printedDateKind: "mhd" | "use_by" | null;
   /** Confirmed package size. Null until the user confirms one. */
   packageAmount: number | null;
   packageUnit: "g" | "ml" | null;
@@ -133,6 +135,7 @@ async function readProducts(access: PantryAccess): Promise<StockProduct[]> {
       name,
       brand,
       trackUnit: p.trackUnit,
+      printedDateKind: p.printedDateKind,
       packageAmount: p.packageAmount,
       packageUnit: p.packageUnit,
       suggestedPackage: parsePackageSize(found?.quantity),
@@ -312,6 +315,16 @@ export const addPurchase = createServerFn({ method: "POST" })
           })),
         )
         .onConflictDoNothing({ target: batch.id });
+      // Remember what the user said this package prints, to preselect it on the next purchase.
+      const printed = data.batches.filter(
+        (b) => b.dateKind === "mhd" || b.dateKind === "use_by",
+      )[0];
+      if (printed && (printed.dateKind === "mhd" || printed.dateKind === "use_by")) {
+        await tx
+          .update(product)
+          .set({ printedDateKind: printed.dateKind })
+          .where(and(eq(product.id, productId), eq(product.pantryId, pantryId)));
+      }
       return { productId };
     });
   });
