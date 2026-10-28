@@ -154,3 +154,19 @@ export const batch = pgTable(
     ),
   ],
 );
+
+/** Latest run of each background task (one row per task), so the settings page can show it. */
+export const taskRun = pgTable("task_run", {
+  name: text("name").primaryKey(),
+  status: text("status", { enum: ["running", "succeeded", "failed"] }).notNull(),
+  startedAt: timestamp("started_at", { withTimezone: true }).notNull(),
+  /** Bumped with every progress update, so a run that stopped updating can be told from a slow one. */
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
+  finishedAt: timestamp("finished_at", { withTimezone: true }),
+  /** Whether the run ignored freshness and refreshed every held barcode. */
+  full: boolean("full").notNull().default(false),
+  /** Items the run set out to handle and how many it has handled so far. */
+  total: integer("total").notNull().default(0),
+  processed: integer("processed").notNull().default(0),
+  error: text("error"),
+});

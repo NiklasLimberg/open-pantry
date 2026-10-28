@@ -1,0 +1,64 @@
+.hint {
+  color: var(--color-muted);
+  margin-block: 0 var(--space-3);
+}
+
+.bar {
+  display: flex;
+  block-size: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: var(--color-soft);
+}
+
+.fresh {
+  background: var(--color-progress);
+}
+
+.due {
+  background: var(--color-amber);
+}
+
+.never {
+  background: var(--color-line);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-muted);
+}
+
+.dot {
+  display: inline-block;
+  inline-size: 8px;
+  block-size: 8px;
+  margin-inline-end: var(--space-2);
+  border-radius: 50%;
+}
+
+.detail {
+  color: var(--color-muted);
+  margin-block: var(--space-2) 0;
+}
+
+.run {
+  margin-block-start: var(--space-3);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--color-line);
+}
+
+.run p {
+  margin: 0;
+}
+
+.progress {
+  display: block;
+  inline-size: 100%;
+  margin-block-start: var(--space-2);
+  accent-color: var(--color-progress);
+}
