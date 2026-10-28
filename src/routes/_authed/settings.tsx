@@ -2,10 +2,12 @@ import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 import { Button } from "#/components/Button/Button.tsx";
 import { Card } from "#/components/Card/Card.tsx";
+import { ProductSyncPanel } from "#/components/ProductSyncPanel/ProductSyncPanel.tsx";
 import { Page } from "#/components/Page/Page.tsx";
 import { authClient } from "#/domains/auth/auth-client.ts";
 import { resetVerifiedSession } from "#/domains/auth/verified-session.ts";
 import { clearLocalData } from "#/domains/offline/persister.ts";
+import { roleCan } from "#/domains/pantry/permissions.ts";
 
 const authed = getRouteApi("/_authed");
 
@@ -35,6 +37,7 @@ function Settings() {
           Sign out
         </Button>
       </Card>
+      {roleCan(pantry.role, { productSync: ["read"] }) && <ProductSyncPanel />}
     </Page>
   );
 }

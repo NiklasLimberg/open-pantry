@@ -22,6 +22,13 @@
       "when": 1792793624184,
       "tag": "0002_stock",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792835787931,
+      "tag": "0003_boring_silverclaw",
+      "breakpoints": true
     }
   ]
 }

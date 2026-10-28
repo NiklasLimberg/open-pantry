@@ -9,6 +9,7 @@ export const statement = {
   rule: ["read", "create", "update", "delete"],
   shopping: ["read", "add", "check", "confirm-purchase"],
   shareLink: ["read", "create", "revoke"],
+  productSync: ["read", "run"],
 } as const;
 
 export const ac = createAccessControl(statement);
@@ -36,6 +37,7 @@ export const owner = ac.newRole({
   ...ownerAc.statements,
   ...editPantry,
   shareLink: ["read", "create", "revoke"],
+  productSync: ["read", "run"],
 });
 
 export const roles = { owner, editor, viewer };
