@@ -11,6 +11,16 @@ import { VitePWA } from "vite-plugin-pwa";
 
 const config = defineConfig({
   resolve: { tsconfigPaths: true },
+  build: {
+    rolldownOptions: {
+      // Libraries start files with "use client" (a React Server Components marker). This app has
+      // no server components, so dropping the directive is harmless; 87 warnings per build otherwise.
+      onLog(level, log, defaultHandler) {
+        if (log.code === "MODULE_LEVEL_DIRECTIVE" && log.id?.includes("node_modules")) return;
+        defaultHandler(level, log);
+      },
+    },
+  },
   plugins: [
     devtools(),
     // Every 30 minutes: up to 20 stale products, spaced to stay below the Open Food Facts quota.
@@ -45,13 +55,18 @@ const config = defineConfig({
         short_name: "Pantry",
         start_url: "/pantry",
         display: "standalone",
-        background_color: "#f7f6f0",
-        theme_color: "#294f3b",
+        background_color: "#f6f6f4",
+        theme_color: "#2b2b2b",
       },
       // Includes the barcode reader's wasm file (about 1 MB), so scanning works offline even when
       // the app was installed while online and never scanned before. Its name carries a content
       // hash, so it is downloaded again only when the reader changes.
-      injectManifest: { globPatterns: ["assets/**/*.{js,css,woff2,wasm}"] },
+      injectManifest: {
+        globPatterns: ["assets/**/*.{js,css,woff2,wasm}"],
+        // The worker is registered as a classic script (register-sw.ts). The default "es" build
+        // sets the deprecated rolldown option inlineDynamicImports, which warns on every build.
+        rollupFormat: "iife",
+      },
     }),
   ],
 });

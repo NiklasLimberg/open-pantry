@@ -1,6 +1,6 @@
 import { m } from "#/paraglide/messages.js";
 import type { AnyFieldApi } from "@tanstack/react-form";
-import { Form as RadixForm } from "radix-ui";
+import * as RadixForm from "@radix-ui/react-form";
 import {
   cloneElement,
   isValidElement,

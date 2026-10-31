@@ -1,4 +1,4 @@
-import { RadioGroup } from "radix-ui";
+import * as RadioGroup from "@radix-ui/react-radio-group";
 
 import { changeLocale } from "#/domains/i18n/locale.ts";
 import { m } from "#/paraglide/messages.js";

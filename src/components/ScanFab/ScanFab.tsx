@@ -1,6 +1,6 @@
 import { m } from "#/paraglide/messages.js";
 import { ScanBarcode, X } from "lucide-react";
-import { Dialog } from "radix-ui";
+import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
 
 import { ScanFlow } from "../ScanFlow/ScanFlow.tsx";
