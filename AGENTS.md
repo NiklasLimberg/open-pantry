@@ -31,7 +31,7 @@ Paraglide JS, English (`messages/en.json`, the base) and German (`messages/de.js
 - Read messages when rendering or calling, never in module-level constants: the server resolves the language per request, so a constant freezes whichever language came first. Use functions (`() => m["…"]()`), zod's `error: () => …`, and `Intl` formatters created with `getLocale()` at call time.
 - Plurals are separate `one` / `other` messages picked in code (`unitLabel`); the plural syntax in Paraglide's docs doesn't compile with the message-format plugin we use.
 - Messages keep their whitespace, but build sentences from whole messages plus variables rather than gluing fragments.
-- The language comes from the `PARAGLIDE_LOCALE` cookie, then the browser, then English; there are no language URLs (`src/server.ts` wraps requests in `paraglideMiddleware`). The Settings language card sets it with `setLocale`.
+- The language comes from the `PARAGLIDE_LOCALE` cookie, then the browser, then English; there are no language URLs (`src/server.ts` wraps requests in `paraglideMiddleware`). The Settings language card switches with `changeLocale` (`src/domains/i18n/locale.ts`), which does not reload: offline, the service worker answers a reload with a page cached in the old language or a redirect. `LocaleBoundary` renders the signed-in screens again instead, so keep new signed-in UI inside it.
 - Open Food Facts product names are stored per app language (`off_product.names`) and shipped with the stock, so `productName()` switches language offline. A new language needs its code in `project.inlang/settings.json` and a `messages/<code>.json`.
 - Not translated: names the user or Open Food Facts typed (products, brands, locations), and server messages for invalid requests.
 

@@ -1,7 +1,8 @@
 import { RadioGroup } from "radix-ui";
 
+import { changeLocale } from "#/domains/i18n/locale.ts";
 import { m } from "#/paraglide/messages.js";
-import { getLocale, setLocale, type Locale } from "#/paraglide/runtime.js";
+import { getLocale, type Locale } from "#/paraglide/runtime.js";
 
 import { Card } from "../Card/Card.tsx";
 import styles from "./LanguageSetting.module.css";
@@ -17,12 +18,12 @@ export function LanguageSetting() {
   return (
     <Card title={m["language.title"]()}>
       <p className={styles.hint}>{m["language.hint"]()}</p>
-      {/* The stock carries product names in every language, so switching needs no network. */}
+      {/* No network involved: the stock carries product names in every language. */}
       <RadioGroup.Root
         value={getLocale()}
         onValueChange={(value) => {
           const locale = options.find((option) => option.value === value)?.value;
-          if (locale) void setLocale(locale);
+          if (locale) changeLocale(locale);
         }}
         aria-label={m["language.group"]()}
         className={styles.group}

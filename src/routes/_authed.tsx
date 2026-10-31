@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 
 import { AppShell } from "#/components/AppShell/AppShell.tsx";
+import { LocaleBoundary } from "#/components/LocaleBoundary/LocaleBoundary.tsx";
 import { PantryCache } from "#/components/PantryCache/PantryCache.tsx";
 import { ScanFab } from "#/components/ScanFab/ScanFab.tsx";
 import { getSession } from "#/domains/auth/auth.functions.ts";
@@ -54,13 +55,15 @@ function AuthedLayout() {
 
   return (
     <PantryCache key={pantry.id} userId={pantry.user.id} pantryId={pantry.id} prefetch={canAdd}>
-      <AppShell>
-        <Outlet />
-      </AppShell>
-      {canAdd && (
-        // After adding, show the list with the new item scrolled into view.
-        <ScanFab onAdded={(added) => void navigate({ to: "/pantry", search: { added } })} />
-      )}
+      <LocaleBoundary>
+        <AppShell>
+          <Outlet />
+        </AppShell>
+        {canAdd && (
+          // After adding, show the list with the new item scrolled into view.
+          <ScanFab onAdded={(added) => void navigate({ to: "/pantry", search: { added } })} />
+        )}
+      </LocaleBoundary>
     </PantryCache>
   );
 }
