@@ -1,3 +1,4 @@
+import { paraglideVitePlugin } from "@inlang/paraglide-js";
 import { defineConfig } from "vite";
 import { devtools } from "@tanstack/devtools-vite";
 
@@ -21,6 +22,13 @@ const config = defineConfig({
         },
       },
       scheduledTasks: { "*/30 * * * *": ["products:refresh"] },
+    }),
+    // Compiles messages/*.json into typed functions in src/paraglide (not committed). The language
+    // comes from the PARAGLIDE_LOCALE cookie, then the browser's; there are no language URLs.
+    paraglideVitePlugin({
+      project: "./project.inlang",
+      outdir: "./src/paraglide",
+      strategy: ["cookie", "preferredLanguage", "baseLocale"],
     }),
     tanstackStart(),
     viteReact(),

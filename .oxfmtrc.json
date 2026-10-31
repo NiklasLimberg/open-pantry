@@ -5,6 +5,7 @@
     ".output/**",
     ".tanstack/**",
     "drizzle/**",
-    "pnpm-lock.yaml"
+    "pnpm-lock.yaml",
+    "src/paraglide/**"
   ]
 }

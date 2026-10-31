@@ -15,3 +15,7 @@ todos.json
 
 # Local agent and preview config
 .claude/
+
+
+# Compiled by Paraglide from messages/*.json
+src/paraglide/

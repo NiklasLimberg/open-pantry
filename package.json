@@ -14,14 +14,16 @@
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit pull",
     "db:studio": "drizzle-kit studio",
-    "test": "vitest run --passWithNoTests",
+    "i18n:compile": "rm -rf src/paraglide && paraglide-js compile --project ./project.inlang --outdir ./src/paraglide --strategy cookie preferredLanguage baseLocale",
+    "test": "pnpm i18n:compile && vitest run --passWithNoTests",
     "db:up": "docker compose up -d db",
-    "check": "oxfmt --check && oxlint --deny-warnings && tsc --noEmit",
+    "check": "pnpm i18n:compile && oxfmt --check && oxlint --deny-warnings && tsc --noEmit",
     "lint": "oxlint --deny-warnings",
     "format": "oxfmt",
     "auth:generate": "pnpm dlx auth@1.7.12 generate --config src/domains/auth/auth.ts --output src/db/auth-schema.ts --yes"
   },
   "dependencies": {
+    "@inlang/paraglide-js": "^2.29.3",
     "@tanstack/query-async-storage-persister": "5.104.5",
     "@tanstack/react-devtools": "0.10.13",
     "@tanstack/react-form": "1.33.5",
@@ -44,6 +46,7 @@
     "zxing-wasm": "^3.1.6"
   },
   "devDependencies": {
+    "@inlang/plugin-message-format": "^4.5.6",
     "@tanstack/devtools-vite": "0.8.5",
     "@types/node": "^24.19.2",
     "@types/pg": "^8.15.6",
