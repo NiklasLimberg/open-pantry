@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { setResponseStatus } from "@tanstack/react-start/server";
 import { and, eq } from "drizzle-orm";
 
@@ -20,7 +21,7 @@ export type PantryAccess = {
 };
 
 export class ForbiddenError extends Error {
-  constructor(message = "You don't have access to this.") {
+  constructor(message = m["error.noAccess"]()) {
     super(message);
     setResponseStatus(403);
     this.name = "ForbiddenError";

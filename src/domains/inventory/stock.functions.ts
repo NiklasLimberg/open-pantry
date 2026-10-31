@@ -10,7 +10,10 @@ import { roleCan } from "#/domains/pantry/permissions.ts";
 import { pantryMiddleware } from "#/domains/pantry/pantry.functions.ts";
 import { normalizeBarcode } from "#/domains/products/barcode.ts";
 import { getOffProduct } from "#/domains/products/off-cache.ts";
+import { localizedName } from "#/domains/products/languages.ts";
 import { parsePackageSize } from "#/domains/products/quantity.ts";
+import { m } from "#/paraglide/messages.js";
+import { getLocale } from "#/paraglide/runtime.js";
 
 // Every handler resolves the pantry from the session (pantryMiddleware), checks the role, and
 // filters by that pantry ID; IDs sent by the client are never trusted to select a pantry.
@@ -63,8 +66,13 @@ export type StockLocation = { id: string; name: string };
 export type StockProduct = {
   id: string;
   barcode: string | null;
-  /** The name to show: the user's own, else Open Food Facts', else null. */
+  /** The user's own name, else Open Food Facts' default name, else null. */
   name: string | null;
+  /**
+   * Open Food Facts' name per language, for products still following it. Every language comes
+   * with the stock so the screen can switch language offline; show it with `productName`.
+   */
+  names: Record<string, string>;
   brand: string | null;
   trackUnit: (typeof trackUnits)[number];
   /** The printed date type the user last confirmed for this product; null until they have. */
@@ -133,6 +141,7 @@ async function readProducts(access: PantryAccess): Promise<StockProduct[]> {
       id: p.id,
       barcode: p.barcode,
       name,
+      names: p.name === null ? (found?.names ?? {}) : {},
       brand,
       trackUnit: p.trackUnit,
       printedDateKind: p.printedDateKind,
@@ -208,7 +217,7 @@ export const lookupBarcode = createServerFn({ method: "POST" })
   .handler(async ({ data, context: { access } }): Promise<BarcodeLookup> => {
     requirePermission(access, { inventory: ["create"] });
     const barcode = normalizeBarcode(data.barcode);
-    if (!barcode) throw new Error("That is not a valid EAN or UPC barcode.");
+    if (!barcode) throw new Error(m["error.invalidBarcode"]());
     const productId = await findProductIdByBarcode(db, access.pantryId, barcode);
     const off = await getOffProduct(barcode);
     if (!off) return { status: "unavailable", barcode, productId };
@@ -216,7 +225,7 @@ export const lookupBarcode = createServerFn({ method: "POST" })
     return {
       status: "found",
       barcode,
-      name: off.name,
+      name: localizedName(off.names, getLocale(), off.name),
       brand: off.brand,
       quantity: off.quantity,
       suggestedPackage: parsePackageSize(off.quantity),

@@ -1,4 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it } from "vitest";
+
+import { overwriteGetLocale } from "#/paraglide/runtime.js";
 
 import { describeDate, formatPackagesLeft, summarizeStock, todayIn, unitLabel } from "./format.ts";
 
@@ -125,5 +127,20 @@ describe("summarizeStock", () => {
     const summary = summarizeStock({ trackUnit: "slice", ...milka, quarters: [4] });
     expect(summary.packages).toBe("1 pack · 100 g");
     expect(summary.needsDetails).toMatch(/slices per pack/);
+  });
+});
+
+describe("in German", () => {
+  afterEach(() => overwriteGetLocale(() => "en"));
+
+  it("uses German words and decimal commas", () => {
+    overwriteGetLocale(() => "de");
+    expect(formatPackagesLeft([4, 2])).toBe("ca. 1,5");
+    expect(unitLabel("loaf", 2)).toBe("Laibe");
+    expect(describeDate("use_by", "2026-10-22", "2026-10-23").warning).toBe("Nicht verwenden");
+    expect(
+      summarizeStock({ trackUnit: "pack", packageAmount: 100, packageUnit: "g", quarters: [4, 2] })
+        .left,
+    ).toBe("ca. 1,5 Packungen übrig · ca. 150 g");
   });
 });

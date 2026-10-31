@@ -27,7 +27,7 @@ export function groupStock(
   for (const batch of batches) {
     const product = byId.get(batch.productId);
     if (!product || (locationId && batch.locationId !== locationId)) continue;
-    const label = `${product.name ?? ""} ${product.brand ?? ""} ${product.barcode ?? ""}`;
+    const label = `${product.name ?? ""} ${Object.values(product.names).join(" ")} ${product.brand ?? ""} ${product.barcode ?? ""}`;
     if (term && !label.toLowerCase().includes(term)) continue;
     const group = groups.get(product.id) ?? { product, batches: [], earliest: null };
     group.batches.push(batch);

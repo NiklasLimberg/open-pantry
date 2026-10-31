@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { useForm } from "@tanstack/react-form";
 import { Camera, CameraOff } from "lucide-react";
 import { z } from "zod";
@@ -24,7 +25,7 @@ export function Scanner({ onBarcode }: Props) {
       <div className={styles.viewfinder} hidden={!camera.active}>
         <video ref={videoRef} className={styles.video} playsInline muted />
         <p className={styles.caption}>
-          {camera.scanning ? "Point the camera at the barcode" : "Starting camera…"}
+          {camera.scanning ? m["scan.pointCamera"]() : m["scan.startingCamera"]()}
         </p>
       </div>
       {camera.error && (
@@ -34,11 +35,11 @@ export function Scanner({ onBarcode }: Props) {
       )}
       {camera.active ? (
         <Button type="button" variant="secondary" onClick={camera.stop}>
-          Stop camera
+          {m["scan.stopCamera"]()}
         </Button>
       ) : (
         <Button type="button" onClick={camera.start}>
-          <Camera size={18} aria-hidden /> Scan with camera
+          <Camera size={18} aria-hidden /> {m["scan.withCamera"]()}
         </Button>
       )}
       <TypedBarcode onBarcode={onBarcode} />
@@ -47,9 +48,9 @@ export function Scanner({ onBarcode }: Props) {
 }
 
 const barcodeSchema = z.object({
-  barcode: z
-    .string()
-    .refine((value) => normalizeBarcode(value) !== null, "Enter a valid EAN or UPC barcode."),
+  barcode: z.string().refine((value) => normalizeBarcode(value) !== null, {
+    error: () => m["scan.invalidBarcode"](),
+  }),
 });
 
 function TypedBarcode({ onBarcode }: Props) {
@@ -72,7 +73,7 @@ function TypedBarcode({ onBarcode }: Props) {
     >
       <form.Field name="barcode">
         {(field) => (
-          <Field label="Or type the barcode" htmlFor="barcode" errors={field.state.meta.errors}>
+          <Field label={m["scan.orType"]()} htmlFor="barcode" errors={field.state.meta.errors}>
             <Input
               id="barcode"
               inputMode="numeric"
@@ -85,7 +86,7 @@ function TypedBarcode({ onBarcode }: Props) {
         )}
       </form.Field>
       <Button type="submit" variant="secondary">
-        Use barcode
+        {m["scan.useBarcode"]()}
       </Button>
     </form>
   );

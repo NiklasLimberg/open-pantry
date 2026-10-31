@@ -1,6 +1,419 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "global": {
-    "pantry": "Pantry"
+    "pantry": "Pantry",
+    "rules": "Rules",
+    "stockRules": "Stock rules",
+    "shopping": "Shopping",
+    "settings": "Settings",
+    "scan": "Scan",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "date": "Date",
+    "location": "Location",
+    "update": "Update",
+    "updating": "Updating…",
+    "refreshing": "Refreshing…",
+    "tryAgain": "Try again",
+    "close": "Close",
+    "opened": "Opened",
+    "unopened": "Unopened",
+    "openFoodFacts": "Open Food Facts",
+    "unit": {
+      "pack": {
+        "one": "pack",
+        "other": "packs"
+      },
+      "carton": {
+        "one": "carton",
+        "other": "cartons"
+      },
+      "bottle": {
+        "one": "bottle",
+        "other": "bottles"
+      },
+      "loaf": {
+        "one": "loaf",
+        "other": "loaves"
+      },
+      "slice": {
+        "one": "slice",
+        "other": "slices"
+      },
+      "piece": {
+        "one": "piece",
+        "other": "pieces"
+      },
+      "gram": {
+        "one": "g",
+        "other": "g"
+      },
+      "millilitre": {
+        "one": "ml",
+        "other": "ml"
+      }
+    },
+    "amount": {
+      "full": "Full",
+      "threeQuarters": "¾",
+      "half": "½",
+      "quarter": "¼",
+      "usedUp": "Used up",
+      "left": "Amount left"
+    },
+    "dateKind": {
+      "mhd": "MHD",
+      "useBy": "Verbrauchsdatum",
+      "estimate": "Estimated reminder",
+      "none": "No printed date",
+      "unknown": "Date not entered"
+    },
+    "dateWarning": {
+      "unknown": "Unknown date",
+      "doNotUse": "Do not use",
+      "reviewEstimate": "Review estimate",
+      "pastMhd": "Past MHD: review"
+    }
+  },
+  "nav": {
+    "label": "Main"
+  },
+  "theme": {
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "switch": "Theme: {current}. Switch to {next}."
+  },
+  "settings": {
+    "title": "Settings",
+    "account": "Account",
+    "signedIn": "Signed in as {email}.",
+    "signOut": "Sign out"
+  },
+  "language": {
+    "title": "Language",
+    "hint": "The app and the product names from Open Food Facts appear in this language where a translation exists.",
+    "group": "Language"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign in",
+      "submit": "Sign in",
+      "failed": "Sign-in failed."
+    },
+    "setup": {
+      "title": "Create the owner account",
+      "submit": "Create account",
+      "failed": "Could not create the account."
+    }
+  },
+  "form": {
+    "invalidFormat": "Check the format of this field.",
+    "tooShort": "Too short.",
+    "invalidValue": "Invalid value."
+  },
+  "stock": {
+    "added": "Added {name}",
+    "fallbackProduct": "product",
+    "unnamed": "Unnamed product",
+    "search": {
+      "label": "Search by name",
+      "placeholder": "Search"
+    },
+    "filterLocation": "Filter by location",
+    "allLocations": "All locations",
+    "loadFailed": "The pantry could not be loaded.",
+    "loading": "Loading your pantry…",
+    "noMatch": "No stock matches the search or location.",
+    "empty": "Nothing in the pantry yet.",
+    "emptyHint": "Tap the scan button to add your first product.",
+    "attribution": {
+      "prefix": "Product data:",
+      "suffix": "(ODbL). Images CC BY-SA."
+    },
+    "individual": "Individual {units}",
+    "each": "{size} each",
+    "about": "about ",
+    "left": "{about}{amount} {unit} left",
+    "needsSize": "Needs a package size in {unit} to show {unit} left",
+    "needsCount": "Needs the number of {units} per pack"
+  },
+  "batch": {
+    "usedUpHint": "Used up removes this package from your pantry.",
+    "conflict": "This changed on another device. The current amount is shown; check it and update again.",
+    "saveFailed": "Couldn't save. Check your connection and try again; nothing was changed."
+  },
+  "sync": {
+    "offline": "Offline · showing what was last loaded. Changes need a connection.",
+    "failedTitle": "Couldn't refresh the pantry",
+    "failedBody": "Showing what was last loaded{since}.",
+    "since": "from {time}"
+  },
+  "productData": {
+    "title": "Product data",
+    "refreshAll": "Refresh all",
+    "hint": "From Open Food Facts. Entries that are due refresh by themselves every 30 minutes, 20 at a time. Refresh all re-checks every product, about 5 seconds each.",
+    "fresh": "fresh",
+    "due": "due",
+    "never": "never fetched",
+    "oldest": "Oldest data from {time}.",
+    "none": "No products with a barcode yet.",
+    "neverRun": "Hasn't run yet.",
+    "refreshingAll": "Refreshing everything",
+    "refreshingSome": "Refreshing",
+    "progress": "{label} · {processed} of {total}",
+    "looking": "Looking for products to refresh…",
+    "progressLabel": "Refresh progress",
+    "lastFailed": "Last run failed",
+    "last": "Last run",
+    "checked": "{processed} of {total} checked",
+    "startFailed": "Couldn't start the sync."
+  },
+  "purchase": {
+    "dateKind": {
+      "mhd": "MHD (best before)",
+      "useBy": "Verbrauchsdatum (use by)",
+      "notEntered": "Not entered yet"
+    },
+    "validation": {
+      "atLeastOne": "Add at least one.",
+      "atMostTwenty": "Add up to 20 at a time.",
+      "chooseLocation": "Choose where it is kept.",
+      "enterName": "Enter a name for this product.",
+      "positiveSize": "Enter a positive size.",
+      "enterDate": "Enter the printed date, or choose No printed date."
+    },
+    "brand": "Brand (optional)",
+    "packageSize": "Package size (optional)",
+    "sizeHint": "From Open Food Facts. Check it against the package.",
+    "unit": "Unit",
+    "trackIn": "Track amount in",
+    "trackHint": "What you call one package. Its size, if entered, is shown next to what is left.",
+    "howMany": "How many",
+    "dateOnPackage": "Date on the package",
+    "datePlaceholder": "DD.MM.YY",
+    "dateExample": "Type it as printed, e.g. 2803, 28.03.27 or 03.27.",
+    "dateInvalid": "Not a date. Try 2803, 28.03.27 or 03.27.",
+    "endOfMonth": "(end of month)",
+    "submit": "Add to pantry",
+    "saveFailed": "Couldn't save. Check your connection and try again; nothing was added."
+  },
+  "scan": {
+    "open": "Scan a product",
+    "lookingUp": "Looking up product…",
+    "addPurchase": "Add a purchase",
+    "newProduct": "New product",
+    "barcode": "Barcode {barcode}",
+    "found": {
+      "prefix": "Product data:",
+      "suffix": ". Check it against the package."
+    },
+    "notFound": "Open Food Facts doesn't know this barcode. Enter the details yourself.",
+    "unavailable": "Product details couldn't be loaded. You can enter the name yourself; saving needs a connection, and details are filled in later.",
+    "different": "Scan a different product",
+    "pointCamera": "Point the camera at the barcode",
+    "startingCamera": "Starting camera…",
+    "stopCamera": "Stop camera",
+    "withCamera": "Scan with camera",
+    "orType": "Or type the barcode",
+    "useBarcode": "Use barcode",
+    "invalidBarcode": "Enter a valid EAN or UPC barcode.",
+    "cameraDenied": "Camera access was denied. Type the barcode instead, or allow the camera in your browser settings.",
+    "cameraUnsupported": "This browser cannot open the camera here. Camera access needs HTTPS.",
+    "cameraFailed": "The camera could not be started."
+  },
+  "share": {
+    "title": "View-only links",
+    "create": "Create link",
+    "hint": "Anyone with a link can see this pantry without signing in, but cannot change anything.",
+    "copyNow": "Copy this link now. It won't be shown again.",
+    "newLinkLabel": "New share link",
+    "none": "No active links.",
+    "link": "Link",
+    "created": "{label} · created {date}",
+    "revoke": "Revoke",
+    "failed": "Something went wrong.",
+    "unavailableTitle": "Link unavailable",
+    "unavailableBody": "This link is invalid or has been revoked.",
+    "viewOnly": "View only",
+    "placeholder": "The read-only pantry view will appear here."
+  },
+  "meta": {
+    "description": "See what is at home, use food in time, and buy what is missing. A pantry companion for cupboard, fridge, and freezer."
+  },
+  "landing": {
+    "cta": {
+      "pantry": "Open your pantry",
+      "setup": "Set up your pantry",
+      "signIn": "Sign in"
+    },
+    "hero": {
+      "eyebrow": "Cupboard · Fridge · Freezer",
+      "title": "See what is at home, use food in time, buy what is missing.",
+      "lead": "Open Pantry keeps track of how much is actually left — half a carton of milk, three slices of bread — reminds you before dates pass, and turns your own stock rules into a shopping list.",
+      "seeScreens": "See the screens",
+      "caption": "Pantry screen on a phone: sourdough bread and whole milk to use soon, and a whole milk card with two cartons, about 1.5 left.",
+      "useSoon": "Use soon",
+      "useSoonMeta": "2 items · next 3 days",
+      "inventory": "Inventory",
+      "inventoryMeta": "4 products"
+    },
+    "features": {
+      "useSoon": {
+        "eyebrow": "Use soon",
+        "title": "The next dates come first",
+        "body1": "Items due in the next few days sit at the top of the pantry, ordered by date. MHD and Verbrauchsdatum are labelled separately, and estimated reminders never pretend to be printed dates.",
+        "body2": "Past a Verbrauchsdatum, an item reads Do not use and no longer counts as stock.",
+        "caption": "Two Use soon cards: sourdough bread, MHD tomorrow, 3 slices left; whole milk, MHD tomorrow, half left and opened."
+      },
+      "inventory": {
+        "eyebrow": "Inventory",
+        "title": "Amounts the way you see them",
+        "body1": "Update a pack with Full, ¾, ½, ¼, or Empty, or count exactly when it matters, like slices of bread. Track amounts in cartons, loaves, slices, grams, or whatever fits the product.",
+        "body2": "Several purchases of the same product group into one card, while each keeps its own amount, date, and opened state.",
+        "caption": "Inventory cards: ground coffee, 1.5 packs across two batches; basmati rice, three quarters left; sourdough bread, 3 slices remaining."
+      },
+      "rules": {
+        "eyebrow": "Stock rules",
+        "title": "Decide what enough means",
+        "body": "More than 3 slices of bread. At least 2 cartons of milk. One unopened spare pack of coffee. Each rule shows what is available, the target, and the shortage, and can be narrowed by brand, location, or opened state.",
+        "caption": "Three stock rules: bread for tomorrow is 1 slice short, milk in the fridge is 1 carton short, a spare coffee is covered."
+      },
+      "shopping": {
+        "eyebrow": "Shopping",
+        "title": "A list built from your rules",
+        "body1": "Shortages land on the shopping list with what is at home and which rule asked for it. Add anything else by hand.",
+        "body2": "Tick items into the basket, then put purchases away in one step: confirm the product, amount, place, and date, and the list recalculates.",
+        "caption": "Shopping list: sourdough bread, 1 loaf; whole milk, 1 carton, already in the basket; bananas, added by hand.",
+        "putAway": "Put purchases away"
+      },
+      "scan": {
+        "eyebrow": "Scan",
+        "title": "Scan a barcode, then choose",
+        "body": "Scanning looks up the product on Open Food Facts and asks whether this is a new purchase or an update to one you already have. Camera frames stay on the device, and manual entry works when the camera or lookup does not.",
+        "caption": "Scan result for whole milk, 1 litre carton, offering Add a purchase or updating the opened or unopened carton."
+      }
+    },
+    "extras": {
+      "title": "Built for the kitchen, not the spreadsheet",
+      "offline": {
+        "title": "Works offline",
+        "body": "View the pantry, add stock, and check the list without a connection. Changes sync when you are back online."
+      },
+      "shared": {
+        "title": "Shared on your terms",
+        "body": "Owner, editor, and viewer roles, plus view-only links you can revoke at any time."
+      },
+      "reminders": {
+        "title": "Reminders you opt into",
+        "body": "A daily digest of what is due, 2 days ahead at 09:00 by default, or none at all."
+      },
+      "selfHosted": {
+        "title": "Runs on your server",
+        "body": "One Node app and a PostgreSQL database. Your pantry stays on infrastructure you control."
+      }
+    },
+    "closing": {
+      "title": "Know what is in the cupboard.",
+      "status": "Open Pantry is in early development. The screens above come from the design prototype; accounts, roles, and share links work today."
+    },
+    "footer": "Product data from Open Food Facts."
+  },
+  "mock": {
+    "item": {
+      "sourdough": "Sourdough bread",
+      "milk": "Whole milk",
+      "coffee": "Ground coffee",
+      "rice": "Basmati rice",
+      "bananas": "Bananas"
+    },
+    "place": {
+      "cupboard": "Cupboard",
+      "fridge": "Fridge"
+    },
+    "tomorrow": "Tomorrow",
+    "date22oct": "22 Oct",
+    "left": {
+      "slices3": "3 slices left",
+      "halfOpened": "½ left · opened",
+      "half": "½ left"
+    },
+    "updateAmount": "Update amount",
+    "milkMeta": "Fridge · 2 batches",
+    "milkAmount": "1.5 cartons",
+    "approxRemaining": "approximately remaining",
+    "milkSplit": "2 cartons · 1 opened · 1 unopened",
+    "individualCartons": "Individual cartons",
+    "carton1": "Carton 1",
+    "carton2": "Carton 2",
+    "mhdTomorrow": "MHD tomorrow",
+    "mhd28oct": "MHD 28 Oct",
+    "remaining": "remaining",
+    "remainingApprox": "remaining · approximate",
+    "covered": "Covered",
+    "coffeeMeta": "Cupboard · 2 batches",
+    "coffeeAmount": "1.5 packs",
+    "coffeeDate": "Earliest: MHD 10 Feb",
+    "riceMeta": "Cupboard · Opened",
+    "riceDate": "MHD 1 Jun 2027",
+    "breadSlices": "3 slices",
+    "breadDate": "MHD tomorrow",
+    "rule": {
+      "bread": {
+        "name": "Bread for tomorrow",
+        "criteria": "Category: Bread",
+        "sentence": "Keep more than 3 slices at home.",
+        "have": "3 / 4 slices available",
+        "status": "1 slice short"
+      },
+      "milk": {
+        "name": "Milk in the fridge",
+        "criteria": "Category: Milk",
+        "sentence": "Keep at least 2 cartons at home.",
+        "have": "About 1.5 / 2 cartons available",
+        "status": "1 carton short"
+      },
+      "coffee": {
+        "name": "A spare coffee",
+        "criteria": "Category: Coffee · Unopened only",
+        "sentence": "Keep 1 unopened pack at home.",
+        "have": "1 / 1 packs available"
+      }
+    },
+    "shop": {
+      "bread": {
+        "detail": "3 slices at home · Bread for tomorrow",
+        "amount": "1 loaf"
+      },
+      "milk": {
+        "detail": "About 1.5 cartons at home · In basket",
+        "amount": "1 carton"
+      },
+      "bananas": {
+        "detail": "Added by hand",
+        "amount": "6 pieces"
+      }
+    },
+    "scanSheet": {
+      "barcode": "Barcode 4 006 381 333 931",
+      "meta": "1 litre carton · Open Food Facts",
+      "question": "You already have 2 batches of milk. What would you like to do?",
+      "add": "Add a purchase",
+      "updateOpened": "Update opened carton · ½",
+      "updateUnopened": "Update unopened carton · Full"
+    },
+    "phone": {
+      "time": "9:41",
+      "upToDate": "Up to date"
+    }
+  },
+  "error": {
+    "signUpClosed": "Sign-up is closed. Ask the pantry owner for an invitation.",
+    "noAccess": "You don't have access to this.",
+    "linkInvalid": "This link is invalid or has been revoked.",
+    "notSignedIn": "Not signed in.",
+    "noPantry": "You are not a member of any pantry.",
+    "invalidBarcode": "That is not a valid EAN or UPC barcode."
   }
 }

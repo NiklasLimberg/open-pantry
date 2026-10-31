@@ -3,6 +3,7 @@ import { useState } from "react";
 
 import { useRefreshStock } from "#/domains/inventory/stock-query.ts";
 import { updateBatch, type StockBatch } from "#/domains/inventory/stock.functions.ts";
+import { m } from "#/paraglide/messages.js";
 
 import { AmountPicker, type Amount } from "../AmountPicker/AmountPicker.tsx";
 import { Button } from "../Button/Button.tsx";
@@ -52,12 +53,10 @@ function AmountForm({ batch, error, onError }: FormProps) {
         });
         await refresh();
         if (!result.ok) {
-          onError(
-            "This changed on another device. The current amount is shown; check it and update again.",
-          );
+          onError(m["batch.conflict"]());
         }
       } catch {
-        onError("Couldn't save. Check your connection and try again; nothing was changed.");
+        onError(m["batch.saveFailed"]());
       }
     },
   });
@@ -74,7 +73,7 @@ function AmountForm({ batch, error, onError }: FormProps) {
         {(field) => (
           <AmountPicker
             name={`amount-${batch.id}`}
-            legend="Amount left"
+            legend={m["global.amount.left"]()}
             legendHidden
             value={field.state.value}
             onChange={field.handleChange}
@@ -84,9 +83,7 @@ function AmountForm({ batch, error, onError }: FormProps) {
 
       <form.Subscribe selector={(state) => state.values.amount}>
         {(amount) =>
-          amount === "used" ? (
-            <p className={styles.hint}>Used up removes this package from your pantry.</p>
-          ) : null
+          amount === "used" ? <p className={styles.hint}>{m["batch.usedUpHint"]()}</p> : null
         }
       </form.Subscribe>
 
@@ -96,7 +93,7 @@ function AmountForm({ batch, error, onError }: FormProps) {
           unchanged ? null : (
             <div className={styles.actions}>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Updating…" : "Update"}
+                {isSubmitting ? m["global.updating"]() : m["global.update"]()}
               </Button>
             </div>
           )

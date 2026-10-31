@@ -1,3 +1,5 @@
+import { m } from "#/paraglide/messages.js";
+import { getLocale } from "#/paraglide/runtime.js";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
@@ -15,7 +17,7 @@ import styles from "./ProductSyncPanel.module.css";
 const queryKey = ["product-sync"];
 
 function formatTime(date: Date | string) {
-  return new Date(date).toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+  return new Date(date).toLocaleString(getLocale(), { dateStyle: "medium", timeStyle: "short" });
 }
 
 /** Owner-only: when the Open Food Facts refresh last ran, with a manual trigger and progress. */
@@ -42,7 +44,7 @@ export function ProductSyncPanel() {
       await start({ data: { all } });
       await queryClient.invalidateQueries({ queryKey });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Couldn't start the sync.");
+      setError(e instanceof Error ? e.message : m["productData.startFailed"]());
     } finally {
       setStarting(false);
     }
@@ -51,15 +53,15 @@ export function ProductSyncPanel() {
   const fresh = freshness ? freshness.held - freshness.missing - freshness.stale : 0;
   const bands = freshness
     ? [
-        { key: "fresh", label: "fresh", count: fresh },
-        { key: "due", label: "due", count: freshness.stale },
-        { key: "never", label: "never fetched", count: freshness.missing },
+        { key: "fresh", label: m["productData.fresh"](), count: fresh },
+        { key: "due", label: m["productData.due"](), count: freshness.stale },
+        { key: "never", label: m["productData.never"](), count: freshness.missing },
       ]
     : [];
 
   return (
     <Card
-      title="Product data"
+      title={m["productData.title"]()}
       actions={
         <Button
           type="button"
@@ -67,14 +69,11 @@ export function ProductSyncPanel() {
           disabled={running || starting}
           onClick={() => void sync(true)}
         >
-          {running ? "Refreshing…" : "Refresh all"}
+          {running ? m["global.refreshing"]() : m["productData.refreshAll"]()}
         </Button>
       }
     >
-      <p className={styles.hint}>
-        From Open Food Facts. Entries that are due refresh by themselves every 30 minutes, 20 at a
-        time. Refresh all re-checks every product, about 5 seconds each.
-      </p>
+      <p className={styles.hint}>{m["productData.hint"]()}</p>
       <FormError message={error} />
       {freshness && freshness.held > 0 ? (
         <>
@@ -98,33 +97,43 @@ export function ProductSyncPanel() {
             ))}
           </ul>
           {freshness.oldest && (
-            <p className={styles.detail}>Oldest data from {formatTime(freshness.oldest)}.</p>
+            <p className={styles.detail}>
+              {m["productData.oldest"]({ time: formatTime(freshness.oldest) })}
+            </p>
           )}
         </>
       ) : (
-        <p className={styles.detail}>No products with a barcode yet.</p>
+        <p className={styles.detail}>{m["productData.none"]()}</p>
       )}
       <div className={styles.run}>
-        {!run && <p>Hasn't run yet.</p>}
+        {!run && <p>{m["productData.neverRun"]()}</p>}
         {run && running && (
           <>
             <p>
               {run.total > 0
-                ? `${run.full ? "Refreshing everything" : "Refreshing"} · ${run.processed} of ${run.total}`
-                : "Looking for products to refresh…"}
+                ? m["productData.progress"]({
+                    label: run.full
+                      ? m["productData.refreshingAll"]()
+                      : m["productData.refreshingSome"](),
+                    processed: run.processed,
+                    total: run.total,
+                  })
+                : m["productData.looking"]()}
             </p>
             <progress
               className={styles.progress}
               value={run.processed}
               max={Math.max(run.total, 1)}
-              aria-label="Refresh progress"
+              aria-label={m["productData.progressLabel"]()}
             />
           </>
         )}
         {run && !running && run.finishedAt && (
           <p>
-            {run.status === "failed" ? "Last run failed" : "Last run"} {formatTime(run.finishedAt)}
-            {run.status === "succeeded" && ` · ${run.processed} of ${run.total} checked`}
+            {run.status === "failed" ? m["productData.lastFailed"]() : m["productData.last"]()}{" "}
+            {formatTime(run.finishedAt)}
+            {run.status === "succeeded" &&
+              ` · ${m["productData.checked"]({ processed: run.processed, total: run.total })}`}
             {run.status === "failed" && run.error ? ` · ${run.error}` : ""}
           </p>
         )}

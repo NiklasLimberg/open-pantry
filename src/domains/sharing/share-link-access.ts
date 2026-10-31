@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { createHash, randomBytes } from "node:crypto";
 
 import { and, eq, gt, isNull, or } from "drizzle-orm";
@@ -25,7 +26,7 @@ export async function getShareLinkAccess(token: string): Promise<PantryAccess> {
         or(isNull(shareLink.expiresAt), gt(shareLink.expiresAt, new Date())),
       ),
     );
-  if (!row) throw new ForbiddenError("This link is invalid or has been revoked.");
+  if (!row) throw new ForbiddenError(m["error.linkInvalid"]());
   return { ...row, role: "viewer", userId: null };
 }
 

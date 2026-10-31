@@ -1,26 +1,31 @@
 import type { trackUnits } from "#/db/schema.ts";
+import { m } from "#/paraglide/messages.js";
+import { getLocale } from "#/paraglide/runtime.js";
 
 // Pure display helpers shared by the inventory views. No browser or server APIs.
 
 export type TrackUnit = (typeof trackUnits)[number];
 
-const unitNames: Record<TrackUnit, [one: string, many: string]> = {
-  pack: ["pack", "packs"],
-  carton: ["carton", "cartons"],
-  bottle: ["bottle", "bottles"],
-  loaf: ["loaf", "loaves"],
-  slice: ["slice", "slices"],
-  piece: ["piece", "pieces"],
-  gram: ["g", "g"],
-  millilitre: ["ml", "ml"],
+// Read when called, never at module load: the language is only known per request.
+const unitNames: Record<TrackUnit, [one: () => string, many: () => string]> = {
+  pack: [() => m["global.unit.pack.one"](), () => m["global.unit.pack.other"]()],
+  carton: [() => m["global.unit.carton.one"](), () => m["global.unit.carton.other"]()],
+  bottle: [() => m["global.unit.bottle.one"](), () => m["global.unit.bottle.other"]()],
+  loaf: [() => m["global.unit.loaf.one"](), () => m["global.unit.loaf.other"]()],
+  slice: [() => m["global.unit.slice.one"](), () => m["global.unit.slice.other"]()],
+  piece: [() => m["global.unit.piece.one"](), () => m["global.unit.piece.other"]()],
+  gram: [() => m["global.unit.gram.one"](), () => m["global.unit.gram.other"]()],
+  millilitre: [() => m["global.unit.millilitre.one"](), () => m["global.unit.millilitre.other"]()],
 };
 
 export function unitLabel(unit: TrackUnit, count: number): string {
   const [one, many] = unitNames[unit];
-  return count === 1 ? one : many;
+  return count === 1 ? one() : many();
 }
 
-export const quarterLabels = ["Empty", "¼", "½", "¾", "Full"] as const;
+/** A number in the current language's notation, at most two decimals: "1.5" or "1,5". */
+const formatNumber = (value: number) =>
+  new Intl.NumberFormat(getLocale(), { maximumFractionDigits: 2 }).format(value);
 
 /** Remaining amount in whole packages: 4 quarters = 1 pack. */
 export function packagesLeft(quarters: number[]): number {
@@ -31,7 +36,7 @@ export function packagesLeft(quarters: number[]): number {
 export function formatPackagesLeft(quarters: number[]): string {
   const total = packagesLeft(quarters);
   const exact = quarters.every((q) => q === 0 || q === 4);
-  return `${exact ? "" : "about "}${Number.isInteger(total) ? total : total.toFixed(2).replace(/0$/, "")}`;
+  return `${exact ? "" : m["stock.about"]()}${formatNumber(total)}`;
 }
 
 const containerUnits: ReadonlySet<TrackUnit> = new Set(["pack", "carton", "bottle", "loaf"]);
@@ -59,8 +64,6 @@ export type SummaryInput = {
   quarters: number[];
 };
 
-const trimNumber = (value: number) => String(Number(value.toFixed(2)));
-
 /**
  * One consistent description of a product's stock. The tracking unit only decides how the
  * remaining amount is expressed; it is never used to name the packages themselves
@@ -78,13 +81,13 @@ export function summarizeStock({
   const size = packageAmount && packageUnit ? `${packageAmount} ${packageUnit}` : null;
   const packages = [
     `${count} ${unitLabel(noun, count)}`,
-    size && (count === 1 ? size : `${size} each`),
+    size && (count === 1 ? size : m["stock.each"]({ size })),
   ]
     .filter(Boolean)
     .join(" · ");
 
   const exact = quarters.every((q) => q === 0 || q === 4);
-  const about = exact ? "" : "about ";
+  const about = exact ? "" : m["stock.about"]();
   const total = packagesLeft(quarters);
 
   if (containerUnits.has(trackUnit)) {
@@ -95,7 +98,7 @@ export function summarizeStock({
         : "";
     return {
       packages,
-      left: `${about}${trimNumber(total)} ${unitLabel(trackUnit, total === 1 ? 1 : 2)} left${measured}`,
+      left: `${m["stock.left"]({ about, amount: formatNumber(total), unit: unitLabel(trackUnit, total === 1 ? 1 : 2) })}${measured}`,
       needsDetails: null,
     };
   }
@@ -103,7 +106,11 @@ export function summarizeStock({
   if (wanted && packageAmount && packageUnit === wanted) {
     return {
       packages,
-      left: `${about}${Math.round(total * packageAmount)} ${wanted} left`,
+      left: m["stock.left"]({
+        about,
+        amount: String(Math.round(total * packageAmount)),
+        unit: wanted,
+      }),
       needsDetails: null,
     };
   }
@@ -111,32 +118,34 @@ export function summarizeStock({
     packages,
     left: null,
     needsDetails: wanted
-      ? `Needs a package size in ${wanted} to show ${wanted} left`
-      : `Needs the number of ${unitLabel(trackUnit, 2)} per pack`,
+      ? m["stock.needsSize"]({ unit: wanted })
+      : m["stock.needsCount"]({ units: unitLabel(trackUnit, 2) }),
   };
 }
 
 export type DateKind = "mhd" | "use_by" | "estimate" | "none" | "unknown";
 
-const dateKindLabels: Record<DateKind, string> = {
-  mhd: "MHD",
-  use_by: "Verbrauchsdatum",
-  estimate: "Estimated reminder",
-  none: "No printed date",
-  unknown: "Date not entered",
+const dateKindLabels: Record<DateKind, () => string> = {
+  mhd: () => m["global.dateKind.mhd"](),
+  use_by: () => m["global.dateKind.useBy"](),
+  estimate: () => m["global.dateKind.estimate"](),
+  none: () => m["global.dateKind.none"](),
+  unknown: () => m["global.dateKind.unknown"](),
 };
 
 export type DateInfo = { text: string; warning: string | null };
 
 /** `today` is a calendar date (YYYY-MM-DD) in the pantry's time zone. */
 export function describeDate(kind: DateKind, date: string | null, today: string): DateInfo {
-  const label = dateKindLabels[kind];
-  if (!date) return { text: label, warning: kind === "unknown" ? "Unknown date" : null };
+  const label = dateKindLabels[kind]();
+  if (!date) {
+    return { text: label, warning: kind === "unknown" ? m["global.dateWarning.unknown"]() : null };
+  }
   const text = `${label} ${date}`;
   if (date >= today) return { text, warning: null };
-  if (kind === "use_by") return { text, warning: "Do not use" };
-  if (kind === "estimate") return { text, warning: "Review estimate" };
-  return { text, warning: "Past MHD: review" };
+  if (kind === "use_by") return { text, warning: m["global.dateWarning.doNotUse"]() };
+  if (kind === "estimate") return { text, warning: m["global.dateWarning.reviewEstimate"]() };
+  return { text, warning: m["global.dateWarning.pastMhd"]() };
 }
 
 /** Sort key for "use soon" ordering: dated first by date, undated last. */

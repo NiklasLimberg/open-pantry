@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
+import { m } from "#/paraglide/messages.js";
+
 import { Button } from "../Button/Button.tsx";
 import {
   MilkGroupCard,
@@ -19,16 +21,16 @@ import styles from "./Landing.module.css";
 export type LandingCta = "pantry" | "setup" | "sign-in";
 
 const ctaLinks = {
-  pantry: { to: "/pantry", label: "Open your pantry" },
-  setup: { to: "/setup", label: "Set up your pantry" },
-  "sign-in": { to: "/sign-in", label: "Sign in" },
+  pantry: { to: "/pantry", label: () => m["landing.cta.pantry"]() },
+  setup: { to: "/setup", label: () => m["landing.cta.setup"]() },
+  "sign-in": { to: "/sign-in", label: () => m["landing.cta.signIn"]() },
 } as const;
 
 function CtaButton({ cta, className }: { cta: LandingCta; className?: string }) {
   const { to, label } = ctaLinks[cta];
   return (
     <Button asChild className={className}>
-      <Link to={to}>{label}</Link>
+      <Link to={to}>{label()}</Link>
     </Button>
   );
 }
@@ -49,44 +51,38 @@ export function Landing({ cta }: { cta: LandingCta }) {
       <main>
         <section className={styles.hero}>
           <div className={styles.heroText}>
-            <p className={styles.eyebrow}>Cupboard · Fridge · Freezer</p>
-            <h1 className={styles.heroTitle}>
-              See what is at home, use food in time, buy what is missing.
-            </h1>
-            <p className={styles.lead}>
-              Open Pantry keeps track of how much is actually left — half a carton of milk, three
-              slices of bread — reminds you before dates pass, and turns your own stock rules into a
-              shopping list.
-            </p>
+            <p className={styles.eyebrow}>{m["landing.hero.eyebrow"]()}</p>
+            <h1 className={styles.heroTitle}>{m["landing.hero.title"]()}</h1>
+            <p className={styles.lead}>{m["landing.hero.lead"]()}</p>
             <div className={styles.heroActions}>
               <CtaButton cta={cta} />
               <Button asChild variant="secondary">
-                <a href="#features">See the screens</a>
+                <a href="#features">{m["landing.hero.seeScreens"]()}</a>
               </Button>
             </div>
           </div>
           <ScreenFrame
             variant="phone"
             className={styles.heroPhone}
-            label="Pantry screen on a phone: sourdough bread and whole milk to use soon, and a whole milk card with two cartons, about 1.5 left."
+            label={m["landing.hero.caption"]()}
           >
-            <PhoneScreen title="Pantry" active="Pantry">
+            <PhoneScreen title={m["global.pantry"]()} active="pantry">
               <div className={styles.phoneSection}>
-                <strong>Use soon</strong>
-                <span>2 items · next 3 days</span>
+                <strong>{m["landing.hero.useSoon"]()}</strong>
+                <span>{m["landing.hero.useSoonMeta"]()}</span>
               </div>
               <UseSoonCard
                 icon="🍞"
-                name="Sourdough bread"
-                location="Cupboard"
-                dateType="MHD"
-                when="Tomorrow"
-                date="22 Oct"
-                amount="3 slices left"
+                name={m["mock.item.sourdough"]()}
+                location={m["mock.place.cupboard"]()}
+                dateType={m["global.dateKind.mhd"]()}
+                when={m["mock.tomorrow"]()}
+                date={m["mock.date22oct"]()}
+                amount={m["mock.left.slices3"]()}
               />
               <div className={styles.phoneSection}>
-                <strong>Inventory</strong>
-                <span>4 products</span>
+                <strong>{m["landing.hero.inventory"]()}</strong>
+                <span>{m["landing.hero.inventoryMeta"]()}</span>
               </div>
               <MilkGroupCard />
             </PhoneScreen>
@@ -95,180 +91,153 @@ export function Landing({ cta }: { cta: LandingCta }) {
 
         <div id="features" className={styles.features}>
           <Feature
-            eyebrow="Use soon"
-            title="The next dates come first"
+            eyebrow={m["landing.features.useSoon.eyebrow"]()}
+            title={m["landing.features.useSoon.title"]()}
             body={
               <>
-                <p>
-                  Items due in the next few days sit at the top of the pantry, ordered by date. MHD
-                  and Verbrauchsdatum are labelled separately, and estimated reminders never pretend
-                  to be printed dates.
-                </p>
-                <p>
-                  Past a Verbrauchsdatum, an item reads Do not use and no longer counts as stock.
-                </p>
+                <p>{m["landing.features.useSoon.body1"]()}</p>
+                <p>{m["landing.features.useSoon.body2"]()}</p>
               </>
             }
           >
-            <ScreenFrame label="Two Use soon cards: sourdough bread, MHD tomorrow, 3 slices left; whole milk, MHD tomorrow, half left and opened.">
+            <ScreenFrame label={m["landing.features.useSoon.caption"]()}>
               <UseSoonCard
                 icon="🍞"
-                name="Sourdough bread"
-                location="Cupboard"
-                dateType="MHD"
-                when="Tomorrow"
-                date="22 Oct"
-                amount="3 slices left"
+                name={m["mock.item.sourdough"]()}
+                location={m["mock.place.cupboard"]()}
+                dateType={m["global.dateKind.mhd"]()}
+                when={m["mock.tomorrow"]()}
+                date={m["mock.date22oct"]()}
+                amount={m["mock.left.slices3"]()}
               />
               <UseSoonCard
                 icon="🥛"
-                name="Whole milk"
-                location="Fridge"
-                dateType="MHD"
-                when="Tomorrow"
-                date="22 Oct"
-                amount="½ left · opened"
+                name={m["mock.item.milk"]()}
+                location={m["mock.place.fridge"]()}
+                dateType={m["global.dateKind.mhd"]()}
+                when={m["mock.tomorrow"]()}
+                date={m["mock.date22oct"]()}
+                amount={m["mock.left.halfOpened"]()}
               />
             </ScreenFrame>
           </Feature>
 
           <Feature
-            eyebrow="Inventory"
-            title="Amounts the way you see them"
+            eyebrow={m["landing.features.inventory.eyebrow"]()}
+            title={m["landing.features.inventory.title"]()}
             body={
               <>
-                <p>
-                  Update a pack with Full, ¾, ½, ¼, or Empty, or count exactly when it matters, like
-                  slices of bread. Track amounts in cartons, loaves, slices, grams, or whatever fits
-                  the product.
-                </p>
-                <p>
-                  Several purchases of the same product group into one card, while each keeps its
-                  own amount, date, and opened state.
-                </p>
+                <p>{m["landing.features.inventory.body1"]()}</p>
+                <p>{m["landing.features.inventory.body2"]()}</p>
               </>
             }
             reverse
           >
             <ScreenFrame
               className={styles.cardGrid}
-              label="Inventory cards: ground coffee, 1.5 packs across two batches; basmati rice, three quarters left; sourdough bread, 3 slices remaining."
+              label={m["landing.features.inventory.caption"]()}
             >
               <StockCard
                 icon="☕"
-                name="Ground coffee"
-                meta="Cupboard · 2 batches"
-                amount="1.5 packs"
+                name={m["mock.item.coffee"]()}
+                meta={m["mock.coffeeMeta"]()}
+                amount={m["mock.coffeeAmount"]()}
                 quarters={3}
-                date="Earliest: MHD 10 Feb"
+                date={m["mock.coffeeDate"]()}
               />
               <StockCard
                 icon="🍚"
-                name="Basmati rice"
-                meta="Cupboard · Opened"
-                amount="¾"
+                name={m["mock.item.rice"]()}
+                meta={m["mock.riceMeta"]()}
+                amount={m["global.amount.threeQuarters"]()}
                 quarters={3}
-                date="MHD 1 Jun 2027"
+                date={m["mock.riceDate"]()}
               />
               <StockCard
                 icon="🍞"
-                name="Sourdough bread"
-                meta="Cupboard · Opened"
-                amount="3 slices"
-                date="MHD tomorrow"
+                name={m["mock.item.sourdough"]()}
+                meta={m["mock.riceMeta"]()}
+                amount={m["mock.breadSlices"]()}
+                date={m["mock.breadDate"]()}
               />
             </ScreenFrame>
           </Feature>
 
           <Feature
-            eyebrow="Stock rules"
-            title="Decide what enough means"
-            body={
-              <p>
-                More than 3 slices of bread. At least 2 cartons of milk. One unopened spare pack of
-                coffee. Each rule shows what is available, the target, and the shortage, and can be
-                narrowed by brand, location, or opened state.
-              </p>
-            }
+            eyebrow={m["landing.features.rules.eyebrow"]()}
+            title={m["landing.features.rules.title"]()}
+            body={<p>{m["landing.features.rules.body"]()}</p>}
           >
-            <ScreenFrame label="Three stock rules: bread for tomorrow is 1 slice short, milk in the fridge is 1 carton short, a spare coffee is covered.">
+            <ScreenFrame label={m["landing.features.rules.caption"]()}>
               <RuleCard
                 icon="🍞"
-                name="Bread for tomorrow"
-                criteria="Category: Bread"
-                sentence="Keep more than 3 slices at home."
-                have="3 / 4 slices available"
+                name={m["mock.rule.bread.name"]()}
+                criteria={m["mock.rule.bread.criteria"]()}
+                sentence={m["mock.rule.bread.sentence"]()}
+                have={m["mock.rule.bread.have"]()}
                 progress={3 / 4}
-                status="1 slice short"
+                status={m["mock.rule.bread.status"]()}
               />
               <RuleCard
                 icon="🥛"
-                name="Milk in the fridge"
-                criteria="Category: Milk"
-                sentence="Keep at least 2 cartons at home."
-                have="About 1.5 / 2 cartons available"
+                name={m["mock.rule.milk.name"]()}
+                criteria={m["mock.rule.milk.criteria"]()}
+                sentence={m["mock.rule.milk.sentence"]()}
+                have={m["mock.rule.milk.have"]()}
                 progress={1.5 / 2}
-                status="1 carton short"
+                status={m["mock.rule.milk.status"]()}
               />
               <RuleCard
                 icon="☕"
-                name="A spare coffee"
-                criteria="Category: Coffee · Unopened only"
-                sentence="Keep 1 unopened pack at home."
-                have="1 / 1 packs available"
+                name={m["mock.rule.coffee.name"]()}
+                criteria={m["mock.rule.coffee.criteria"]()}
+                sentence={m["mock.rule.coffee.sentence"]()}
+                have={m["mock.rule.coffee.have"]()}
                 progress={1}
               />
             </ScreenFrame>
           </Feature>
 
           <Feature
-            eyebrow="Shopping"
-            title="A list built from your rules"
+            eyebrow={m["landing.features.shopping.eyebrow"]()}
+            title={m["landing.features.shopping.title"]()}
             body={
               <>
-                <p>
-                  Shortages land on the shopping list with what is at home and which rule asked for
-                  it. Add anything else by hand.
-                </p>
-                <p>
-                  Tick items into the basket, then put purchases away in one step: confirm the
-                  product, amount, place, and date, and the list recalculates.
-                </p>
+                <p>{m["landing.features.shopping.body1"]()}</p>
+                <p>{m["landing.features.shopping.body2"]()}</p>
               </>
             }
             reverse
           >
-            <ScreenFrame label="Shopping list: sourdough bread, 1 loaf; whole milk, 1 carton, already in the basket; bananas, added by hand.">
+            <ScreenFrame label={m["landing.features.shopping.caption"]()}>
               <div className={styles.listPanel}>
                 <ShoppingRow
-                  name="Sourdough bread"
-                  detail="3 slices at home · Bread for tomorrow"
-                  amount="1 loaf"
+                  name={m["mock.item.sourdough"]()}
+                  detail={m["mock.shop.bread.detail"]()}
+                  amount={m["mock.shop.bread.amount"]()}
                 />
                 <ShoppingRow
-                  name="Whole milk"
-                  detail="About 1.5 cartons at home · In basket"
-                  amount="1 carton"
+                  name={m["mock.item.milk"]()}
+                  detail={m["mock.shop.milk.detail"]()}
+                  amount={m["mock.shop.milk.amount"]()}
                   checked
                 />
-                <ShoppingRow name="Bananas" detail="Added by hand" amount="6 pieces" />
+                <ShoppingRow
+                  name={m["mock.item.bananas"]()}
+                  detail={m["mock.shop.bananas.detail"]()}
+                  amount={m["mock.shop.bananas.amount"]()}
+                />
               </div>
-              <span className={styles.putAway}>Put purchases away</span>
+              <span className={styles.putAway}>{m["landing.features.shopping.putAway"]()}</span>
             </ScreenFrame>
           </Feature>
 
           <Feature
-            eyebrow="Scan"
-            title="Scan a barcode, then choose"
-            body={
-              <p>
-                Scanning looks up the product on Open Food Facts and asks whether this is a new
-                purchase or an update to one you already have. Camera frames stay on the device, and
-                manual entry works when the camera or lookup does not.
-              </p>
-            }
+            eyebrow={m["landing.features.scan.eyebrow"]()}
+            title={m["landing.features.scan.title"]()}
+            body={<p>{m["landing.features.scan.body"]()}</p>}
           >
-            <ScreenFrame label="Scan result for whole milk, 1 litre carton, offering Add a purchase or updating the opened or unopened carton.">
+            <ScreenFrame label={m["landing.features.scan.caption"]()}>
               <ScanSheet />
             </ScreenFrame>
           </Feature>
@@ -276,32 +245,27 @@ export function Landing({ cta }: { cta: LandingCta }) {
 
         <section className={styles.extras} aria-labelledby="extras-title">
           <h2 id="extras-title" className={styles.sectionTitle}>
-            Built for the kitchen, not the spreadsheet
+            {m["landing.extras.title"]()}
           </h2>
           <ul className={styles.extraList}>
-            <Extra title="Works offline">
-              View the pantry, add stock, and check the list without a connection. Changes sync when
-              you are back online.
+            <Extra title={m["landing.extras.offline.title"]()}>
+              {m["landing.extras.offline.body"]()}
             </Extra>
-            <Extra title="Shared on your terms">
-              Owner, editor, and viewer roles, plus view-only links you can revoke at any time.
+            <Extra title={m["landing.extras.shared.title"]()}>
+              {m["landing.extras.shared.body"]()}
             </Extra>
-            <Extra title="Reminders you opt into">
-              A daily digest of what is due, 2 days ahead at 09:00 by default, or none at all.
+            <Extra title={m["landing.extras.reminders.title"]()}>
+              {m["landing.extras.reminders.body"]()}
             </Extra>
-            <Extra title="Runs on your server">
-              One Node app and a PostgreSQL database. Your pantry stays on infrastructure you
-              control.
+            <Extra title={m["landing.extras.selfHosted.title"]()}>
+              {m["landing.extras.selfHosted.body"]()}
             </Extra>
           </ul>
         </section>
 
         <section className={styles.closing}>
-          <h2 className={styles.sectionTitle}>Know what is in the cupboard.</h2>
-          <p className={styles.status}>
-            Open Pantry is in early development. The screens above come from the design prototype;
-            accounts, roles, and share links work today.
-          </p>
+          <h2 className={styles.sectionTitle}>{m["landing.closing.title"]()}</h2>
+          <p className={styles.status}>{m["landing.closing.status"]()}</p>
           <CtaButton cta={cta} />
         </section>
       </main>
@@ -310,7 +274,7 @@ export function Landing({ cta }: { cta: LandingCta }) {
         <span className={styles.brand}>
           Open <b>Pantry</b>
         </span>
-        <span>Product data from Open Food Facts.</span>
+        <span>{m["landing.footer"]()}</span>
       </footer>
     </div>
   );

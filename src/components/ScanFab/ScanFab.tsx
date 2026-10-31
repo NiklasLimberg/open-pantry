@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { ScanBarcode, X } from "lucide-react";
 import { Dialog } from "radix-ui";
 import { useState } from "react";
@@ -14,15 +15,15 @@ export function ScanFab({ onAdded }: { onAdded: (productId: string) => void }) {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger className={styles.fab} aria-label="Scan a product">
+      <Dialog.Trigger className={styles.fab} aria-label={m["scan.open"]()}>
         <ScanBarcode size={24} aria-hidden />
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className={styles.overlay} />
         <Dialog.Content className={styles.dialog} aria-describedby={undefined}>
           <header className={styles.header}>
-            <Dialog.Title className={styles.title}>Scan a product</Dialog.Title>
-            <Dialog.Close className={styles.close} aria-label="Close">
+            <Dialog.Title className={styles.title}>{m["scan.open"]()}</Dialog.Title>
+            <Dialog.Close className={styles.close} aria-label={m["global.close"]()}>
               <X size={20} aria-hidden />
             </Dialog.Close>
           </header>

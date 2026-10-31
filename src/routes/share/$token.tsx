@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { Card } from "#/components/Card/Card.tsx";
@@ -9,9 +10,9 @@ export const Route = createFileRoute("/share/$token")({
   head: () => ({ meta: [{ name: "robots", content: "noindex" }] }),
   component: SharedPantry,
   errorComponent: () => (
-    <Page title="Link unavailable">
+    <Page title={m["share.unavailableTitle"]()}>
       <Card>
-        <p>This link is invalid or has been revoked.</p>
+        <p>{m["share.unavailableBody"]()}</p>
       </Card>
     </Page>
   ),
@@ -20,9 +21,9 @@ export const Route = createFileRoute("/share/$token")({
 function SharedPantry() {
   const pantry = Route.useLoaderData();
   return (
-    <Page title={pantry.name} badge="View only">
-      <Card title="Pantry">
-        <p>The read-only pantry view will appear here.</p>
+    <Page title={pantry.name} badge={m["share.viewOnly"]()}>
+      <Card title={m["global.pantry"]()}>
+        <p>{m["share.placeholder"]()}</p>
       </Card>
     </Page>
   );

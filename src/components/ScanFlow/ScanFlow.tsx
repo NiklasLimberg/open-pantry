@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { useState } from "react";
 
 import { resolveBarcode, type LookupState } from "#/domains/inventory/lookup.ts";
@@ -31,7 +32,7 @@ export function ScanFlow({ onAdded }: { onAdded: (productId: string) => void }) 
     return (
       <div>
         <Scanner onBarcode={(barcode) => void onBarcode(barcode)} />
-        {resolving && <output className={styles.note}>Looking up product…</output>}
+        {resolving && <output className={styles.note}>{m["scan.lookingUp"]()}</output>}
       </div>
     );
   }
@@ -40,9 +41,11 @@ export function ScanFlow({ onAdded }: { onAdded: (productId: string) => void }) 
   const existing = products.find((product) => product.barcode === barcode) ?? null;
   return (
     <div>
-      <h3 className={styles.heading}>{existing ? "Add a purchase" : "New product"}</h3>
+      <h3 className={styles.heading}>
+        {existing ? m["scan.addPurchase"]() : m["scan.newProduct"]()}
+      </h3>
       <LookupNote barcode={barcode} lookup={lookup} />
-      <p className={styles.note}>Barcode {barcode}</p>
+      <p className={styles.note}>{m["scan.barcode"]({ barcode })}</p>
       <AddPurchase
         barcode={barcode}
         existing={existing}
@@ -56,7 +59,7 @@ export function ScanFlow({ onAdded }: { onAdded: (productId: string) => void }) 
         className={styles.secondary}
         onClick={() => setScanned(null)}
       >
-        Scan a different product
+        {m["scan.different"]()}
       </Button>
     </div>
   );
@@ -67,23 +70,21 @@ function LookupNote({ barcode, lookup }: { barcode: string; lookup: LookupState 
   if (lookup.status === "found") {
     return (
       <p className={styles.note}>
-        Product data:{" "}
+        {m["scan.found.prefix"]()}{" "}
         <a
           href={`https://world.openfoodfacts.org/product/${barcode}`}
           target="_blank"
           rel="noreferrer"
         >
-          Open Food Facts
+          {m["global.openFoodFacts"]()}
         </a>
-        . Check it against the package.
+        {m["scan.found.suffix"]()}
       </p>
     );
   }
   return (
     <output className={styles.note}>
-      {lookup.status === "not_found"
-        ? "Open Food Facts doesn't know this barcode. Enter the details yourself."
-        : "Product details couldn't be loaded. You can enter the name yourself; saving needs a connection, and details are filled in later."}
+      {lookup.status === "not_found" ? m["scan.notFound"]() : m["scan.unavailable"]()}
     </output>
   );
 }

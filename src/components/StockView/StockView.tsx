@@ -1,3 +1,5 @@
+import { m } from "#/paraglide/messages.js";
+import { productName } from "#/domains/inventory/product-name.ts";
 import { useMemo, useState } from "react";
 
 import { todayIn } from "#/domains/inventory/format.ts";
@@ -46,21 +48,25 @@ export function StockView({ initial, timeZone, canEdit, addedId, onAddedShown }:
   return (
     <div className={styles.stock}>
       <SyncStatus query={query} />
-      {added && <output className={styles.added}>Added {added.name ?? "product"}</output>}
+      {added && (
+        <output className={styles.added}>
+          {m["stock.added"]({ name: productName(added) ?? m["stock.fallbackProduct"]() })}
+        </output>
+      )}
       <div className={styles.filters}>
         <Input
           type="search"
-          aria-label="Search by name"
-          placeholder="Search"
+          aria-label={m["stock.search.label"]()}
+          placeholder={m["stock.search.placeholder"]()}
           value={search}
           onChange={(event) => setSearch(event.target.value)}
         />
         <Select
-          aria-label="Filter by location"
+          aria-label={m["stock.filterLocation"]()}
           value={locationId}
           onChange={(event) => setLocationId(event.target.value)}
         >
-          <option value="">All locations</option>
+          <option value="">{m["stock.allLocations"]()}</option>
           {locations.map((location) => (
             <option key={location.id} value={location.id}>
               {location.name}
@@ -70,14 +76,12 @@ export function StockView({ initial, timeZone, canEdit, addedId, onAddedShown }:
       </div>
 
       {!query.data ? (
-        <Message>
-          {query.isError ? "The pantry could not be loaded." : "Loading your pantry…"}
-        </Message>
+        <Message>{query.isError ? m["stock.loadFailed"]() : m["stock.loading"]()}</Message>
       ) : groups.length === 0 ? (
         <Message>
           {batches.length > 0
-            ? "No stock matches the search or location."
-            : `Nothing in the pantry yet.${canEdit ? " Tap the scan button to add your first product." : ""}`}
+            ? m["stock.noMatch"]()
+            : `${m["stock.empty"]()}${canEdit ? ` ${m["stock.emptyHint"]()}` : ""}`}
         </Message>
       ) : (
         groups.map((group) => (
@@ -93,11 +97,11 @@ export function StockView({ initial, timeZone, canEdit, addedId, onAddedShown }:
       )}
       {usesOpenFoodFacts && (
         <p className={styles.attribution}>
-          Product data:{" "}
+          {m["stock.attribution.prefix"]()}{" "}
           <a href="https://world.openfoodfacts.org" target="_blank" rel="noreferrer">
-            Open Food Facts
+            {m["global.openFoodFacts"]()}
           </a>{" "}
-          (ODbL). Images CC BY-SA.
+          {m["stock.attribution.suffix"]()}
         </p>
       )}
     </div>

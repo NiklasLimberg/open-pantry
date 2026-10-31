@@ -1,22 +1,24 @@
 import type { StartAmount } from "#/domains/inventory/purchase.ts";
+import { m } from "#/paraglide/messages.js";
 
 import styles from "./AmountPicker.module.css";
 
-export const amountOptions = [
-  { value: "4", label: "Full" },
-  { value: "3", label: "¾" },
-  { value: "2", label: "½" },
-  { value: "1", label: "¼" },
-  { value: "used", label: "Used up" },
-] as const;
+export type Amount = "4" | "3" | "2" | "1" | "used";
 
-export type Amount = (typeof amountOptions)[number]["value"];
+/** Labels are read when called, because the language is only known per request. */
+export const amountOptions = (): ReadonlyArray<{ value: Amount; label: string }> => [
+  { value: "4", label: m["global.amount.full"]() },
+  { value: "3", label: m["global.amount.threeQuarters"]() },
+  { value: "2", label: m["global.amount.half"]() },
+  { value: "1", label: m["global.amount.quarter"]() },
+  { value: "used", label: m["global.amount.usedUp"]() },
+];
 
 /** Choices for a package that is just being added: anything but Used up. */
-export const startAmountOptions = amountOptions.filter(
-  (option): option is Extract<(typeof amountOptions)[number], { value: StartAmount }> =>
-    option.value !== "used",
-);
+export const startAmountOptions = () =>
+  amountOptions().filter(
+    (option): option is { value: StartAmount; label: string } => option.value !== "used",
+  );
 
 type Props<T extends Amount> = {
   /** Groups the radios; must differ between pickers on the same page. */
@@ -37,7 +39,7 @@ export function AmountPicker<T extends Amount = Amount>({
   legendHidden = false,
   value,
   onChange,
-  options = amountOptions as unknown as ReadonlyArray<{ value: T; label: string }>,
+  options = amountOptions() as unknown as ReadonlyArray<{ value: T; label: string }>,
 }: Props<T>) {
   return (
     <fieldset className={styles.amounts}>

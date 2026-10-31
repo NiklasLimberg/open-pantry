@@ -1,3 +1,5 @@
+import { m } from "#/paraglide/messages.js";
+import { productName } from "#/domains/inventory/product-name.ts";
 import {
   describeDate,
   packageNoun,
@@ -51,7 +53,7 @@ export function ProductCard({ group, locations, today, canEdit, highlighted }: P
           />
         )}
         <div>
-          <h3 className={styles.name}>{product.name ?? "Unnamed product"}</h3>
+          <h3 className={styles.name}>{productName(product) ?? m["stock.unnamed"]()}</h3>
           {product.brand && <p className={styles.meta}>{product.brand}</p>}
           <p className={styles.meta}>{stock.packages}</p>
           <p className={stock.left ? styles.left : styles.meta}>
@@ -66,15 +68,17 @@ export function ProductCard({ group, locations, today, canEdit, highlighted }: P
         </div>
       </div>
       <details>
-        <summary>Individual {unitLabel(packageNoun(product.trackUnit), 2)}</summary>
+        <summary>
+          {m["stock.individual"]({ units: unitLabel(packageNoun(product.trackUnit), 2) })}
+        </summary>
         <ul className={styles.batches}>
           {batches.map((batch) => {
             const info = describeDate(batch.dateKind, batch.date, today);
             return (
               <li key={batch.id} className={styles.batch}>
                 <p className={styles.meta}>
-                  {locationName(batch.locationId)} · {batch.opened ? "Opened" : "Unopened"} ·{" "}
-                  {info.text}
+                  {locationName(batch.locationId)} ·{" "}
+                  {batch.opened ? m["global.opened"]() : m["global.unopened"]()} · {info.text}
                   {info.warning && <strong className={styles.warning}> · {info.warning}</strong>}
                 </p>
                 {canEdit && <BatchAmount batch={batch} />}

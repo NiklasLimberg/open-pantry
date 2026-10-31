@@ -1,6 +1,419 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
   "global": {
-    "pantry": "Vorrat"
+    "pantry": "Vorrat",
+    "rules": "Regeln",
+    "stockRules": "Bestandsregeln",
+    "shopping": "Einkauf",
+    "settings": "Einstellungen",
+    "scan": "Scannen",
+    "name": "Name",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "date": "Datum",
+    "location": "Ort",
+    "update": "Aktualisieren",
+    "updating": "Wird aktualisiert…",
+    "refreshing": "Wird aktualisiert…",
+    "tryAgain": "Erneut versuchen",
+    "close": "Schließen",
+    "opened": "Geöffnet",
+    "unopened": "Ungeöffnet",
+    "openFoodFacts": "Open Food Facts",
+    "unit": {
+      "pack": {
+        "one": "Packung",
+        "other": "Packungen"
+      },
+      "carton": {
+        "one": "Karton",
+        "other": "Kartons"
+      },
+      "bottle": {
+        "one": "Flasche",
+        "other": "Flaschen"
+      },
+      "loaf": {
+        "one": "Laib",
+        "other": "Laibe"
+      },
+      "slice": {
+        "one": "Scheibe",
+        "other": "Scheiben"
+      },
+      "piece": {
+        "one": "Stück",
+        "other": "Stück"
+      },
+      "gram": {
+        "one": "g",
+        "other": "g"
+      },
+      "millilitre": {
+        "one": "ml",
+        "other": "ml"
+      }
+    },
+    "amount": {
+      "full": "Voll",
+      "threeQuarters": "¾",
+      "half": "½",
+      "quarter": "¼",
+      "usedUp": "Aufgebraucht",
+      "left": "Verbleibende Menge"
+    },
+    "dateKind": {
+      "mhd": "MHD",
+      "useBy": "Verbrauchsdatum",
+      "estimate": "Geschätzte Erinnerung",
+      "none": "Kein aufgedrucktes Datum",
+      "unknown": "Datum nicht erfasst"
+    },
+    "dateWarning": {
+      "unknown": "Datum unbekannt",
+      "doNotUse": "Nicht verwenden",
+      "reviewEstimate": "Schätzung prüfen",
+      "pastMhd": "MHD überschritten: prüfen"
+    }
+  },
+  "nav": {
+    "label": "Hauptmenü"
+  },
+  "theme": {
+    "system": "System",
+    "light": "Hell",
+    "dark": "Dunkel",
+    "switch": "Darstellung: {current}. Wechseln zu {next}."
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "account": "Konto",
+    "signedIn": "Angemeldet als {email}.",
+    "signOut": "Abmelden"
+  },
+  "language": {
+    "title": "Sprache",
+    "hint": "Die App und die Produktnamen von Open Food Facts erscheinen in dieser Sprache, sofern es eine Übersetzung gibt.",
+    "group": "Sprache"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Anmelden",
+      "submit": "Anmelden",
+      "failed": "Anmeldung fehlgeschlagen."
+    },
+    "setup": {
+      "title": "Besitzerkonto erstellen",
+      "submit": "Konto erstellen",
+      "failed": "Das Konto konnte nicht erstellt werden."
+    }
+  },
+  "form": {
+    "invalidFormat": "Prüfe das Format dieses Felds.",
+    "tooShort": "Zu kurz.",
+    "invalidValue": "Ungültiger Wert."
+  },
+  "stock": {
+    "added": "{name} hinzugefügt",
+    "fallbackProduct": "Produkt",
+    "unnamed": "Unbenanntes Produkt",
+    "search": {
+      "label": "Nach Name suchen",
+      "placeholder": "Suchen"
+    },
+    "filterLocation": "Nach Ort filtern",
+    "allLocations": "Alle Orte",
+    "loadFailed": "Der Vorrat konnte nicht geladen werden.",
+    "loading": "Vorrat wird geladen…",
+    "noMatch": "Kein Bestand passt zu Suche oder Ort.",
+    "empty": "Noch nichts im Vorrat.",
+    "emptyHint": "Tippe auf die Scan-Taste, um dein erstes Produkt hinzuzufügen.",
+    "attribution": {
+      "prefix": "Produktdaten:",
+      "suffix": "(ODbL). Bilder CC BY-SA."
+    },
+    "individual": "Einzelne {units}",
+    "each": "{size} je Packung",
+    "about": "ca. ",
+    "left": "{about}{amount} {unit} übrig",
+    "needsSize": "Braucht eine Packungsgröße in {unit}, um {unit} übrig anzuzeigen",
+    "needsCount": "Braucht die Anzahl {units} pro Packung"
+  },
+  "batch": {
+    "usedUpHint": "„Aufgebraucht“ entfernt diese Packung aus deinem Vorrat.",
+    "conflict": "Das wurde auf einem anderen Gerät geändert. Die aktuelle Menge wird angezeigt; prüfe sie und aktualisiere erneut.",
+    "saveFailed": "Speichern fehlgeschlagen. Prüfe deine Verbindung und versuche es erneut; es wurde nichts geändert."
+  },
+  "sync": {
+    "offline": "Offline · zeigt die zuletzt geladenen Daten. Änderungen brauchen eine Verbindung.",
+    "failedTitle": "Der Vorrat konnte nicht aktualisiert werden",
+    "failedBody": "Zeigt die zuletzt geladenen Daten{since}.",
+    "since": "von {time}"
+  },
+  "productData": {
+    "title": "Produktdaten",
+    "refreshAll": "Alle aktualisieren",
+    "hint": "Von Open Food Facts. Fällige Einträge werden alle 30 Minuten automatisch aktualisiert, jeweils 20. „Alle aktualisieren“ prüft jedes Produkt neu, etwa 5 Sekunden pro Produkt.",
+    "fresh": "aktuell",
+    "due": "fällig",
+    "never": "nie abgerufen",
+    "oldest": "Älteste Daten von {time}.",
+    "none": "Noch keine Produkte mit Barcode.",
+    "neverRun": "Noch nicht gelaufen.",
+    "refreshingAll": "Alles wird aktualisiert",
+    "refreshingSome": "Wird aktualisiert",
+    "progress": "{label} · {processed} von {total}",
+    "looking": "Suche Produkte zum Aktualisieren…",
+    "progressLabel": "Fortschritt der Aktualisierung",
+    "lastFailed": "Letzter Lauf fehlgeschlagen",
+    "last": "Letzter Lauf",
+    "checked": "{processed} von {total} geprüft",
+    "startFailed": "Die Aktualisierung konnte nicht gestartet werden."
+  },
+  "purchase": {
+    "dateKind": {
+      "mhd": "MHD (Mindesthaltbarkeitsdatum)",
+      "useBy": "Verbrauchsdatum (zu verbrauchen bis)",
+      "notEntered": "Noch nicht erfasst"
+    },
+    "validation": {
+      "atLeastOne": "Füge mindestens eine hinzu.",
+      "atMostTwenty": "Füge höchstens 20 auf einmal hinzu.",
+      "chooseLocation": "Wähle, wo es aufbewahrt wird.",
+      "enterName": "Gib einen Namen für dieses Produkt ein.",
+      "positiveSize": "Gib eine positive Größe ein.",
+      "enterDate": "Gib das aufgedruckte Datum ein oder wähle „Kein aufgedrucktes Datum“."
+    },
+    "brand": "Marke (optional)",
+    "packageSize": "Packungsgröße (optional)",
+    "sizeHint": "Von Open Food Facts. Vergleiche es mit der Packung.",
+    "unit": "Einheit",
+    "trackIn": "Menge erfassen in",
+    "trackHint": "Wie du eine Packung nennst. Ihre Größe wird, falls angegeben, neben dem Rest angezeigt.",
+    "howMany": "Wie viele",
+    "dateOnPackage": "Datum auf der Packung",
+    "datePlaceholder": "TT.MM.JJ",
+    "dateExample": "Tippe es wie aufgedruckt ein, z. B. 2803, 28.03.27 oder 03.27.",
+    "dateInvalid": "Kein Datum. Versuche 2803, 28.03.27 oder 03.27.",
+    "endOfMonth": "(Monatsende)",
+    "submit": "Zum Vorrat hinzufügen",
+    "saveFailed": "Speichern fehlgeschlagen. Prüfe deine Verbindung und versuche es erneut; es wurde nichts hinzugefügt."
+  },
+  "scan": {
+    "open": "Produkt scannen",
+    "lookingUp": "Produkt wird gesucht…",
+    "addPurchase": "Einkauf hinzufügen",
+    "newProduct": "Neues Produkt",
+    "barcode": "Barcode {barcode}",
+    "found": {
+      "prefix": "Produktdaten:",
+      "suffix": ". Vergleiche es mit der Packung."
+    },
+    "notFound": "Open Food Facts kennt diesen Barcode nicht. Gib die Angaben selbst ein.",
+    "unavailable": "Die Produktdaten konnten nicht geladen werden. Du kannst den Namen selbst eingeben; Speichern braucht eine Verbindung, die Angaben werden später ergänzt.",
+    "different": "Anderes Produkt scannen",
+    "pointCamera": "Richte die Kamera auf den Barcode",
+    "startingCamera": "Kamera wird gestartet…",
+    "stopCamera": "Kamera stoppen",
+    "withCamera": "Mit Kamera scannen",
+    "orType": "Oder tippe den Barcode ein",
+    "useBarcode": "Barcode verwenden",
+    "invalidBarcode": "Gib einen gültigen EAN- oder UPC-Barcode ein.",
+    "cameraDenied": "Der Kamerazugriff wurde verweigert. Tippe den Barcode ein oder erlaube die Kamera in den Browsereinstellungen.",
+    "cameraUnsupported": "Dieser Browser kann die Kamera hier nicht öffnen. Der Kamerazugriff braucht HTTPS.",
+    "cameraFailed": "Die Kamera konnte nicht gestartet werden."
+  },
+  "share": {
+    "title": "Links zum Ansehen",
+    "create": "Link erstellen",
+    "hint": "Jeder mit einem Link kann diesen Vorrat ohne Anmeldung ansehen, aber nichts ändern.",
+    "copyNow": "Kopiere diesen Link jetzt. Er wird nicht noch einmal angezeigt.",
+    "newLinkLabel": "Neuer Freigabe-Link",
+    "none": "Keine aktiven Links.",
+    "link": "Link",
+    "created": "{label} · erstellt am {date}",
+    "revoke": "Widerrufen",
+    "failed": "Etwas ist schiefgelaufen.",
+    "unavailableTitle": "Link nicht verfügbar",
+    "unavailableBody": "Dieser Link ist ungültig oder wurde widerrufen.",
+    "viewOnly": "Nur ansehen",
+    "placeholder": "Hier erscheint die schreibgeschützte Vorratsansicht."
+  },
+  "meta": {
+    "description": "Sieh, was zu Hause ist, verbrauche Essen rechtzeitig und kaufe, was fehlt. Ein Vorrats-Begleiter für Schrank, Kühlschrank und Gefrierfach."
+  },
+  "landing": {
+    "cta": {
+      "pantry": "Zu deinem Vorrat",
+      "setup": "Vorrat einrichten",
+      "signIn": "Anmelden"
+    },
+    "hero": {
+      "eyebrow": "Schrank · Kühlschrank · Gefrierfach",
+      "title": "Sieh, was zu Hause ist, verbrauche Essen rechtzeitig, kaufe, was fehlt.",
+      "lead": "Open Pantry hält fest, wie viel wirklich noch da ist – eine halbe Packung Milch, drei Scheiben Brot –, erinnert dich, bevor Daten ablaufen, und macht aus deinen eigenen Bestandsregeln eine Einkaufsliste.",
+      "seeScreens": "Bildschirme ansehen",
+      "caption": "Vorratsbildschirm auf einem Smartphone: Sauerteigbrot und Vollmilch, bald zu verbrauchen, und eine Vollmilch-Karte mit zwei Packungen, etwa 1,5 übrig.",
+      "useSoon": "Bald verbrauchen",
+      "useSoonMeta": "2 Artikel · nächste 3 Tage",
+      "inventory": "Bestand",
+      "inventoryMeta": "4 Produkte"
+    },
+    "features": {
+      "useSoon": {
+        "eyebrow": "Bald verbrauchen",
+        "title": "Die nächsten Daten zuerst",
+        "body1": "Artikel, die in den nächsten Tagen fällig sind, stehen oben im Vorrat, nach Datum sortiert. MHD und Verbrauchsdatum sind getrennt beschriftet, und geschätzte Erinnerungen geben sich nie als aufgedruckte Daten aus.",
+        "body2": "Nach dem Verbrauchsdatum steht bei einem Artikel „Nicht verwenden“, und er zählt nicht mehr zum Bestand.",
+        "caption": "Zwei Karten „Bald verbrauchen“: Sauerteigbrot, MHD morgen, 3 Scheiben übrig; Vollmilch, MHD morgen, zur Hälfte übrig und geöffnet."
+      },
+      "inventory": {
+        "eyebrow": "Bestand",
+        "title": "Mengen, wie du sie siehst",
+        "body1": "Aktualisiere eine Packung mit Voll, ¾, ½, ¼ oder Leer, oder zähle genau, wenn es darauf ankommt, etwa bei Brotscheiben. Erfasse Mengen in Kartons, Laiben, Scheiben, Gramm oder was zum Produkt passt.",
+        "body2": "Mehrere Einkäufe desselben Produkts werden in einer Karte zusammengefasst, und jeder behält seine eigene Menge, sein Datum und seinen Geöffnet-Status.",
+        "caption": "Bestandskarten: gemahlener Kaffee, 1,5 Packungen in zwei Chargen; Basmatireis, drei Viertel übrig; Sauerteigbrot, 3 Scheiben übrig."
+      },
+      "rules": {
+        "eyebrow": "Bestandsregeln",
+        "title": "Entscheide, was genug ist",
+        "body": "Mehr als 3 Scheiben Brot. Mindestens 2 Packungen Milch. Eine ungeöffnete Reservepackung Kaffee. Jede Regel zeigt, was da ist, das Ziel und den Fehlbestand, und lässt sich nach Marke, Ort oder Geöffnet-Status eingrenzen.",
+        "caption": "Drei Bestandsregeln: Brot für morgen fehlt 1 Scheibe, Milch im Kühlschrank fehlt 1 Packung, ein Reservekaffee ist gedeckt."
+      },
+      "shopping": {
+        "eyebrow": "Einkauf",
+        "title": "Eine Liste aus deinen Regeln",
+        "body1": "Fehlbestände landen auf der Einkaufsliste, mit dem, was zu Hause ist, und der Regel, die sie verlangt hat. Alles andere fügst du von Hand hinzu.",
+        "body2": "Hake Artikel im Korb ab und räume den Einkauf in einem Schritt ein: Bestätige Produkt, Menge, Ort und Datum, und die Liste wird neu berechnet.",
+        "caption": "Einkaufsliste: Sauerteigbrot, 1 Laib; Vollmilch, 1 Packung, schon im Korb; Bananen, von Hand hinzugefügt.",
+        "putAway": "Einkauf einräumen"
+      },
+      "scan": {
+        "eyebrow": "Scannen",
+        "title": "Barcode scannen, dann wählen",
+        "body": "Beim Scannen wird das Produkt auf Open Food Facts gesucht, und du wählst, ob es ein neuer Einkauf oder die Aktualisierung eines vorhandenen ist. Kamerabilder bleiben auf dem Gerät, und die manuelle Eingabe funktioniert, wenn Kamera oder Suche ausfallen.",
+        "caption": "Scanergebnis für Vollmilch, 1-Liter-Packung, mit den Optionen Einkauf hinzufügen oder die geöffnete bzw. ungeöffnete Packung aktualisieren."
+      }
+    },
+    "extras": {
+      "title": "Für die Küche gebaut, nicht für die Tabelle",
+      "offline": {
+        "title": "Funktioniert offline",
+        "body": "Sieh den Vorrat an, füge Bestand hinzu und prüfe die Liste ohne Verbindung. Änderungen werden synchronisiert, sobald du wieder online bist."
+      },
+      "shared": {
+        "title": "Geteilt zu deinen Bedingungen",
+        "body": "Rollen für Besitzer, Bearbeiter und Betrachter sowie Links zum Ansehen, die du jederzeit widerrufen kannst."
+      },
+      "reminders": {
+        "title": "Erinnerungen, für die du dich entscheidest",
+        "body": "Eine tägliche Übersicht dessen, was fällig ist, standardmäßig 2 Tage vorher um 09:00 Uhr, oder gar keine."
+      },
+      "selfHosted": {
+        "title": "Läuft auf deinem Server",
+        "body": "Eine Node-App und eine PostgreSQL-Datenbank. Dein Vorrat bleibt auf Infrastruktur, die du kontrollierst."
+      }
+    },
+    "closing": {
+      "title": "Wisse, was im Schrank ist.",
+      "status": "Open Pantry befindet sich in früher Entwicklung. Die Bildschirme oben stammen aus dem Design-Prototyp; Konten, Rollen und Freigabe-Links funktionieren heute schon."
+    },
+    "footer": "Produktdaten von Open Food Facts."
+  },
+  "mock": {
+    "item": {
+      "sourdough": "Sauerteigbrot",
+      "milk": "Vollmilch",
+      "coffee": "Gemahlener Kaffee",
+      "rice": "Basmatireis",
+      "bananas": "Bananen"
+    },
+    "place": {
+      "cupboard": "Schrank",
+      "fridge": "Kühlschrank"
+    },
+    "tomorrow": "Morgen",
+    "date22oct": "22. Okt.",
+    "left": {
+      "slices3": "3 Scheiben übrig",
+      "halfOpened": "½ übrig · geöffnet",
+      "half": "½ übrig"
+    },
+    "updateAmount": "Menge aktualisieren",
+    "milkMeta": "Kühlschrank · 2 Chargen",
+    "milkAmount": "1,5 Packungen",
+    "approxRemaining": "ungefähr übrig",
+    "milkSplit": "2 Packungen · 1 geöffnet · 1 ungeöffnet",
+    "individualCartons": "Einzelne Packungen",
+    "carton1": "Packung 1",
+    "carton2": "Packung 2",
+    "mhdTomorrow": "MHD morgen",
+    "mhd28oct": "MHD 28. Okt.",
+    "remaining": "übrig",
+    "remainingApprox": "übrig · ungefähr",
+    "covered": "Gedeckt",
+    "coffeeMeta": "Schrank · 2 Chargen",
+    "coffeeAmount": "1,5 Packungen",
+    "coffeeDate": "Frühestes: MHD 10. Feb.",
+    "riceMeta": "Schrank · Geöffnet",
+    "riceDate": "MHD 1. Juni 2027",
+    "breadSlices": "3 Scheiben",
+    "breadDate": "MHD morgen",
+    "rule": {
+      "bread": {
+        "name": "Brot für morgen",
+        "criteria": "Kategorie: Brot",
+        "sentence": "Halte mehr als 3 Scheiben zu Hause vorrätig.",
+        "have": "3 / 4 Scheiben vorhanden",
+        "status": "1 Scheibe fehlt"
+      },
+      "milk": {
+        "name": "Milch im Kühlschrank",
+        "criteria": "Kategorie: Milch",
+        "sentence": "Halte mindestens 2 Packungen zu Hause vorrätig.",
+        "have": "Etwa 1,5 / 2 Packungen vorhanden",
+        "status": "1 Packung fehlt"
+      },
+      "coffee": {
+        "name": "Ein Reservekaffee",
+        "criteria": "Kategorie: Kaffee · nur ungeöffnet",
+        "sentence": "Halte 1 ungeöffnete Packung zu Hause vorrätig.",
+        "have": "1 / 1 Packungen vorhanden"
+      }
+    },
+    "shop": {
+      "bread": {
+        "detail": "3 Scheiben zu Hause · Brot für morgen",
+        "amount": "1 Laib"
+      },
+      "milk": {
+        "detail": "Etwa 1,5 Packungen zu Hause · Im Korb",
+        "amount": "1 Packung"
+      },
+      "bananas": {
+        "detail": "Von Hand hinzugefügt",
+        "amount": "6 Stück"
+      }
+    },
+    "scanSheet": {
+      "barcode": "Barcode 4 006 381 333 931",
+      "meta": "1-Liter-Packung · Open Food Facts",
+      "question": "Du hast schon 2 Chargen Milch. Was möchtest du tun?",
+      "add": "Einkauf hinzufügen",
+      "updateOpened": "Geöffnete Packung aktualisieren · ½",
+      "updateUnopened": "Ungeöffnete Packung aktualisieren · Voll"
+    },
+    "phone": {
+      "time": "9:41",
+      "upToDate": "Aktuell"
+    }
+  },
+  "error": {
+    "signUpClosed": "Die Registrierung ist geschlossen. Bitte den Besitzer des Vorrats um eine Einladung.",
+    "noAccess": "Du hast darauf keinen Zugriff.",
+    "linkInvalid": "Dieser Link ist ungültig oder wurde widerrufen.",
+    "notSignedIn": "Nicht angemeldet.",
+    "noPantry": "Du bist in keinem Vorrat Mitglied.",
+    "invalidBarcode": "Das ist kein gültiger EAN- oder UPC-Barcode."
   }
 }
