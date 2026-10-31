@@ -10,15 +10,20 @@ import { Field, Input } from "../Form/Form.tsx";
 import styles from "./Scanner.module.css";
 import { useCameraScan } from "./use-camera-scan.ts";
 
-type Props = { onBarcode: (barcode: string) => void };
+type Props = {
+  onBarcode: (barcode: string) => void;
+  /** Open the camera as soon as the scanner appears, when the user already asked to scan. */
+  autoStart?: boolean;
+};
 
 /**
  * Camera scanning plus a typed-barcode field that is always available (denied permission,
  * unsupported browser, damaged label). Decoding happens on the device, so it works offline.
- * The camera starts only after the user asks for it.
+ * The camera starts when the user asks for it: with the button, or at once when `autoStart` says
+ * pressing Scan already was the request.
  */
-export function Scanner({ onBarcode }: Props) {
-  const { videoRef, ...camera } = useCameraScan(onBarcode);
+export function Scanner({ onBarcode, autoStart }: Props) {
+  const { videoRef, ...camera } = useCameraScan(onBarcode, autoStart);
 
   return (
     <div className={styles.scanner}>

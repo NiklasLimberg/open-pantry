@@ -31,7 +31,7 @@ export function ScanFlow({ onAdded }: { onAdded: (productId: string) => void }) 
   if (!scanned) {
     return (
       <div>
-        <Scanner onBarcode={(barcode) => void onBarcode(barcode)} />
+        <Scanner autoStart onBarcode={(barcode) => void onBarcode(barcode)} />
         {resolving && <output className={styles.note}>{m["scan.lookingUp"]()}</output>}
       </div>
     );
