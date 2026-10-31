@@ -1,3 +1,4 @@
+import { productName } from "#/domains/inventory/product-name.ts";
 import { useForm, type AnyFieldApi } from "@tanstack/react-form";
 import { useState } from "react";
 import { z } from "zod";
@@ -14,6 +15,9 @@ import {
   type StockProduct,
 } from "#/domains/inventory/stock.functions.ts";
 
+import { m } from "#/paraglide/messages.js";
+import { getLocale } from "#/paraglide/runtime.js";
+
 import { AmountPicker, startAmountOptions } from "../AmountPicker/AmountPicker.tsx";
 import { Button } from "../Button/Button.tsx";
 import { Field, FormError, FormInput, FormSelect, Input } from "../Form/Form.tsx";
@@ -29,11 +33,11 @@ type Props = {
   onSaved: (productId: string) => void;
 };
 
-const dateKindOptions: Array<{ value: DateKind; label: string }> = [
-  { value: "mhd", label: "MHD (best before)" },
-  { value: "use_by", label: "Verbrauchsdatum (use by)" },
-  { value: "none", label: "No printed date" },
-  { value: "unknown", label: "Not entered yet" },
+const dateKindOptions = (): Array<{ value: DateKind; label: string }> => [
+  { value: "mhd", label: m["purchase.dateKind.mhd"]() },
+  { value: "use_by", label: m["purchase.dateKind.useBy"]() },
+  { value: "none", label: m["global.dateKind.none"]() },
+  { value: "unknown", label: m["purchase.dateKind.notEntered"]() },
 ];
 
 /**
@@ -49,8 +53,13 @@ const schema = z
     trackUnit: z.enum(trackUnits),
     packageAmount: z.string().trim(),
     packageUnit: z.enum(["g", "ml"]),
-    count: z.number().int().min(1, "Add at least one.").max(20, "Add up to 20 at a time."),
-    locationId: z.string().min(1, "Choose where it is kept."),
+    // Messages are functions: they are read when validation fails, in that request's language.
+    count: z
+      .number()
+      .int()
+      .min(1, { error: () => m["purchase.validation.atLeastOne"]() })
+      .max(20, { error: () => m["purchase.validation.atMostTwenty"]() }),
+    locationId: z.string().min(1, { error: () => m["purchase.validation.chooseLocation"]() }),
     dateKind: z.enum(["mhd", "use_by", "none", "unknown"]),
     date: z.string(),
     amount: z.enum(["4", "3", "2", "1"]),
@@ -58,16 +67,24 @@ const schema = z
   })
   .superRefine((value, ctx) => {
     if (value.needsName && !value.name) {
-      ctx.addIssue({ code: "custom", path: ["name"], message: "Enter a name for this product." });
+      ctx.addIssue({
+        code: "custom",
+        path: ["name"],
+        message: m["purchase.validation.enterName"](),
+      });
     }
     if (value.packageAmount && !(Number(value.packageAmount) > 0)) {
-      ctx.addIssue({ code: "custom", path: ["packageAmount"], message: "Enter a positive size." });
+      ctx.addIssue({
+        code: "custom",
+        path: ["packageAmount"],
+        message: m["purchase.validation.positiveSize"](),
+      });
     }
     if ((value.dateKind === "mhd" || value.dateKind === "use_by") && !value.date) {
       ctx.addIssue({
         code: "custom",
         path: ["date"],
-        message: "Enter the printed date, or choose No printed date.",
+        message: m["purchase.validation.enterDate"](),
       });
     }
   });
@@ -84,7 +101,7 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
   const suggestion = found?.suggestedPackage ?? existing?.suggestedPackage ?? null;
 
   const defaultValues: PurchaseValues & { needsName: boolean } = {
-    name: existing?.name ?? found?.name ?? "",
+    name: (existing && productName(existing)) ?? found?.name ?? "",
     brand: existing?.brand ?? found?.brand ?? "",
     trackUnit: existing?.trackUnit ?? "pack",
     packageAmount: String(existing?.packageAmount ?? suggestion?.amount ?? ""),
@@ -109,7 +126,7 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
         await refresh();
         onSaved(input.productId);
       } catch {
-        setError("Couldn't save. Check your connection and try again; nothing was added.");
+        setError(m["purchase.saveFailed"]());
       }
     },
   });
@@ -124,31 +141,31 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
     >
       {existing ? (
         <p className={styles.product}>
-          <strong>{existing.name ?? barcode}</strong>
+          <strong>{productName(existing) ?? barcode}</strong>
           {existing.brand && <span> · {existing.brand}</span>}
         </p>
       ) : (
         <>
-          <form.Field name="name">{(field) => <FormInput field={field} label="Name" />}</form.Field>
+          <form.Field name="name">
+            {(field) => <FormInput field={field} label={m["global.name"]()} />}
+          </form.Field>
           <form.Field name="brand">
-            {(field) => <FormInput field={field} label="Brand (optional)" />}
+            {(field) => <FormInput field={field} label={m["purchase.brand"]()} />}
           </form.Field>
           <div className={styles.sizeRow}>
             <form.Field name="packageAmount">
               {(field) => (
                 <FormInput
                   field={field}
-                  label="Package size (optional)"
-                  hint={
-                    suggestion ? "From Open Food Facts. Check it against the package." : undefined
-                  }
+                  label={m["purchase.packageSize"]()}
+                  hint={suggestion ? m["purchase.sizeHint"]() : undefined}
                   inputMode="decimal"
                 />
               )}
             </form.Field>
             <form.Field name="packageUnit">
               {(field) => (
-                <FormSelect field={field} label="Unit">
+                <FormSelect field={field} label={m["purchase.unit"]()}>
                   <option value="g">g</option>
                   <option value="ml">ml</option>
                 </FormSelect>
@@ -159,8 +176,8 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
             {(field) => (
               <FormSelect
                 field={field}
-                label="Track amount in"
-                hint="What you call one package. Its size, if entered, is shown next to what is left."
+                label={m["purchase.trackIn"]()}
+                hint={m["purchase.trackHint"]()}
               >
                 {packageUnits.map((unit) => (
                   <option key={unit} value={unit}>
@@ -175,11 +192,19 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
 
       <div className={styles.row}>
         <form.Field name="count">
-          {(field) => <FormInput field={field} label="How many" type="number" min={1} max={20} />}
+          {(field) => (
+            <FormInput
+              field={field}
+              label={m["purchase.howMany"]()}
+              type="number"
+              min={1}
+              max={20}
+            />
+          )}
         </form.Field>
         <form.Field name="locationId">
           {(field) => (
-            <FormSelect field={field} label="Location">
+            <FormSelect field={field} label={m["global.location"]()}>
               {locations.map((location) => (
                 <option key={location.id} value={location.id}>
                   {location.name}
@@ -192,8 +217,8 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
 
       <form.Field name="dateKind">
         {(field) => (
-          <FormSelect field={field} label="Date on the package">
-            {dateKindOptions.map((option) => (
+          <FormSelect field={field} label={m["purchase.dateOnPackage"]()}>
+            {dateKindOptions().map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -215,8 +240,8 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
         {(field) => (
           <AmountPicker
             name="amount"
-            legend="Amount left"
-            options={startAmountOptions}
+            legend={m["global.amount.left"]()}
+            options={startAmountOptions()}
             value={field.state.value}
             onChange={field.handleChange}
           />
@@ -227,7 +252,7 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
       <form.Subscribe selector={(state) => state.isSubmitting}>
         {(isSubmitting) => (
           <Button type="submit" disabled={isSubmitting}>
-            Add to pantry
+            {m["purchase.submit"]()}
           </Button>
         )}
       </form.Subscribe>
@@ -236,13 +261,14 @@ export function AddPurchase({ barcode, existing, lookup, locations, onSaved }: P
 }
 
 /** Shown back to the user so a typed shortcut is confirmed before it is saved. */
-const dateFormat = new Intl.DateTimeFormat("en-GB", {
-  weekday: "short",
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-});
+const dateFormat = () =>
+  new Intl.DateTimeFormat(getLocale() === "de" ? "de-DE" : "en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 
 /**
  * The printed date, typed the way it reads on the package (2803, 28.03.27, 03.27) and echoed back
@@ -253,14 +279,14 @@ function TypedDate({ field, disabled }: { field: AnyFieldApi; disabled: boolean 
   const [today] = useState(() => todayIn(Intl.DateTimeFormat().resolvedOptions().timeZone));
   const parsed = parseTypedDate(text, today);
   const echo = parsed
-    ? `${dateFormat.format(new Date(`${parsed.iso}T00:00:00Z`))}${parsed.monthOnly ? " (end of month)" : ""}`
+    ? `${dateFormat().format(new Date(`${parsed.iso}T00:00:00Z`))}${parsed.monthOnly ? ` ${m["purchase.endOfMonth"]()}` : ""}`
     : text.trim()
-      ? "Not a date. Try 2803, 28.03.27 or 03.27."
-      : "Type it as printed, e.g. 2803, 28.03.27 or 03.27.";
+      ? m["purchase.dateInvalid"]()
+      : m["purchase.dateExample"]();
 
   return (
     <Field
-      label="Date"
+      label={m["global.date"]()}
       hint={disabled ? undefined : echo}
       htmlFor={field.name}
       errors={field.state.meta.errors}
@@ -271,7 +297,7 @@ function TypedDate({ field, disabled }: { field: AnyFieldApi; disabled: boolean 
         disabled={disabled}
         inputMode="numeric"
         autoComplete="off"
-        placeholder="DD.MM.YY"
+        placeholder={m["purchase.datePlaceholder"]()}
         onBlur={field.handleBlur}
         onChange={(event) => {
           setText(event.target.value);

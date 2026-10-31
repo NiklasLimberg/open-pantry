@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { Landing } from "#/components/Landing/Landing.tsx";
@@ -12,8 +13,7 @@ export const Route = createFileRoute("/")({
     meta: [
       {
         name: "description",
-        content:
-          "See what is at home, use food in time, and buy what is missing. A pantry companion for cupboard, fridge, and freezer.",
+        content: m["meta.description"](),
       },
     ],
   }),

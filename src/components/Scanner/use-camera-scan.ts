@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { useEffect, useEffectEvent, useRef, useState } from "react";
 
 import { createDecoder } from "#/domains/products/barcode-decoder.ts";
@@ -12,9 +13,9 @@ type CameraState =
 
 function describeFailure(error: unknown) {
   if (error instanceof DOMException && error.name === "NotAllowedError") {
-    return "Camera access was denied. Type the barcode instead, or allow the camera in your browser settings.";
+    return m["scan.cameraDenied"]();
   }
-  return error instanceof Error ? error.message : "The camera could not be started.";
+  return error instanceof Error ? error.message : m["scan.cameraFailed"]();
 }
 
 /**
@@ -22,9 +23,9 @@ function describeFailure(error: unknown) {
  * reads. Decoding happens on the device; frames never leave the browser. Stopping, or unmounting,
  * releases the camera.
  */
-export function useCameraScan(onBarcode: (barcode: string) => void) {
+export function useCameraScan(onBarcode: (barcode: string) => void, autoStart = false) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [camera, setCamera] = useState<CameraState>({ kind: "idle" });
+  const [camera, setCamera] = useState<CameraState>({ kind: autoStart ? "starting" : "idle" });
   const found = useEffectEvent(onBarcode);
 
   // Keyed on this flag, not on camera.kind: the starting -> scanning change must not restart the
@@ -40,7 +41,7 @@ export function useCameraScan(onBarcode: (barcode: string) => void) {
     async function run() {
       try {
         if (!navigator.mediaDevices?.getUserMedia) {
-          throw new Error("This browser cannot open the camera here. Camera access needs HTTPS.");
+          throw new Error(m["scan.cameraUnsupported"]());
         }
         stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: { ideal: "environment" } },

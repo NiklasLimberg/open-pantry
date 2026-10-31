@@ -14,12 +14,17 @@ describe("mapOffResponse", () => {
         image_front_url: "https://images.openfoodfacts.org/images/products/1.400.jpg",
         image_front_small_url: "https://images.openfoodfacts.org/images/products/1.200.jpg",
         conservation_conditions: "",
+        product_name_de: " Nutella (DE) ",
+        product_name_en: "",
+        product_name_fr: "Nutella FR",
+        product_name_fr_imported: "ignored",
       },
     });
     expect(result).toEqual({
       kind: "found",
       product: {
         name: "Nutella",
+        names: { de: "Nutella (DE)" },
         brand: "Nutella, Ferrero",
         quantity: "400 g e",
         categories: ["en:spreads"],

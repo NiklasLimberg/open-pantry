@@ -5,8 +5,15 @@
     "correctness": "error",
     "suspicious": "warn"
   },
-  "ignorePatterns": ["src/routeTree.gen.ts", ".output/**", ".tanstack/**", "drizzle/**"],
+  "ignorePatterns": [
+    "src/routeTree.gen.ts",
+    ".output/**",
+    ".tanstack/**",
+    "drizzle/**",
+    "src/paraglide/**"
+  ],
   "rules": {
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "import/namespace": "off"
   }
 }

@@ -1,3 +1,5 @@
+import { m } from "#/paraglide/messages.js";
+import { getLocale } from "#/paraglide/runtime.js";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { useEffect, useState, useSyncExternalStore } from "react";
 
@@ -48,26 +50,22 @@ export function SyncStatus({ query }: Props) {
   const slowRefresh = useAfterDelay(query.isFetching, 600);
 
   if (!online) {
-    return (
-      <output className={styles.status}>
-        Offline · showing what was last loaded. Changes need a connection.
-      </output>
-    );
+    return <output className={styles.status}>{m["sync.offline"]()}</output>;
   }
   if (query.isError && !query.isFetching) {
     const since = query.dataUpdatedAt
-      ? ` from ${new Date(query.dataUpdatedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`
+      ? ` ${m["sync.since"]({ time: new Date(query.dataUpdatedAt).toLocaleTimeString(getLocale(), { hour: "2-digit", minute: "2-digit" }) })}`
       : "";
     return (
       <div role="alert" className={`${styles.status} ${styles.error}`}>
-        <strong>Couldn't refresh the pantry</strong>
-        <span>Showing what was last loaded{since}.</span>
+        <strong>{m["sync.failedTitle"]()}</strong>
+        <span>{m["sync.failedBody"]({ since })}</span>
         <Button type="button" variant="secondary" onClick={() => void query.refetch()}>
-          Try again
+          {m["global.tryAgain"]()}
         </Button>
       </div>
     );
   }
-  if (slowRefresh) return <output className={styles.status}>Refreshing…</output>;
+  if (slowRefresh) return <output className={styles.status}>{m["global.refreshing"]()}</output>;
   return null;
 }

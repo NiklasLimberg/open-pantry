@@ -1,3 +1,5 @@
+import { m } from "#/paraglide/messages.js";
+import { getLocale } from "#/paraglide/runtime.js";
 import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
@@ -24,13 +26,13 @@ export function ShareLinkPanel({ links }: { links: ShareLink[] }) {
       await action();
       await router.invalidate();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong.");
+      setError(e instanceof Error ? e.message : m["share.failed"]());
     }
   }
 
   return (
     <Card
-      title="View-only links"
+      title={m["share.title"]()}
       actions={
         <Button
           type="button"
@@ -42,41 +44,42 @@ export function ShareLinkPanel({ links }: { links: ShareLink[] }) {
             })
           }
         >
-          Create link
+          {m["share.create"]()}
         </Button>
       }
     >
-      <p className={styles.hint}>
-        Anyone with a link can see this pantry without signing in, but cannot change anything.
-      </p>
+      <p className={styles.hint}>{m["share.hint"]()}</p>
       <FormError message={error} />
       {newUrl && (
         <div className={styles.newLink}>
-          <p>Copy this link now. It won't be shown again.</p>
+          <p>{m["share.copyNow"]()}</p>
           <input
             className={styles.url}
             readOnly
             value={newUrl}
-            aria-label="New share link"
+            aria-label={m["share.newLinkLabel"]()}
             onFocus={(e) => e.currentTarget.select()}
           />
         </div>
       )}
       {links.length === 0 ? (
-        <p className={styles.empty}>No active links.</p>
+        <p className={styles.empty}>{m["share.none"]()}</p>
       ) : (
         <ul className={styles.list}>
           {links.map((link) => (
             <li key={link.id} className={styles.item}>
               <span>
-                {link.label ?? "Link"} · created {new Date(link.createdAt).toLocaleDateString()}
+                {m["share.created"]({
+                  label: link.label ?? m["share.link"](),
+                  date: new Date(link.createdAt).toLocaleDateString(getLocale()),
+                })}
               </span>
               <Button
                 type="button"
                 variant="secondary"
                 onClick={() => run(() => revoke({ data: { id: link.id } }))}
               >
-                Revoke
+                {m["share.revoke"]()}
               </Button>
             </li>
           ))}

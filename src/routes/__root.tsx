@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, ScriptOnce, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { getLocale } from "#/paraglide/runtime.js";
 import { registerServiceWorker } from "#/domains/offline/register-sw.ts";
 import { themeScript } from "#/domains/theme/theme.ts";
 import appCss from "../styles.css?url";
@@ -36,7 +37,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   useEffect(registerServiceWorker, []);
   return (
     // themeScript sets data-theme before hydration, so React must not flag the mismatch.
-    <html lang="en" suppressHydrationWarning>
+    <html lang={getLocale()} suppressHydrationWarning>
       <head>
         <ScriptOnce>{themeScript}</ScriptOnce>
         <HeadContent />

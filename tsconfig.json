@@ -16,6 +16,9 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
+    /* Paraglide emits JavaScript with JSDoc types (src/paraglide); read its types, don't check it. */
+    "allowJs": true,
+    "checkJs": false,
 
     /* Linting */
     "skipLibCheck": true,

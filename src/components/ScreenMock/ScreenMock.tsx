@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { m } from "#/paraglide/messages.js";
+
 import styles from "./ScreenMock.module.css";
 
 // Static, non-interactive renderings of the screens in docs/design/screens.html,
@@ -80,7 +82,7 @@ export function UseSoonCard({
       </div>
       <div className={styles.cardFooter}>
         <span>{amount}</span>
-        <FakeButton>Update amount</FakeButton>
+        <FakeButton>{m["mock.updateAmount"]()}</FakeButton>
       </div>
     </div>
   );
@@ -92,43 +94,43 @@ export function MilkGroupCard() {
       <div className={styles.product}>
         <Icon>🥛</Icon>
         <div>
-          <strong className={styles.name}>Whole milk</strong>
-          <span className={styles.muted}>Fridge · 2 batches</span>
+          <strong className={styles.name}>{m["mock.item.milk"]()}</strong>
+          <span className={styles.muted}>{m["mock.milkMeta"]()}</span>
         </div>
       </div>
       <div className={styles.quantity}>
-        <strong>1.5 cartons</strong>
-        <span className={styles.muted}>approximately remaining</span>
+        <strong>{m["mock.milkAmount"]()}</strong>
+        <span className={styles.muted}>{m["mock.approxRemaining"]()}</span>
       </div>
-      <span className={styles.muted}>2 cartons · 1 opened · 1 unopened</span>
+      <span className={styles.muted}>{m["mock.milkSplit"]()}</span>
       <div className={styles.batches}>
-        <span className={styles.batchesTitle}>Individual cartons</span>
+        <span className={styles.batchesTitle}>{m["mock.individualCartons"]()}</span>
         <div className={styles.batch}>
           <div className={styles.batchHead}>
-            <strong>Carton 1</strong>
-            <span className={styles.muted}>Opened</span>
+            <strong>{m["mock.carton1"]()}</strong>
+            <span className={styles.muted}>{m["global.opened"]()}</span>
           </div>
           <div className={styles.batchAmount}>
-            <span>½ left</span>
+            <span>{m["mock.left.half"]()}</span>
             <Quarters filled={2} />
           </div>
           <div className={styles.batchHead}>
-            <span className={styles.warnText}>MHD tomorrow</span>
-            <FakeButton>Update</FakeButton>
+            <span className={styles.warnText}>{m["mock.mhdTomorrow"]()}</span>
+            <FakeButton>{m["global.update"]()}</FakeButton>
           </div>
         </div>
         <div className={styles.batch}>
           <div className={styles.batchHead}>
-            <strong>Carton 2</strong>
-            <span className={styles.muted}>Unopened</span>
+            <strong>{m["mock.carton2"]()}</strong>
+            <span className={styles.muted}>{m["global.unopened"]()}</span>
           </div>
           <div className={styles.batchAmount}>
-            <span>Full</span>
+            <span>{m["global.amount.full"]()}</span>
             <Quarters filled={4} />
           </div>
           <div className={styles.batchHead}>
-            <span className={styles.muted}>MHD 28 Oct</span>
-            <FakeButton>Update</FakeButton>
+            <span className={styles.muted}>{m["mock.mhd28oct"]()}</span>
+            <FakeButton>{m["global.update"]()}</FakeButton>
           </div>
         </div>
       </div>
@@ -163,13 +165,13 @@ export function StockCard({
       <div className={styles.quantity}>
         <strong>{amount}</strong>
         <span className={styles.muted}>
-          remaining{quarters === undefined ? "" : " · approximate"}
+          {quarters === undefined ? m["mock.remaining"]() : m["mock.remainingApprox"]()}
         </span>
       </div>
       {quarters !== undefined && <Quarters filled={quarters} />}
       <div className={styles.cardFooter}>
         <span className={styles.muted}>{date}</span>
-        <FakeButton>Update</FakeButton>
+        <FakeButton>{m["global.update"]()}</FakeButton>
       </div>
     </div>
   );
@@ -210,7 +212,7 @@ export function RuleCard({
       <div className={styles.batchHead}>
         <span className={styles.small}>{have}</span>
         <span className={[styles.pill, status && styles.warn].filter(Boolean).join(" ")}>
-          {status ?? "Covered"}
+          {status ?? m["mock.covered"]()}
         </span>
       </div>
     </div>
@@ -245,19 +247,19 @@ export function ScanSheet() {
     <div className={styles.sheet}>
       <div className={styles.viewfinder}>
         <span className={styles.barcode} />
-        <span className={styles.small}>Barcode 4 006 381 333 931</span>
+        <span className={styles.small}>{m["mock.scanSheet.barcode"]()}</span>
       </div>
       <div className={styles.product}>
         <Icon>🥛</Icon>
         <div>
-          <strong className={styles.name}>Whole milk</strong>
-          <span className={styles.muted}>1 litre carton · Open Food Facts</span>
+          <strong className={styles.name}>{m["mock.item.milk"]()}</strong>
+          <span className={styles.muted}>{m["mock.scanSheet.meta"]()}</span>
         </div>
       </div>
-      <span>You already have 2 batches of milk. What would you like to do?</span>
-      <FakeButton primary>Add a purchase</FakeButton>
-      <FakeButton>Update opened carton · ½</FakeButton>
-      <FakeButton>Update unopened carton · Full</FakeButton>
+      <span>{m["mock.scanSheet.question"]()}</span>
+      <FakeButton primary>{m["mock.scanSheet.add"]()}</FakeButton>
+      <FakeButton>{m["mock.scanSheet.updateOpened"]()}</FakeButton>
+      <FakeButton>{m["mock.scanSheet.updateUnopened"]()}</FakeButton>
     </div>
   );
 }
@@ -269,27 +271,34 @@ export function PhoneScreen({
   children,
 }: {
   title: string;
-  active: string;
+  active: "pantry" | "rules" | "shopping" | "settings";
   children: ReactNode;
 }) {
   return (
     <div className={styles.phoneLayout}>
       <div className={styles.statusBar}>
-        <span>9:41</span>
+        <span>{m["mock.phone.time"]()}</span>
         <span className={styles.sync}>
           <span className={styles.dot} />
-          Up to date
+          {m["mock.phone.upToDate"]()}
         </span>
       </div>
       <div className={styles.phoneBody}>
         <strong className={styles.phoneTitle}>{title}</strong>
         {children}
       </div>
-      <span className={styles.fab}>Scan</span>
+      <span className={styles.fab}>{m["global.scan"]()}</span>
       <div className={styles.bottomNav}>
-        {["Pantry", "Rules", "Shopping", "Settings"].map((item) => (
-          <span key={item} className={item === active ? styles.navActive : undefined}>
-            {item}
+        {(
+          [
+            ["pantry", m["global.pantry"]()],
+            ["rules", m["global.rules"]()],
+            ["shopping", m["global.shopping"]()],
+            ["settings", m["global.settings"]()],
+          ] as const
+        ).map(([key, label]) => (
+          <span key={key} className={key === active ? styles.navActive : undefined}>
+            {label}
           </span>
         ))}
       </div>

@@ -1,5 +1,6 @@
+import { m } from "#/paraglide/messages.js";
 import type { AnyFieldApi } from "@tanstack/react-form";
-import { Form as RadixForm } from "radix-ui";
+import * as RadixForm from "@radix-ui/react-form";
 import {
   cloneElement,
   isValidElement,
@@ -34,10 +35,10 @@ export function TextField({ name, label, missingMessage, ...inputProps }: TextFi
         </RadixForm.Message>
       )}
       <RadixForm.Message match="typeMismatch" className={styles.message}>
-        Check the format of this field.
+        {m["form.invalidFormat"]()}
       </RadixForm.Message>
       <RadixForm.Message match="tooShort" className={styles.message}>
-        Too short.
+        {m["form.tooShort"]()}
       </RadixForm.Message>
     </RadixForm.Field>
   );
@@ -64,7 +65,7 @@ type FieldProps = {
 /** Label, control and error text for fields driven by TanStack Form. */
 export function Field({ label, errors = [], hint, htmlFor, children }: FieldProps) {
   const messages = errors.map((e) =>
-    typeof e === "string" ? e : ((e as { message?: string })?.message ?? "Invalid value."),
+    typeof e === "string" ? e : ((e as { message?: string })?.message ?? m["form.invalidValue"]()),
   );
   const invalid = messages.length > 0;
   const errorId = `${htmlFor}-error`;

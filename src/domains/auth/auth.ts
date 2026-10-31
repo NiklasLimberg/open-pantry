@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError } from "better-auth/api";
@@ -20,7 +21,7 @@ export const auth = betterAuth({
           const existing = await ctx?.context.adapter.count({ model: "user" });
           if (existing !== 0) {
             throw new APIError("FORBIDDEN", {
-              message: "Sign-up is closed. Ask the pantry owner for an invitation.",
+              message: m["error.signUpClosed"](),
             });
           }
         },

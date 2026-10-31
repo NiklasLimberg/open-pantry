@@ -1,3 +1,4 @@
+import { m } from "#/paraglide/messages.js";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
@@ -20,7 +21,7 @@ function SignIn() {
   const [pending, setPending] = useState(false);
 
   return (
-    <AuthLayout title="Sign in">
+    <AuthLayout title={m["auth.signIn.title"]()}>
       <Form
         onSubmit={async (event) => {
           event.preventDefault();
@@ -31,21 +32,27 @@ function SignIn() {
             password: String(form.get("password")),
           });
           setPending(false);
-          if (result.error) return setError(result.error.message ?? "Sign-in failed.");
+          if (result.error) return setError(result.error.message ?? m["auth.signIn.failed"]());
           await navigate({ to: "/pantry" });
         }}
       >
-        <TextField name="email" label="Email" type="email" autoComplete="email" required />
+        <TextField
+          name="email"
+          label={m["global.email"]()}
+          type="email"
+          autoComplete="email"
+          required
+        />
         <TextField
           name="password"
-          label="Password"
+          label={m["global.password"]()}
           type="password"
           autoComplete="current-password"
           required
         />
         <FormError message={error} />
         <Button type="submit" disabled={pending}>
-          Sign in
+          {m["auth.signIn.submit"]()}
         </Button>
       </Form>
     </AuthLayout>
