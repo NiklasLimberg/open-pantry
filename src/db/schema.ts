@@ -5,6 +5,7 @@ import {
   date,
   index,
   integer,
+  jsonb,
   pgTable,
   smallint,
   text,
@@ -46,6 +47,8 @@ export const offProduct = pgTable("off_product", {
   /** `not_found` is cached too, so unknown barcodes don't hit the API on every scan. */
   status: text("status", { enum: ["found", "not_found"] }).notNull(),
   name: text("name"),
+  /** The name in each language Open Food Facts has one for, keyed by two-letter code. */
+  names: jsonb("names").$type<Record<string, string>>().notNull().default({}),
   brand: text("brand"),
   /** Free text as printed ("400 g e"); parsed only when unambiguous, otherwise confirmed by the user. */
   quantity: text("quantity"),

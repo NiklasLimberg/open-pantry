@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { locales } from "#/paraglide/runtime.js";
+
 // Server-only client for the Open Food Facts product API. The public API is limited to 15 product
 // reads per minute per IP and bans abusers, so every request in this process goes through one
 // queue with fixed spacing, duplicate lookups share a single request, and throttling responses
@@ -15,16 +17,9 @@ const minSpacingMs = 5_000;
 const timeoutMs = 8_000;
 const defaultBackoffMs = 60_000;
 
-const fields = [
-  "code",
-  "product_name",
-  "brands",
-  "quantity",
-  "categories_tags",
-  "image_front_url",
-  "image_front_small_url",
-  "conservation_conditions",
-].join(",");
+// No `fields` filter: names in other languages are separate keys (product_name_de, …), and listing
+// every language Open Food Facts has (~190) makes the URL longer than the API's proxy accepts (it answers 502). The full
+// product is about 12 kB compressed, and the queue below keeps requests to a dozen a minute.
 
 const responseSchema = z.object({
   status: z.number(),
@@ -38,11 +33,15 @@ const responseSchema = z.object({
       image_front_small_url: z.string().optional(),
       conservation_conditions: z.string().optional(),
     })
+    // The per-language names (product_name_de, …) are read by key below.
+    .catchall(z.unknown())
     .optional(),
 });
 
 export type OffProductData = {
   name: string | null;
+  /** Name per language, two-letter code → text; only languages with a name. */
+  names: Record<string, string>;
   brand: string | null;
   quantity: string | null;
   categories: string[];
@@ -58,6 +57,17 @@ export type OffResult =
 
 const clean = (value: string | undefined) => value?.trim() || null;
 
+/** `product_name_<code>` for the app's languages (messages/*.json); others are dropped. */
+function localizedNames(product: Record<string, unknown>) {
+  const names: Record<string, string> = {};
+  for (const code of locales) {
+    const value = product[`product_name_${code}`];
+    const name = typeof value === "string" ? clean(value) : null;
+    if (name) names[code] = name;
+  }
+  return names;
+}
+
 export function mapOffResponse(body: unknown): OffResult {
   const parsed = responseSchema.safeParse(body);
   if (!parsed.success) return { kind: "unavailable" };
@@ -69,6 +79,7 @@ export function mapOffResponse(body: unknown): OffResult {
     kind: "found",
     product: {
       name: clean(p.product_name),
+      names: localizedNames(p),
       brand: clean(p.brands),
       quantity: clean(p.quantity),
       categories: (p.categories_tags ?? []).slice(0, 20),
@@ -106,7 +117,7 @@ async function request(barcode: string): Promise<OffResult> {
   lastRequestAt = Date.now();
 
   try {
-    const url = `${baseUrl}/api/v2/product/${encodeURIComponent(barcode)}.json?fields=${fields}`;
+    const url = `${baseUrl}/api/v2/product/${encodeURIComponent(barcode)}.json`;
     const response = await fetch(url, {
       headers: { "User-Agent": userAgent, Accept: "application/json" },
       signal: AbortSignal.timeout(timeoutMs),

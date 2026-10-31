@@ -44,6 +44,7 @@ export async function refreshOffProduct(
       : {
           status: "not_found" as const,
           name: null,
+          names: {},
           brand: null,
           quantity: null,
           categories: [],
