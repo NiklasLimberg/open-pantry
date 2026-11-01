@@ -1,15 +1,15 @@
 import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 
-import { AppShell } from "#/components/AppShell/AppShell.tsx";
-import { LocaleBoundary } from "#/components/LocaleBoundary/LocaleBoundary.tsx";
-import { PantryCache } from "#/components/PantryCache/PantryCache.tsx";
-import { ScanFab } from "#/components/ScanFab/ScanFab.tsx";
-import { getSession } from "#/domains/auth/auth.functions.ts";
-import { getVerifiedSession, setVerifiedSession } from "#/domains/auth/verified-session.ts";
-import { isNetworkFailure } from "#/domains/offline/network-failure.ts";
-import { loadPantry, savePantry } from "#/domains/offline/persister.ts";
-import { getCurrentPantry } from "#/domains/pantry/pantry.functions.ts";
-import { roleCan } from "#/domains/pantry/permissions.ts";
+import { AppShell } from "#/layout/AppShell/AppShell.tsx";
+import { LocaleBoundary } from "#/features/i18n/LocaleBoundary/LocaleBoundary.tsx";
+import { PantryCache } from "#/layout/PantryCache/PantryCache.tsx";
+import { ScanFab } from "#/features/scan/ScanFab/ScanFab.tsx";
+import { getSession } from "#/features/auth/auth.functions.ts";
+import { getVerifiedSession, setVerifiedSession } from "#/features/auth/verified-session.ts";
+import { isNetworkFailure } from "#/features/offline/network-failure.ts";
+import { loadPantry, savePantry } from "#/features/offline/persister.ts";
+import { getCurrentPantry } from "#/features/pantry/pantry.functions.ts";
+import { roleCan } from "#/features/pantry/permissions.ts";
 
 type Pantry = Awaited<ReturnType<typeof getCurrentPantry>>;
 
@@ -17,28 +17,40 @@ type Pantry = Awaited<ReturnType<typeof getCurrentPantry>>;
 export const Route = createFileRoute("/_authed")({
   beforeLoad: async () => {
     const verified = getVerifiedSession();
-    if (!import.meta.env.SSR && verified) return { session: verified };
+    if (!import.meta.env.SSR && verified) {
+      return { session: verified };
+    }
     try {
       const session = await getSession();
-      if (!session) throw redirect({ to: "/sign-in" });
-      if (!import.meta.env.SSR) setVerifiedSession(session);
+      if (!session) {
+        throw redirect({ to: "/sign-in" });
+      }
+      if (!import.meta.env.SSR) {
+        setVerifiedSession(session);
+      }
       return { session };
     } catch (error) {
       // Offline: stay on the signed-in screens, which show what is cached. Anything that needs
       // the server reports its own error.
-      if (isNetworkFailure(error)) return { session: null };
+      if (isNetworkFailure(error)) {
+        return { session: null };
+      }
       throw error;
     }
   },
   loader: async (): Promise<Pantry> => {
     try {
       const pantry = await getCurrentPantry();
-      if (!import.meta.env.SSR) void savePantry(pantry);
+      if (!import.meta.env.SSR) {
+        void savePantry(pantry);
+      }
       return pantry;
     } catch (error) {
       // Offline: use the pantry details saved on this device, if any.
       const saved = isNetworkFailure(error) ? await loadPantry<Pantry>() : undefined;
-      if (saved) return saved;
+      if (saved) {
+        return saved;
+      }
       throw error;
     }
   },

@@ -109,6 +109,7 @@
     }
   },
   "form": {
+    "required": "Fill in this field.",
     "invalidFormat": "Check the format of this field.",
     "tooShort": "Too short.",
     "invalidValue": "Invalid value."
@@ -142,6 +143,7 @@
   "batch": {
     "usedUpHint": "Used up removes this package from your pantry.",
     "conflict": "This changed on another device. The current amount is shown; check it and update again.",
+    "gone": "This package was already used up on another device. The list now shows the current stock.",
     "saveFailed": "Couldn't save. Check your connection and try again; nothing was changed."
   },
   "sync": {
@@ -223,22 +225,6 @@
     "cameraUnsupported": "This browser cannot open the camera here. Camera access needs HTTPS.",
     "cameraFailed": "The camera could not be started."
   },
-  "share": {
-    "title": "View-only links",
-    "create": "Create link",
-    "hint": "Anyone with a link can see this pantry without signing in, but cannot change anything.",
-    "copyNow": "Copy this link now. It won't be shown again.",
-    "newLinkLabel": "New share link",
-    "none": "No active links.",
-    "link": "Link",
-    "created": "{label} · created {date}",
-    "revoke": "Revoke",
-    "failed": "Something went wrong.",
-    "unavailableTitle": "Link unavailable",
-    "unavailableBody": "This link is invalid or has been revoked.",
-    "viewOnly": "View only",
-    "placeholder": "The read-only pantry view will appear here."
-  },
   "meta": {
     "description": "See what is at home, use food in time, and buy what is missing. A pantry companion for cupboard, fridge, and freezer."
   },
@@ -316,7 +302,7 @@
     },
     "closing": {
       "title": "Know what is in the cupboard.",
-      "status": "Open Pantry is in early development. The screens above come from the design prototype; accounts, roles, and share links work today."
+      "status": "Open Pantry is in early development. The screens above come from the design prototype; accounts and roles work today."
     },
     "footer": "Product data from Open Food Facts."
   },
@@ -411,7 +397,6 @@
   "error": {
     "signUpClosed": "Sign-up is closed. Ask the pantry owner for an invitation.",
     "noAccess": "You don't have access to this.",
-    "linkInvalid": "This link is invalid or has been revoked.",
     "notSignedIn": "Not signed in.",
     "noPantry": "You are not a member of any pantry.",
     "invalidBarcode": "That is not a valid EAN or UPC barcode."

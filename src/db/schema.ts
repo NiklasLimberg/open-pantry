@@ -19,7 +19,10 @@ import { organization, user } from "./auth-schema.ts";
 // A pantry is a Better Auth organization, so pantry-owned tables reference organization.id.
 export * from "./auth-schema.ts";
 
-/** Read-only link to a pantry for people without an account. Only a hash of the token is stored. */
+/**
+ * Unused: share links were removed. The table stays until a later release drops it, because
+ * migrations run before the new code is deployed and are never reversed (see AGENTS.md).
+ */
 export const shareLink = pgTable(
   "share_link",
   {

@@ -109,6 +109,7 @@
     }
   },
   "form": {
+    "required": "Fülle dieses Feld aus.",
     "invalidFormat": "Prüfe das Format dieses Felds.",
     "tooShort": "Zu kurz.",
     "invalidValue": "Ungültiger Wert."
@@ -142,6 +143,7 @@
   "batch": {
     "usedUpHint": "„Aufgebraucht“ entfernt diese Packung aus deinem Vorrat.",
     "conflict": "Das wurde auf einem anderen Gerät geändert. Die aktuelle Menge wird angezeigt; prüfe sie und aktualisiere erneut.",
+    "gone": "Diese Packung wurde auf einem anderen Gerät bereits aufgebraucht. Die Liste zeigt jetzt den aktuellen Vorrat.",
     "saveFailed": "Speichern fehlgeschlagen. Prüfe deine Verbindung und versuche es erneut; es wurde nichts geändert."
   },
   "sync": {
@@ -223,22 +225,6 @@
     "cameraUnsupported": "Dieser Browser kann die Kamera hier nicht öffnen. Der Kamerazugriff braucht HTTPS.",
     "cameraFailed": "Die Kamera konnte nicht gestartet werden."
   },
-  "share": {
-    "title": "Links zum Ansehen",
-    "create": "Link erstellen",
-    "hint": "Jeder mit einem Link kann diesen Vorrat ohne Anmeldung ansehen, aber nichts ändern.",
-    "copyNow": "Kopiere diesen Link jetzt. Er wird nicht noch einmal angezeigt.",
-    "newLinkLabel": "Neuer Freigabe-Link",
-    "none": "Keine aktiven Links.",
-    "link": "Link",
-    "created": "{label} · erstellt am {date}",
-    "revoke": "Widerrufen",
-    "failed": "Etwas ist schiefgelaufen.",
-    "unavailableTitle": "Link nicht verfügbar",
-    "unavailableBody": "Dieser Link ist ungültig oder wurde widerrufen.",
-    "viewOnly": "Nur ansehen",
-    "placeholder": "Hier erscheint die schreibgeschützte Vorratsansicht."
-  },
   "meta": {
     "description": "Sieh, was zu Hause ist, verbrauche Essen rechtzeitig und kaufe, was fehlt. Ein Vorrats-Begleiter für Schrank, Kühlschrank und Gefrierfach."
   },
@@ -316,7 +302,7 @@
     },
     "closing": {
       "title": "Wisse, was im Schrank ist.",
-      "status": "Open Pantry befindet sich in früher Entwicklung. Die Bildschirme oben stammen aus dem Design-Prototyp; Konten, Rollen und Freigabe-Links funktionieren heute schon."
+      "status": "Open Pantry befindet sich in früher Entwicklung. Die Bildschirme oben stammen aus dem Design-Prototyp; Konten und Rollen funktionieren heute schon."
     },
     "footer": "Produktdaten von Open Food Facts."
   },
@@ -411,7 +397,6 @@
   "error": {
     "signUpClosed": "Die Registrierung ist geschlossen. Bitte den Besitzer des Vorrats um eine Einladung.",
     "noAccess": "Du hast darauf keinen Zugriff.",
-    "linkInvalid": "Dieser Link ist ungültig oder wurde widerrufen.",
     "notSignedIn": "Nicht angemeldet.",
     "noPantry": "Du bist in keinem Vorrat Mitglied.",
     "invalidBarcode": "Das ist kein gültiger EAN- oder UPC-Barcode."

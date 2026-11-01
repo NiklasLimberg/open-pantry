@@ -14,7 +14,9 @@ todos.json
 .vitest/
 
 # Local agent and preview config
-.claude/
+# Claude Code: only the shared project settings are tracked.
+.claude/*
+!.claude/settings.json
 
 # Local data dumps (e.g. Open Food Facts, see scripts/seed-demo.ts)
 .data/

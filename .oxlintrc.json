@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "react", "jsx-a11y", "import"],
+  "plugins": ["typescript", "react", "jsx-a11y", "import", "vitest"],
   "categories": {
     "correctness": "error",
     "suspicious": "warn"
@@ -14,6 +14,43 @@
   ],
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "react/no-multi-comp": "error",
+    "curly": "error",
+    "eqeqeq": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-else-return": "error",
+    "no-param-reassign": "error",
+    "no-shadow": "error",
+    "no-lonely-if": "error",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "no-nested-ternary": "error",
+    "no-await-in-loop": "error",
+    "require-await": "error",
+    "complexity": ["error", 30],
+    "max-params": ["error", 4],
+    "typescript/no-explicit-any": "error",
+    "typescript/ban-ts-comment": "error",
+    "typescript/consistent-type-imports": "error",
+    "typescript/no-non-null-assertion": "error",
+    "typescript/array-type": "error",
+    "import/no-cycle": "error",
+    "import/no-duplicates": "error",
+    "react/button-has-type": "error",
+    "react/no-array-index-key": "error",
+    "react/jsx-no-target-blank": "error",
+    "react/no-danger": "error",
+    "react/jsx-no-useless-fragment": "error",
+    "vitest/expect-expect": "error",
+    "vitest/no-focused-tests": "error",
+    "vitest/no-disabled-tests": "error",
     "import/namespace": "off"
-  }
+  },
+  "overrides": [
+    {
+      // Command-line scripts print their results and run their steps in order.
+      "files": ["scripts/**", "src/db/migrate.ts"],
+      "rules": { "no-console": "off", "no-await-in-loop": "off", "complexity": "off" }
+    }
+  ]
 }

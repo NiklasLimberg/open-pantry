@@ -9,7 +9,7 @@ The application is scaffolded; product features are not implemented yet.
 - [Technical plan](docs/technical-plan.md): architecture, TanStack DB assessment, offline/sync, integrations, and implementation checks.
 - [Interactive screen designs](docs/design/screens.html): responsive preliminary designs with sample data. Open directly in a browser; no installation is needed.
 - [Screen guide](docs/design/README.md): interactions, sample assumptions, and prototype boundaries.
-- [Authentication and permissions](docs/auth-and-permissions.md): why Better Auth, roles, share links, and how permissions are enforced.
+- [Authentication and permissions](docs/auth-and-permissions.md): why Better Auth, roles, and how permissions are enforced.
 
 The screen prototype is a standalone design artifact, not the application.
 
@@ -17,9 +17,9 @@ The screen prototype is a standalone design artifact, not the application.
 
 - [TanStack Start](https://tanstack.com/start) (React, TypeScript) with TanStack Router, served by Nitro (Node).
 - VoidZero tooling used directly, so the TanStack setup stays stock: Vite (Rolldown) for dev/build, Vitest for tests, Oxlint and Oxfmt for lint and format.
-- Plain CSS: design tokens in `src/styles.css`, CSS Modules per component in `src/components/`, behaviour from [Radix Primitives](https://www.radix-ui.com/primitives).
+- Plain CSS: design tokens in `src/styles.css`, CSS Modules per component, behaviour from [Radix Primitives](https://www.radix-ui.com/primitives).
 - Drizzle ORM on PostgreSQL.
-- [Better Auth](https://better-auth.com) with owner / editor / viewer roles and view-only share links ([details](docs/auth-and-permissions.md)).
+- [Better Auth](https://better-auth.com) with owner / editor / viewer roles ([details](docs/auth-and-permissions.md)).
 
 ## Development
 

@@ -1,4 +1,4 @@
-export type JournalEntry = { idx: number; when: number; tag: string };
+type JournalEntry = { idx: number; when: number; tag: string };
 export type Journal = { entries: JournalEntry[] };
 
 export type MigrationState = {
@@ -16,18 +16,22 @@ export function findProblems(base: MigrationState, head: MigrationState): string
   const headEntries = head.journal.entries;
 
   headEntries.forEach((entry, position) => {
-    if (entry.idx !== position)
+    if (entry.idx !== position) {
       problems.push(`${entry.tag}: idx ${entry.idx} should be ${position}`);
-    if (!(entry.tag in head.sql))
+    }
+    if (!(entry.tag in head.sql)) {
       problems.push(`${entry.tag}: listed in the journal but has no .sql file`);
-    if (position > 0 && entry.when <= headEntries[position - 1]!.when) {
-      problems.push(`${entry.tag}: timestamp is not newer than ${headEntries[position - 1]!.tag}`);
+    }
+    const previous = headEntries[position - 1];
+    if (previous && entry.when <= previous.when) {
+      problems.push(`${entry.tag}: timestamp is not newer than ${previous.tag}`);
     }
   });
   const listed = new Set(headEntries.map((entry) => entry.tag));
   for (const tag of Object.keys(head.sql)) {
-    if (!listed.has(tag))
+    if (!listed.has(tag)) {
       problems.push(`${tag}.sql is not listed in the journal and would never run`);
+    }
   }
 
   // Migrations already on main may be running in production: they must stay byte-for-byte as they are.
@@ -69,11 +73,15 @@ const risky: [RegExp, string][] = [
 // Migrations must work with the previous release still running and with data already in the tables.
 // Deliberate exceptions carry a `-- allow-destructive: <reason>` comment in the SQL file.
 function findRiskyStatements(tag: string, sql: string): string[] {
-  if (/--\s*allow-destructive\b/i.test(sql)) return [];
+  if (/--\s*allow-destructive\b/i.test(sql)) {
+    return [];
+  }
   const problems: string[] = [];
   for (const statement of sql.split("--> statement-breakpoint")) {
     for (const [pattern, why] of risky) {
-      if (pattern.test(statement)) problems.push(`${tag}: ${firstLine(statement)} ${why}`);
+      if (pattern.test(statement)) {
+        problems.push(`${tag}: ${firstLine(statement)} ${why}`);
+      }
     }
     if (
       /\bADD\s+COLUMN\b/i.test(statement) &&

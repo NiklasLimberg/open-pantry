@@ -44,6 +44,7 @@ services:
       DATABASE_URL: *database-url
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:?Set BETTER_AUTH_SECRET in .env}
       BETTER_AUTH_URL: ${BETTER_AUTH_URL:?Set BETTER_AUTH_URL in .env}
+      OFF_CONTACT: ${OFF_CONTACT:?Set OFF_CONTACT in .env}
     depends_on:
       migrate:
         condition: service_completed_successfully

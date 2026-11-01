@@ -1,0 +1,17 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+  gap: var(--space-3);
+}
+
+.product {
+  margin: 0;
+}
+
+/* Package size and its unit always stay side by side, even at 320 px. */
+.sizeRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 6rem;
+  gap: var(--space-3);
+  align-items: start;
+}

@@ -32,8 +32,12 @@ if (mode === "history") {
   // Compares the pull request (merged onto main by CI) with main.
   const ref = process.env.MIGRATIONS_BASE ?? "origin/main";
   const problems = findProblems(readBase(ref), readHead());
-  for (const problem of problems) console.error(`::error::${problem}`);
-  if (problems.length > 0) process.exit(1);
+  for (const problem of problems) {
+    console.error(`::error::${problem}`);
+  }
+  if (problems.length > 0) {
+    process.exit(1);
+  }
   console.log(`Migration history is consistent with ${ref}.`);
 } else if (mode === "applied") {
   // After migrating, every journal entry must be recorded; a skipped migration leaves a gap.

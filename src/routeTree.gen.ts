@@ -18,7 +18,6 @@ import { Route as AuthedRulesRouteImport } from './routes/_authed/rules'
 import { Route as AuthedSettingsRouteImport } from './routes/_authed/settings'
 import { Route as AuthedShoppingRouteImport } from './routes/_authed/shopping'
 import { Route as ApiHealthRouteImport } from './routes/api/health'
-import { Route as ShareTokenRouteImport } from './routes/share/$token'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,11 +64,6 @@ const ApiHealthRoute = ApiHealthRouteImport.update({
   path: '/api/health',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ShareTokenRoute = ShareTokenRouteImport.update({
-  id: '/share/$token',
-  path: '/share/$token',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -85,7 +79,6 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthedSettingsRoute
   '/shopping': typeof AuthedShoppingRoute
   '/api/health': typeof ApiHealthRoute
-  '/share/$token': typeof ShareTokenRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesByTo {
@@ -97,7 +90,6 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthedSettingsRoute
   '/shopping': typeof AuthedShoppingRoute
   '/api/health': typeof ApiHealthRoute
-  '/share/$token': typeof ShareTokenRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRoutesById {
@@ -111,7 +103,6 @@ export interface FileRoutesById {
   '/_authed/settings': typeof AuthedSettingsRoute
   '/_authed/shopping': typeof AuthedShoppingRoute
   '/api/health': typeof ApiHealthRoute
-  '/share/$token': typeof ShareTokenRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
 export interface FileRouteTypes {
@@ -125,7 +116,6 @@ export interface FileRouteTypes {
     | '/settings'
     | '/shopping'
     | '/api/health'
-    | '/share/$token'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -137,7 +127,6 @@ export interface FileRouteTypes {
     | '/settings'
     | '/shopping'
     | '/api/health'
-    | '/share/$token'
     | '/api/auth/$'
   id:
     | '__root__'
@@ -150,7 +139,6 @@ export interface FileRouteTypes {
     | '/_authed/settings'
     | '/_authed/shopping'
     | '/api/health'
-    | '/share/$token'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
 }
@@ -160,7 +148,6 @@ export interface RootRouteChildren {
   SetupRoute: typeof SetupRoute
   SignInRoute: typeof SignInRoute
   ApiHealthRoute: typeof ApiHealthRoute
-  ShareTokenRoute: typeof ShareTokenRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -229,13 +216,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiHealthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/share/$token': {
-      id: '/share/$token'
-      path: '/share/$token'
-      fullPath: '/share/$token'
-      preLoaderRoute: typeof ShareTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -269,7 +249,6 @@ const rootRouteChildren: RootRouteChildren = {
   SetupRoute: SetupRoute,
   SignInRoute: SignInRoute,
   ApiHealthRoute: ApiHealthRoute,
-  ShareTokenRoute: ShareTokenRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

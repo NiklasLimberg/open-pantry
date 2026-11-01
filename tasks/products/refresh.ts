@@ -1,6 +1,6 @@
 import { defineTask } from "nitro/task";
 
-import { runProductRefresh } from "#/domains/products/off-cache.ts";
+import { runProductRefresh } from "../../src/features/products/off-cache.ts";
 
 // Scheduled in vite.config.ts. Refreshes the Open Food Facts data of products some pantry holds.
 export default defineTask({

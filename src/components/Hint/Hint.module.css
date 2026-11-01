@@ -1,0 +1,12 @@
+.hint {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.small {
+  font-size: 0.875rem;
+}
+
+.spaced {
+  margin-bottom: var(--space-3);
+}

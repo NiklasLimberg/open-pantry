@@ -1,6 +1,6 @@
 # Open Pantry authentication and permissions
 
-23 October 2026 · Better Auth, roles, and share links are implemented; Authelia sign-in is not
+23 October 2026 · Better Auth and roles are implemented; Authelia sign-in is not
 
 Which auth library to use and how pantry permissions work. Builds on the authentication section of the [technical plan](technical-plan.md): Authelia as a future OIDC provider, internal user IDs, server-side authorization on every read and mutation.
 
@@ -25,7 +25,7 @@ Which auth library to use and how pantry permissions work. Builds on the authent
 
 Better Auth runs in the Start server, stores users and sessions in our Postgres through Drizzle, sets a Secure, HttpOnly session cookie, and can add Authelia later through `generic-oauth` without changing user IDs. Its `organization` and `access` plugins provide the pantry and permission model below.
 
-Implemented ([src/domains/auth/auth.ts](../src/domains/auth/auth.ts)):
+Implemented ([src/features/auth/auth.ts](../src/features/auth/auth.ts)):
 
 - Email + password. Only the first account can sign up (`/setup`); it becomes the owner and gets a pantry. Later sign-ups are rejected on the server with 403.
 - `organization` plugin with our own statements and roles; a pantry is an organization with a `timeZone` field.
@@ -44,37 +44,32 @@ Risks: Better Auth releases often and plugin APIs have changed between minors; t
 
 ## Permission model
 
-Defined once in [src/domains/pantry/permissions.ts](../src/domains/pantry/permissions.ts) and shared by server and client.
+Defined once in [src/features/pantry/permissions.ts](../src/features/pantry/permissions.ts) and shared by server and client.
 
 ### Concepts
 
 - **Pantry = Better Auth organization.** Every pantry-owned row carries `pantry_id` referencing `organization.id`.
 - **Member** links a user to a pantry with one role.
-- **Share link** grants anonymous, read-only access to one pantry.
 
 ### Roles
 
-| Role     | For                                             | Can                                                                                            |
-| -------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `owner`  | You                                             | Everything: pantry contents, members, share links, deleting the pantry                         |
-| `editor` | Someone who helps keep the pantry up to date    | Read and change inventory, rules, and shopping; not members, share links, or the pantry itself |
-| `viewer` | Read-only member; also every share-link visitor | Read inventory, rules, and shopping                                                            |
+| Role     | For                                          | Can                                                                              |
+| -------- | -------------------------------------------- | -------------------------------------------------------------------------------- |
+| `owner`  | You                                          | Everything: pantry contents, members, deleting the pantry                        |
+| `editor` | Someone who helps keep the pantry up to date | Read and change inventory, rules, and shopping; not members or the pantry itself |
+| `viewer` | Read-only member                             | Read inventory, rules, and shopping                                              |
 
-Resources and actions: `inventory`, `rule` (`read`, `create`, `update`, `delete`); `shopping` (`read`, `add`, `check`, `confirm-purchase`); `shareLink` (`read`, `create`, `revoke`); plus Better Auth's `organization`, `member`, `invitation`, `team`, `ac`.
-
-### Share links
-
-An owner creates a link at `/share/<token>`. The token is 32 random bytes; only its SHA-256 hash is stored, so the link is shown once. Links can be revoked and may carry an expiry. Visitors get the `viewer` role regardless of who created the link, need no account, and the page is marked `noindex`. Revoked, expired, or unknown tokens show "Link unavailable".
+Resources and actions: `inventory`, `rule` (`read`, `create`, `update`, `delete`); `shopping` (`read`, `add`, `check`, `confirm-purchase`); plus Better Auth's `organization`, `member`, `invitation`, `team`, `ac`.
 
 ### Enforcement
 
-- **Server functions are the boundary.** `pantryMiddleware` loads the session and the member's role; a share-link function resolves access from the token instead. Every handler calls `requirePermission(access, { … })`, which throws a 403. Queries always filter by the verified pantry ID.
-- **Client checks are cosmetic.** Pages use `roleCan` to hide controls (for example the share-link panel for non-owners).
+- **Server functions are the boundary.** `pantryMiddleware` loads the session and the member's role; Every handler calls `requirePermission(access, { … })`, which throws a 403. Queries always filter by the verified pantry ID.
+- **Client checks are cosmetic.** Pages use `roleCan` to hide controls (for example the product-sync panel for non-owners).
 - **No offline writes.** There is no outbox to replay, so every write is authorized when it is made.
 - **Local storage scoping (later).** Nothing private is stored in the browser yet: the Query cache is in memory per signed-in visit. A persisted cache or service worker would be keyed by user and pantry and cleared on sign-out.
 
 ### Tests
 
-- Done: role matrix unit test ([permissions.test.ts](../src/domains/pantry/permissions.test.ts)).
-- Verified manually: second sign-up rejected; share link works signed-out and stops working after revoke; a viewer gets 403 from `listShareLinks`.
+- Done: role matrix unit test ([permissions.test.ts](../src/features/pantry/permissions.test.ts)).
+- Verified manually: second sign-up rejected; two sign-ups at the same moment leave one account (the first to take the advisory lock creates the pantry, the other account is removed). `src/features/auth/sign-up.test.ts` runs two simultaneous sign-ups against an empty database and checks that one account, one pantry and one owner remain.
 - To add with pantry features: each role × each server function; a user cannot reach another pantry by changing IDs; a removed member's queued writes are rejected on replay.

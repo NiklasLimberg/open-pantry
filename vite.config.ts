@@ -16,7 +16,9 @@ const config = defineConfig({
       // Libraries start files with "use client" (a React Server Components marker). This app has
       // no server components, so dropping the directive is harmless; 87 warnings per build otherwise.
       onLog(level, log, defaultHandler) {
-        if (log.code === "MODULE_LEVEL_DIRECTIVE" && log.id?.includes("node_modules")) return;
+        if (log.code === "MODULE_LEVEL_DIRECTIVE" && log.id?.includes("node_modules")) {
+          return;
+        }
         defaultHandler(level, log);
       },
     },

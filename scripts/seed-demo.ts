@@ -4,7 +4,7 @@ import { createGunzip } from "node:zlib";
 
 import { and, eq } from "drizzle-orm";
 
-import { auth } from "#/domains/auth/auth.ts";
+import { auth } from "../src/features/auth/auth.ts";
 import { db } from "#/db/index.ts";
 import {
   batch,
@@ -15,9 +15,9 @@ import {
   user,
   type trackUnits,
 } from "#/db/schema.ts";
-import type { DateKind } from "#/domains/inventory/format.ts";
-import { refreshOffProduct, type OffRow } from "#/domains/products/off-cache.ts";
-import { parsePackageSize } from "#/domains/products/quantity.ts";
+import type { DateKind } from "../src/features/inventory/format.ts";
+import { refreshOffProduct, type OffRow } from "../src/features/products/off-cache.ts";
+import { parsePackageSize } from "../src/features/products/quantity.ts";
 
 // Local development only: creates a demo account whose pantry is well stocked, or restocks it
 // if it exists. Run with `pnpm db:seed`. Dates are relative to today so Use soon shows something.
@@ -50,7 +50,6 @@ type Item = {
 };
 
 const pantry: Item[] = [
-  // Cupboard
   {
     code: "8076800195057",
     at: "Cupboard",
@@ -81,7 +80,6 @@ const pantry: Item[] = [
     at: "Cupboard",
     stock: [{ q: 3, in: 2, kind: "estimate" }],
   },
-  // Fridge
   {
     code: "4008452027602",
     unit: "carton",
@@ -109,7 +107,6 @@ const pantry: Item[] = [
   { name: "Eggs", unit: "pack", at: "Fridge", stock: [{ q: 3, in: 12 }] },
   { name: "Carrots", size: [1000, "g"], at: "Fridge", stock: [{ in: 10, kind: "estimate" }] },
   { name: "Apples", unit: "piece", at: "Fridge", stock: [{ n: 6, kind: "none" }] },
-  // Freezer
   { code: "4250241203524", at: "Freezer", stock: [{ q: 3, in: 200 }] }, // Iglo Fischstäbchen
   { code: "4250241204750", at: "Freezer", stock: [{ n: 2, in: 310 }] }, // Iglo Gartenerbsen
   { code: "4001724035268", at: "Freezer", stock: [{ n: 2, in: 160 }] }, // Dr. Oetker pizza
@@ -126,7 +123,9 @@ const dumpPath = process.env.OFF_DUMP ?? ".data/off/en.openfoodfacts.org.product
  */
 async function readDump(codes: Set<string>) {
   const found = new Map<string, OffRow>();
-  if (!existsSync(dumpPath)) return found;
+  if (!existsSync(dumpPath)) {
+    return found;
+  }
   const lines = createInterface({ input: createReadStream(dumpPath).pipe(createGunzip()) });
   let columns: Record<string, number> | undefined;
   for await (const line of lines) {
@@ -137,7 +136,9 @@ async function readDump(codes: Set<string>) {
     }
     const cols = columns;
     const code = cells[cols.code];
-    if (!codes.has(code)) continue;
+    if (!codes.has(code)) {
+      continue;
+    }
     const text = (name: string) => cells[cols[name]]?.trim() || null;
     const image = text("image_url");
     found.set(code, {
@@ -152,7 +153,9 @@ async function readDump(codes: Set<string>) {
       storageInstructions: null,
       fetchedAt: new Date(),
     });
-    if (found.size === codes.size) break;
+    if (found.size === codes.size) {
+      break;
+    }
   }
   return found;
 }
@@ -178,7 +181,9 @@ if (!userId) {
 }
 
 const [membership] = await db.select().from(member).where(eq(member.userId, userId));
-if (!membership) throw new Error("The demo account has no pantry.");
+if (!membership) {
+  throw new Error("The demo account has no pantry.");
+}
 const pantryId = membership.organizationId;
 
 const codes = new Set(pantry.flatMap((item) => (item.code ? [item.code] : [])));
@@ -187,7 +192,9 @@ for (const code of codes) {
   if (!offRows.has(code)) {
     console.log(`${code} is not in the dump; fetching it from Open Food Facts.`);
     const row = await refreshOffProduct(code);
-    if (row?.status !== "found") throw new Error(`Open Food Facts has no product ${code}.`);
+    if (row?.status !== "found") {
+      throw new Error(`Open Food Facts has no product ${code}.`);
+    }
     offRows.set(code, row);
   }
 }
@@ -211,7 +218,9 @@ await db.transaction(async (tx) => {
   const locations = await tx.select().from(location).where(eq(location.pantryId, pantryId));
   const locationId = (name: string) => {
     const row = locations.find((l) => l.name === name);
-    if (!row) throw new Error(`Missing location ${name}`);
+    if (!row) {
+      throw new Error(`Missing location ${name}`);
+    }
     return row.id;
   };
 
