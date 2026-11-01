@@ -13,11 +13,11 @@ import { CacheFirst, NetworkFirst } from "workbox-strategies";
 //   was then; the persisted query cache (IndexedDB) supplies anything newer.
 // - Product pictures from Open Food Facts are cached once seen, so the list keeps its images
 //   offline. They are public files, but which ones are cached shows what you keep at home, so
-//   they are removed on sign-out like the pages (src/domains/offline/persister.ts).
+//   they are removed on sign-out like the pages (src/features/offline/persister.ts).
 // - Server functions, auth and anything else that isn't a page load are never cached here.
 
 declare const self: ServiceWorkerGlobalScope & {
-  __WB_MANIFEST: Array<string | { url: string; revision: string | null }>;
+  __WB_MANIFEST: (string | { url: string; revision: string | null })[];
 };
 
 // Workbox replaces this exact name with the list of files to precache.
@@ -31,7 +31,9 @@ const pagesCache = `pages-${build}`;
 
 function hash(text: string) {
   let value = 5381;
-  for (let i = 0; i < text.length; i++) value = ((value << 5) + value + text.charCodeAt(i)) | 0;
+  for (let i = 0; i < text.length; i++) {
+    value = ((value << 5) + value + text.charCodeAt(i)) | 0;
+  }
   return (value >>> 0).toString(36);
 }
 
@@ -42,9 +44,12 @@ self.addEventListener("install", () => void self.skipWaiting());
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
-      for (const name of await caches.keys()) {
-        if (name.startsWith("pages-") && name !== pagesCache) await caches.delete(name);
-      }
+      const names = await caches.keys();
+      await Promise.all(
+        names
+          .filter((name) => name.startsWith("pages-") && name !== pagesCache)
+          .map((name) => caches.delete(name)),
+      );
       await self.clients.claim();
     })(),
   );
@@ -59,8 +64,8 @@ registerRoute(
       {
         // A redirected response can't be used to answer a navigation later, and an error page
         // must not replace a good copy.
-        cacheWillUpdate: async ({ response }) =>
-          response.status === 200 && !response.redirected ? response : null,
+        cacheWillUpdate: ({ response }) =>
+          Promise.resolve(response.status === 200 && !response.redirected ? response : null),
       },
     ],
   }),
@@ -85,7 +90,9 @@ registerRoute(
 
 // Offline at a page that was never loaded here: go to the pantry, which has a copy if the app has
 // been used. (Serving the pantry's HTML at another URL would hydrate the wrong page.)
-setCatchHandler(async ({ request, url }) => {
-  if (request.mode !== "navigate" || url.pathname === "/pantry") return Response.error();
-  return Response.redirect(new URL("/pantry", url).href, 302);
+setCatchHandler(({ request, url }) => {
+  if (request.mode !== "navigate" || url.pathname === "/pantry") {
+    return Promise.resolve(Response.error());
+  }
+  return Promise.resolve(Response.redirect(new URL("/pantry", url).href, 302));
 });

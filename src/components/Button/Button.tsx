@@ -1,5 +1,6 @@
 import * as Slot from "@radix-ui/react-slot";
 import type { ComponentProps } from "react";
+import { cx } from "../cx.ts";
 import styles from "./Button.module.css";
 
 type ButtonProps = ComponentProps<"button"> & {
@@ -10,10 +11,5 @@ type ButtonProps = ComponentProps<"button"> & {
 
 export function Button({ variant = "primary", asChild = false, className, ...props }: ButtonProps) {
   const Comp = asChild ? Slot.Root : "button";
-  return (
-    <Comp
-      className={[styles.button, styles[variant], className].filter(Boolean).join(" ")}
-      {...props}
-    />
-  );
+  return <Comp className={cx(styles.button, styles[variant], className)} {...props} />;
 }

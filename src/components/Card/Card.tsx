@@ -1,5 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 
+import { cx } from "../cx.ts";
 import styles from "./Card.module.css";
 
 type CardProps = ComponentProps<"section"> & {
@@ -9,7 +10,7 @@ type CardProps = ComponentProps<"section"> & {
 
 export function Card({ title, actions, className, children, ...props }: CardProps) {
   return (
-    <section className={[styles.card, className].filter(Boolean).join(" ")} {...props}>
+    <section className={cx(styles.card, className)} {...props}>
       {(title || actions) && (
         <header className={styles.header}>
           {title && <h2 className={styles.title}>{title}</h2>}

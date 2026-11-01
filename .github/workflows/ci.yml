@@ -34,7 +34,13 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
-      - run: pnpm test
+      - name: Test
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+        run: |
+          psql -h localhost -U postgres -c 'create database test'
+          pnpm db:migrate
+          pnpm test
       - run: pnpm build
 
       # Merging must never leave the database behind the code. Pull requests run on top of

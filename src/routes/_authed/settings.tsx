@@ -2,14 +2,13 @@ import { createFileRoute, getRouteApi } from "@tanstack/react-router";
 
 import { Button } from "#/components/Button/Button.tsx";
 import { Card } from "#/components/Card/Card.tsx";
-import { LanguageSetting } from "#/components/LanguageSetting/LanguageSetting.tsx";
-import { ProductSyncPanel } from "#/components/ProductSyncPanel/ProductSyncPanel.tsx";
-import { Page } from "#/components/Page/Page.tsx";
-import { authClient } from "#/domains/auth/auth-client.ts";
-import { resetVerifiedSession } from "#/domains/auth/verified-session.ts";
-import { clearLocalData } from "#/domains/offline/persister.ts";
+import { LanguageSetting } from "#/features/i18n/LanguageSetting/LanguageSetting.tsx";
+import { ProductSyncPanel } from "#/features/products/ProductSyncPanel/ProductSyncPanel.tsx";
+import { Page } from "#/layout/Page/Page.tsx";
+import { authClient } from "#/features/auth/auth-client.ts";
+import { endSession } from "#/features/auth/end-session.ts";
 import { m } from "#/paraglide/messages.js";
-import { roleCan } from "#/domains/pantry/permissions.ts";
+import { roleCan } from "#/features/pantry/permissions.ts";
 
 const authed = getRouteApi("/_authed");
 
@@ -29,11 +28,7 @@ function Settings() {
           variant="secondary"
           onClick={async () => {
             await authClient.signOut();
-            resetVerifiedSession();
-            // Remove what this device saved for the account (cached pantry and pages), then
-            // reload so nothing from this visit stays in memory for the next sign-in.
-            await clearLocalData();
-            window.location.assign("/sign-in");
+            await endSession();
           }}
         >
           {m["settings.signOut"]()}

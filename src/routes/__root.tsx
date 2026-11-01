@@ -3,8 +3,8 @@ import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, ScriptOnce, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { getLocale } from "#/paraglide/runtime.js";
-import { registerServiceWorker } from "#/domains/offline/register-sw.ts";
-import { themeScript } from "#/domains/theme/theme.ts";
+import { registerServiceWorker } from "#/features/offline/register-sw.ts";
+import { themeScript } from "#/features/theme/theme.ts";
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({

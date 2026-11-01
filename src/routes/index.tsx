@@ -1,13 +1,16 @@
 import { m } from "#/paraglide/messages.js";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Landing } from "#/components/Landing/Landing.tsx";
-import { getSession, needsSetup } from "#/domains/auth/auth.functions.ts";
+import { Landing } from "#/features/landing/Landing/Landing.tsx";
+import { getSession, needsSetup } from "#/features/auth/auth.functions.ts";
 
 export const Route = createFileRoute("/")({
   loader: async () => {
     const [session, setup] = await Promise.all([getSession(), needsSetup()]);
-    return { cta: session ? "pantry" : setup ? "setup" : "sign-in" } as const;
+    if (session) {
+      return { cta: "pantry" } as const;
+    }
+    return { cta: setup ? "setup" : "sign-in" } as const;
   },
   head: () => ({
     meta: [

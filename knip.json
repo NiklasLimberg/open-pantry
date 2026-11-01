@@ -1,0 +1,5 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "entry": ["src/db/migrate.ts", "tasks/**/*.ts", "scripts/*.ts"],
+  "ignoreDependencies": ["@inlang/plugin-message-format"]
+}

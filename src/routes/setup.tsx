@@ -1,65 +1,91 @@
 import { m } from "#/paraglide/messages.js";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
 
-import { AuthLayout } from "#/components/AuthLayout/AuthLayout.tsx";
-import { Button } from "#/components/Button/Button.tsx";
-import { Form, FormError, TextField } from "#/components/Form/Form.tsx";
-import { authClient } from "#/domains/auth/auth-client.ts";
-import { needsSetup } from "#/domains/auth/auth.functions.ts";
+import { AuthLayout } from "#/features/auth/AuthLayout/AuthLayout.tsx";
+import { AuthForm } from "#/features/auth/AuthForm/AuthForm.tsx";
+import { FormInput } from "#/components/Form/FormInput.tsx";
+import { authClient } from "#/features/auth/auth-client.ts";
+import { needsSetup } from "#/features/auth/auth.functions.ts";
+import { errorMessage } from "#/features/offline/network-failure.ts";
 
 // First run only: creates the owner account and their pantry. The server rejects
 // sign-ups once any account exists, so this page is not the security boundary.
 export const Route = createFileRoute("/setup")({
   beforeLoad: async () => {
-    if (!(await needsSetup())) throw redirect({ to: "/sign-in" });
+    if (!(await needsSetup())) {
+      throw redirect({ to: "/sign-in" });
+    }
   },
   component: Setup,
 });
 
+const required = () => ({ error: () => m["form.required"]() });
+
+const schema = z.object({
+  name: z.string().trim().min(1, required()),
+  email: z
+    .string()
+    .trim()
+    .min(1, required())
+    .pipe(z.email({ error: () => m["form.invalidFormat"]() })),
+  password: z.string().min(8, { error: () => m["form.tooShort"]() }),
+});
 function Setup() {
   const navigate = useNavigate();
-  const [error, setError] = useState<string | null>(null);
-  const [pending, setPending] = useState(false);
+  const submit = useMutation({
+    mutationFn: async (values: z.infer<typeof schema>) => {
+      const result = await authClient.signUp.email({
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      });
+      if (result.error) {
+        throw new Error(result.error.message ?? m["auth.setup.failed"]());
+      }
+    },
+    onSuccess: () => navigate({ to: "/pantry" }),
+  });
+  const form = useForm({
+    defaultValues: { name: "", email: "", password: "" },
+    validators: { onSubmit: schema },
+    onSubmit: ({ value }) => submit.mutate(schema.parse(value)),
+  });
 
   return (
     <AuthLayout title={m["auth.setup.title"]()}>
-      <Form
-        onSubmit={async (event) => {
-          event.preventDefault();
-          const form = new FormData(event.currentTarget);
-          setPending(true);
-          const result = await authClient.signUp.email({
-            name: String(form.get("name")),
-            email: String(form.get("email")),
-            password: String(form.get("password")),
-          });
-          setPending(false);
-          if (result.error) return setError(result.error.message ?? m["auth.setup.failed"]());
-          await navigate({ to: "/pantry" });
-        }}
+      <AuthForm
+        form={form}
+        submitLabel={m["auth.setup.submit"]()}
+        pending={submit.isPending}
+        error={submit.error && errorMessage(submit.error, m["auth.setup.failed"]())}
       >
-        <TextField name="name" label={m["global.name"]()} autoComplete="name" required />
-        <TextField
-          name="email"
-          label={m["global.email"]()}
-          type="email"
-          autoComplete="email"
-          required
-        />
-        <TextField
-          name="password"
-          label={m["global.password"]()}
-          type="password"
-          autoComplete="new-password"
-          minLength={8}
-          required
-        />
-        <FormError message={error} />
-        <Button type="submit" disabled={pending}>
-          {m["auth.setup.submit"]()}
-        </Button>
-      </Form>
+        <form.Field name="name">
+          {(field) => <FormInput field={field} label={m["global.name"]()} autoComplete="name" />}
+        </form.Field>
+        <form.Field name="email">
+          {(field) => (
+            <FormInput
+              field={field}
+              label={m["global.email"]()}
+              type="email"
+              autoComplete="email"
+            />
+          )}
+        </form.Field>
+        <form.Field name="password">
+          {(field) => (
+            <FormInput
+              field={field}
+              label={m["global.password"]()}
+              type="password"
+              autoComplete="new-password"
+            />
+          )}
+        </form.Field>
+      </AuthForm>
     </AuthLayout>
   );
 }
